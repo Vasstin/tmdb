@@ -74,29 +74,29 @@ const Wrapper = styled(Box)({
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const [movies, setMovies] = useState([]);
-  const [tv, setTv] = useState([]);
+  const [dayTrand, setDayTrand] = useState([]);
+  const [weekTrand, setWeekTrand] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    fetch('https://api.themoviedb.org/3/movie/popular?api_key=1fe2b672392f0b598d63021cfed3b95e&language=en-US&page=1')
+    fetch('https://api.themoviedb.org/3/trending/all/day?api_key=1fe2b672392f0b598d63021cfed3b95e&language=en-US&page=1')
       .then(response => response.json())
-      .then(data => setMovies(data.results))
+      .then(data => setDayTrand(data.results))
   }, [])
 
   useEffect(() => {
-    fetch('https://api.themoviedb.org/3/tv/popular?api_key=1fe2b672392f0b598d63021cfed3b95e&language=en-US&page=1')
+    fetch('https://api.themoviedb.org/3/trending/all/week?api_key=1fe2b672392f0b598d63021cfed3b95e&language=en-US&page=1')
       .then(response => response.json())
-      .then(data => setTv(data.results))
+      .then(data => setWeekTrand(data.results))
   }, [])
 
   return (
     <Box sx={{ width: '100%', margin: '0 auto', marginBottom: '50px' }}>
       <Wrapper>
-        <Heading >What's Popular</Heading>
+        <Heading >Tranding</Heading>
         <Box sx={{ 
           borderBottom: 1, 
           borderColor: 'divider', 
@@ -104,20 +104,20 @@ export default function BasicTabs() {
           
         }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Movies" {...a11yProps(0)} />
-            <Tab label="On TV" {...a11yProps(1)} />
+            <Tab label="Day" {...a11yProps(0)} />
+            <Tab label="Week" {...a11yProps(1)} />
           </Tabs>
         </Box>
       </Wrapper>
       <TabPanel value={value} index={0} >
-        {movies.map(item => 
+        {dayTrand.map(item => 
           <ReuseTab 
             key = {item.id}
             data = {item}
           />)}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {tv.map(item => 
+        {weekTrand.map(item => 
           <ReuseTab
             key = {item.id}
             data = {item}
