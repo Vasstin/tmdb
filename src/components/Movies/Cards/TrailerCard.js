@@ -56,9 +56,10 @@ const TrailerCard = (props) => {
     background: transparent;
     box-shadow: none;
     color: white;
-    transition: all 0.5s;
+    transition: all 1s;
     &:hover {
       transform: scale(1.1);
+      transition: all 1s;
     }
   `;
 

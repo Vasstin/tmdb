@@ -11,18 +11,48 @@ import { Skeleton } from "@mui/material";
 //import { useSelector } from "react-redux";
 import tmdbUrl from "../../../utility/tmdbUrl";
 import apiKey from "../../../utility/apiKey";
+import LinearProgress from "@mui/material/LinearProgress";
+import { IconButton } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ModalTrailer from "./ModalTrailer";
 
 const MovieCard = (props) => {
   const { id } = useParams();
   const locationState = useLocation();
   const [dataCard, setDataCard] = useState([]);
+  const [trailers, setTrailers] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const toggleModal = () => {
+    setOpen(!open);
+  };
 
   useEffect(() => {
     tmdbUrl
       .get(`${locationState.state}/${id}?api_key=${apiKey}&language=en-US`)
       .then((response) => setDataCard(response.data));
   }, [id, locationState.state]);
-  
+
+  useEffect(() => {
+    let isSubscribed = true;
+    tmdbUrl
+      .get(
+        `${locationState.state}/${dataCard.id}/videos?api_key=${apiKey}&language=en-US`
+      )
+      .then((response) =>
+        isSubscribed
+          ? setTrailers(
+              response.data.results.filter((item) =>
+                item.name.includes("Trailer")
+              )
+            )
+          : null
+      );
+    return () => (isSubscribed = false);
+  }, [locationState.state, dataCard.id]);
+
+  console.log(dataCard);
+
   // const fullState = useSelector((state) => {
   //   return state.movies;
   // });
@@ -67,17 +97,20 @@ const MovieCard = (props) => {
 
   const TitleInform = styled(CardContent)({
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
+    flexWrap: "wrap",
     fontSize: "13px",
     color: "white",
     padding: "0",
+    marginBottom: "30px",
   });
 
   const VoteRate = styled(Box)({
     position: "relative",
     display: "flex",
-    height: "40px",
-    width: "40px",
+    height: "60px",
+    width: "60px",
+    marginRight: "10px",
     alignItems: "center",
     justifyContent: "center",
     paddingLeft: "1px",
@@ -89,6 +122,11 @@ const MovieCard = (props) => {
     textAlign: "center",
     color: "white",
     fontSize: "14px",
+    transition: "all 1s",
+    "&:hover": {
+      transform: "scale(1.1)",
+      transition: "all 1s",
+    },
   });
 
   const CustomizedCard = styled(Card)({
@@ -100,6 +138,8 @@ const MovieCard = (props) => {
 
   const CustomizedMovieScore = styled(MovieScore)({
     position: "absolute",
+    width: "60px",
+    height: "60px",
     top: "0",
     left: "0",
   });
@@ -123,46 +163,142 @@ const MovieCard = (props) => {
     display: "flex",
     flexDirection: "column",
     alignContent: "center",
-    paddingLeft: "15px",
+    paddingLeft: "40px",
   });
 
-  const date = new Date(dataCard.release_date ?? dataCard.first_air_date)
-  
+  const Facts = styled(Box)({
+    // position: 'relative',
+    display: "flex",
+    flexWrap: 'wrap',
+    width: "100%",
+  });
+
+  const FactsItem = styled(Typography)({
+    position: "relative",
+    display: "flex",
+    paddingLeft: "25px",
+    "&::before": {
+      content: "''",
+      position: "absolute",
+      top: "10px",
+      left: "15px",
+      width: "5px",
+      height: "5px",
+      borderRadius: "50%",
+      background: "white",
+    },
+  });
+
+  const Actions = styled(Box)({
+    display: "flex",
+    alignItems: "center",
+    marginBottom: "30px",
+  });
+  const CustomizedIconButton = styled(IconButton)(({ theme }) => ({
+    transition: "all 1s",
+    color: "white",
+    fontSize: "15px",
+    "&:hover": {
+      color: 'gray',
+      transition: "all 1s",
+    },
+  }));
+
+  const Icon = styled(PlayArrowIcon)`
+    width: 30px;
+    height: 30px;
+  `;
+
+  const Overview = styled(Box)({
+    color: 'white'
+  })
+
+  const date = new Date(dataCard.release_date ?? dataCard.first_air_date);
+  function getTimeFromMins(mins) {
+    if(mins < 60) {
+      return `${mins}m`
+    } else {
+      return `${Math.trunc(mins / 60)}h ${mins % 60}m`
+    }
+  }
+
   return (
     <CustomizedBox>
-      <MovieOverviewSection>
-        <BackgroundBlur>
-          <CustomizedCard className="Wrapper">
-            {!dataCard.poster_path ? (
-              <Skeleton
-                sx={{ borderRadius: "10px" }}
-                variant="rectangular"
-                width={300}
-                height={450}
-              />
-            ) : (
-              <ImgWrapper
-                component="img"
-                image={`https://image.tmdb.org/t/p/w500/${dataCard.poster_path}`}
-                alt={dataCard.title}
-              />
-            )}
-            <ContentWrapper>
-              <TitleInform>
-                <Typography variant="h5">
-                  {dataCard.title ?? dataCard.name} ({date.getFullYear()})
-                </Typography>
-                <Typography variant="body2">{date.toLocaleDateString("en-US")}</Typography>
-              </TitleInform>
-              <VoteRate>
-                <Typography>{dataCard.vote_average * 10}</Typography>
-                <sup>%</sup>
-                <CustomizedMovieScore rate={dataCard.vote_average} />
-              </VoteRate>
-            </ContentWrapper>
-          </CustomizedCard>
-        </BackgroundBlur>
-      </MovieOverviewSection>
+      {dataCard.id ? (
+        <MovieOverviewSection>
+          {trailers.length === 0 ? null : (
+            <ModalTrailer
+              trailers={trailers}
+              typeTab={props.type}
+              toggle={open}
+              toggleModal={toggleModal}
+              idMovies={props.id}
+            />
+          )}
+          <BackgroundBlur>
+            <CustomizedCard className="Wrapper">
+              {!dataCard.poster_path ? (
+                <Skeleton
+                  sx={{ borderRadius: "10px" }}
+                  variant="rectangular"
+                  width={300}
+                  height={450}
+                />
+              ) : (
+                <ImgWrapper
+                  component="img"
+                  image={`https://image.tmdb.org/t/p/w500/${dataCard.poster_path}`}
+                  alt={dataCard.title}
+                />
+              )}
+              <ContentWrapper>
+                <TitleInform>
+                  <Typography variant="h4" width={"100%"}>
+                    {dataCard.title ?? dataCard.name} ({date.getFullYear()})
+                  </Typography>
+                  <Facts>
+                    <FactsItem>{date.toLocaleDateString("en-US")}</FactsItem>
+                    <FactsItem>
+                      {dataCard.genres.map((item) => (
+                        <Typography sx={{ marginRight: "5px", display: 'flex' }} key={item.id}>
+                          {item.name}
+                        </Typography>
+                      ))}
+                    </FactsItem>
+                    <FactsItem>{getTimeFromMins(dataCard.runtime ?? dataCard.episode_run_time[0])}</FactsItem>
+                  </Facts>
+                </TitleInform>
+                <Actions>
+                  <VoteRate>
+                    <Typography>{dataCard.vote_average * 10}</Typography>
+                    <sup>%</sup>
+                    <CustomizedMovieScore rate={dataCard.vote_average} />
+                  </VoteRate>
+                  <Typography
+                    sx={{ width: "15px", marginRight: "40px", color: "white" }}
+                  >
+                    User Score
+                  </Typography>
+                  <CustomizedIconButton
+                    onClick={() => toggleModal()}
+                    aria-label="play video"
+                  >
+                    <Icon />
+                    Play Trailer
+                  </CustomizedIconButton>
+                </Actions>
+                <Overview>
+                  <Typography sx={{color: 'gray', fontStyle: 'italic', marginBottom: '15px'}}>{dataCard.tagline}</Typography>
+                  <Typography variant="h6">Overview</Typography>
+                  <Typography variant="body3">{dataCard.overview}</Typography>
+                </Overview>
+              </ContentWrapper>
+            </CustomizedCard>
+          </BackgroundBlur>
+        </MovieOverviewSection>
+      ) : (
+        <LinearProgress color={"primary"} />
+      )}
     </CustomizedBox>
   );
 };

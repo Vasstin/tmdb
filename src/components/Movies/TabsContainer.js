@@ -77,14 +77,6 @@ const Wrapper = styled(Box)({
   marginLeft: "100px",
 });
 
-const CustomizedLink = styled(Link)`
-  text-decoration: none;
-    &:hover {
-      transform: scale(1.1);
-      transition: all 1s;
-
-    }
-`
 const TabsContainer = (props) => {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {

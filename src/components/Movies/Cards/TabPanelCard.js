@@ -48,6 +48,7 @@ const CustomizedCard = styled(Card)`
   margin-right: 15px;
   background: transparent;
   box-shadow: none;
+  transition: all 1s;
     &:hover {
       transform: scale(1.1);
       transition: all 1s;
