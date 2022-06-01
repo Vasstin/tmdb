@@ -1,0 +1,14 @@
+.MuiBox-root .MuiTabs-root button {
+  border-radius: 30px;
+}
+
+.MuiBox-root .MuiTabs-root .Mui-selected {
+  color: white;
+  background: linear-gradient(to left, #032541 0%, #01b4e4 100%);
+  transition: 0.25s;
+}
+
+.MuiBox-root .MuiTabs-root .MuiTabs-indicator {
+  display: none;
+}
+

@@ -1,0 +1,6 @@
+.MuiCard-root .MuiCardContent-root:last-child {
+  padding-bottom: 0;
+}
+sup {
+  font-size: 7px;
+}
