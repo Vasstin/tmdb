@@ -22,6 +22,8 @@ const MovieCard = (props) => {
   const [dataCard, setDataCard] = useState([]);
   const [trailers, setTrailers] = useState([]);
   const [open, setOpen] = useState(false);
+  const [credits, setCredits] = useState([]);
+  const [coreCrew, setCoreCrew] = useState([]);
 
   const toggleModal = () => {
     setOpen(!open);
@@ -31,6 +33,23 @@ const MovieCard = (props) => {
     tmdbUrl
       .get(`${locationState.state}/${id}?api_key=${apiKey}&language=en-US`)
       .then((response) => setDataCard(response.data));
+  }, [id, locationState.state]);
+
+  useEffect(() => {
+    tmdbUrl
+      .get(
+        `${locationState.state}/${id}/credits?api_key=${apiKey}&language=en-US`
+      )
+      .then((response) => {
+        setCredits(response.data);
+        const director = response.data.crew.filter(
+          (item) => item.job === "Director"
+        );
+        const screenplay = response.data.crew.filter(
+          (item) => item.job === "Screenplay"
+        );
+        setCoreCrew([...director, ...screenplay]);
+      });
   }, [id, locationState.state]);
 
   useEffect(() => {
@@ -51,7 +70,18 @@ const MovieCard = (props) => {
     return () => (isSubscribed = false);
   }, [locationState.state, dataCard.id]);
 
-  console.log(dataCard);
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  const date = new Date(dataCard.release_date ?? dataCard.first_air_date);
+  function getTimeFromMins(mins) {
+    if (mins < 60) {
+      return `${mins}m`;
+    } else {
+      return `${Math.trunc(mins / 60)}h ${mins % 60}m`;
+    }
+  }
 
   // const fullState = useSelector((state) => {
   //   return state.movies;
@@ -131,7 +161,7 @@ const MovieCard = (props) => {
 
   const CustomizedCard = styled(Card)({
     display: "flex",
-    padding: "50px 0 50px 0",
+    padding: "50px ",
     background: "transparent",
     boxShadow: "none",
   });
@@ -161,7 +191,7 @@ const MovieCard = (props) => {
 
   const ContentWrapper = styled(Box)({
     display: "flex",
-    flexDirection: "column",
+    flexWrap: "wrap",
     alignContent: "center",
     paddingLeft: "40px",
   });
@@ -169,7 +199,7 @@ const MovieCard = (props) => {
   const Facts = styled(Box)({
     // position: 'relative',
     display: "flex",
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
     width: "100%",
   });
 
@@ -191,6 +221,7 @@ const MovieCard = (props) => {
 
   const Actions = styled(Box)({
     display: "flex",
+    width: "100%",
     alignItems: "center",
     marginBottom: "30px",
   });
@@ -199,7 +230,7 @@ const MovieCard = (props) => {
     color: "white",
     fontSize: "15px",
     "&:hover": {
-      color: 'gray',
+      color: "gray",
       transition: "all 1s",
     },
   }));
@@ -210,17 +241,21 @@ const MovieCard = (props) => {
   `;
 
   const Overview = styled(Box)({
-    color: 'white'
-  })
+    color: "white",
+    marginBottom: "30px",
+  });
 
-  const date = new Date(dataCard.release_date ?? dataCard.first_air_date);
-  function getTimeFromMins(mins) {
-    if(mins < 60) {
-      return `${mins}m`
-    } else {
-      return `${Math.trunc(mins / 60)}h ${mins % 60}m`
-    }
-  }
+  const CoreCrew = styled(Box)({
+    display: "flex",
+    flexWrap: "wrap",
+    width: "100%",
+    color: "white",
+  });
+
+  const CoreCrewItem = styled(Box)({
+    flexBasis: "33%",
+    paddingBottom: "15px",
+  });
 
   return (
     <CustomizedBox>
@@ -260,12 +295,19 @@ const MovieCard = (props) => {
                     <FactsItem>{date.toLocaleDateString("en-US")}</FactsItem>
                     <FactsItem>
                       {dataCard.genres.map((item) => (
-                        <Typography sx={{ marginRight: "5px", display: 'flex' }} key={item.id}>
+                        <Typography
+                          sx={{ marginRight: "5px", display: "flex" }}
+                          key={item.id}
+                        >
                           {item.name}
                         </Typography>
                       ))}
                     </FactsItem>
-                    <FactsItem>{getTimeFromMins(dataCard.runtime ?? dataCard.episode_run_time[0])}</FactsItem>
+                    <FactsItem>
+                      {getTimeFromMins(
+                        dataCard.runtime ?? dataCard.episode_run_time[0]
+                      )}
+                    </FactsItem>
                   </Facts>
                 </TitleInform>
                 <Actions>
@@ -288,10 +330,26 @@ const MovieCard = (props) => {
                   </CustomizedIconButton>
                 </Actions>
                 <Overview>
-                  <Typography sx={{color: 'gray', fontStyle: 'italic', marginBottom: '15px'}}>{dataCard.tagline}</Typography>
+                  <Typography
+                    sx={{
+                      color: "gray",
+                      fontStyle: "italic",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    {dataCard.tagline}
+                  </Typography>
                   <Typography variant="h6">Overview</Typography>
                   <Typography variant="body3">{dataCard.overview}</Typography>
                 </Overview>
+                <CoreCrew>
+                  {coreCrew.map((item) => (
+                    <CoreCrewItem>
+                      <Typography>{item.name}</Typography>
+                      <Typography variant="body3">{item.job}</Typography>
+                    </CoreCrewItem>
+                  ))}
+                </CoreCrew>
               </ContentWrapper>
             </CustomizedCard>
           </BackgroundBlur>
