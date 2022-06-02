@@ -4,5 +4,8 @@ export {
   fetchTrandingPerDay,
   fetchTrandingPerWeek,
   fetchNowPlayingMovies,
-  fetchLatestTv
+  fetchLatestTv,
+  fetchCardData,
+  fetchTrailers,
+  fetchCrew
 } from './action'

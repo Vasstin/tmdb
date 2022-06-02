@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../../../store/actions/action";
 import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -8,9 +10,6 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import MovieScore from "../../../utility/MovieScore";
 import { Skeleton } from "@mui/material";
-//import { useSelector } from "react-redux";
-import tmdbUrl from "../../../utility/tmdbUrl";
-import apiKey from "../../../utility/apiKey";
 import LinearProgress from "@mui/material/LinearProgress";
 import { IconButton } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -19,62 +18,51 @@ import ModalTrailer from "./ModalTrailer";
 const MovieCard = (props) => {
   const { id } = useParams();
   const locationState = useLocation();
-  const [dataCard, setDataCard] = useState([]);
-  const [trailers, setTrailers] = useState([]);
   const [open, setOpen] = useState(false);
-  const [credits, setCredits] = useState([]);
-  const [coreCrew, setCoreCrew] = useState([]);
 
+  const dispatch = useDispatch();
+
+  const cardData = useSelector((state) => {
+    return state.movies.cardData.data
+  });
+  
+  const trailers = useSelector((state) => {
+    return state.movies.cardData.trailers
+  });
+  
+  const coreCrew = useSelector((state) => {
+    return state.movies.cardData.crew
+  });
+
+  const onFetchCardData = useCallback(
+    () => dispatch(actions.fetchCardData(id, locationState.state)),
+    [dispatch, id, locationState.state]
+  );
+  const onFetchTrailers = useCallback(
+    () => dispatch(actions.fetchTrailers(id, locationState.state)),
+    [dispatch, id, locationState.state]
+  );
+  const onFetchCrew = useCallback(
+    () => dispatch(actions.fetchCrew(id, locationState.state)),
+    [dispatch, id, locationState.state]
+  );
+
+  
+  useEffect(()=>{
+    onFetchCardData(id, locationState.state)
+    onFetchTrailers(id, locationState.state)
+    onFetchCrew(id, locationState.state)
+  }, [onFetchCardData, onFetchTrailers, onFetchCrew,id, locationState.state])
+  
   const toggleModal = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    tmdbUrl
-      .get(`${locationState.state}/${id}?api_key=${apiKey}&language=en-US`)
-      .then((response) => setDataCard(response.data));
-  }, [id, locationState.state]);
-
-  useEffect(() => {
-    tmdbUrl
-      .get(
-        `${locationState.state}/${id}/credits?api_key=${apiKey}&language=en-US`
-      )
-      .then((response) => {
-        setCredits(response.data);
-        const director = response.data.crew.filter(
-          (item) => item.job === "Director"
-        );
-        const screenplay = response.data.crew.filter(
-          (item) => item.job === "Screenplay"
-        );
-        setCoreCrew([...director, ...screenplay]);
-      });
-  }, [id, locationState.state]);
-
-  useEffect(() => {
-    let isSubscribed = true;
-    tmdbUrl
-      .get(
-        `${locationState.state}/${dataCard.id}/videos?api_key=${apiKey}&language=en-US`
-      )
-      .then((response) =>
-        isSubscribed
-          ? setTrailers(
-              response.data.results.filter((item) =>
-                item.name.includes("Trailer")
-              )
-            )
-          : null
-      );
-    return () => (isSubscribed = false);
-  }, [locationState.state, dataCard.id]);
-
-  useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
-  const date = new Date(dataCard.release_date ?? dataCard.first_air_date);
+  const date = new Date(cardData.release_date ?? cardData.first_air_date);
   function getTimeFromMins(mins) {
     if (mins < 60) {
       return `${mins}m`;
@@ -83,7 +71,8 @@ const MovieCard = (props) => {
     }
   }
 
-  // const fullState = useSelector((state) => {
+  // -------------------------------------------------------
+  //const fullState = useSelector((state) => {
   //   return state.movies;
   // });
 
@@ -116,7 +105,7 @@ const MovieCard = (props) => {
   //   return result;
   // }
 
-  //const dataCard = getArrayFromState(fullState, id);
+  //const cardData = getArrayFromState(fullState, id);
 
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
@@ -184,7 +173,7 @@ const MovieCard = (props) => {
   });
 
   const MovieOverviewSection = styled(Box)({
-    backgroundImage: `url("https://image.tmdb.org/t/p/original/${dataCard.backdrop_path}")`,
+    backgroundImage: `url("https://image.tmdb.org/t/p/original/${cardData.backdrop_path}")`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   });
@@ -197,7 +186,6 @@ const MovieCard = (props) => {
   });
 
   const Facts = styled(Box)({
-    // position: 'relative',
     display: "flex",
     flexWrap: "wrap",
     width: "100%",
@@ -256,23 +244,21 @@ const MovieCard = (props) => {
     flexBasis: "33%",
     paddingBottom: "15px",
   });
-
+  
   return (
     <CustomizedBox>
-      {dataCard.id ? (
+      {cardData.id ? (
         <MovieOverviewSection>
           {trailers.length === 0 ? null : (
             <ModalTrailer
               trailers={trailers}
-              typeTab={props.type}
               toggle={open}
               toggleModal={toggleModal}
-              idMovies={props.id}
             />
           )}
           <BackgroundBlur>
             <CustomizedCard className="Wrapper">
-              {!dataCard.poster_path ? (
+              {!cardData.poster_path ? (
                 <Skeleton
                   sx={{ borderRadius: "10px" }}
                   variant="rectangular"
@@ -282,19 +268,19 @@ const MovieCard = (props) => {
               ) : (
                 <ImgWrapper
                   component="img"
-                  image={`https://image.tmdb.org/t/p/w500/${dataCard.poster_path}`}
-                  alt={dataCard.title}
+                  image={`https://image.tmdb.org/t/p/w500/${cardData.poster_path}`}
+                  alt={cardData.title}
                 />
               )}
               <ContentWrapper>
                 <TitleInform>
                   <Typography variant="h4" width={"100%"}>
-                    {dataCard.title ?? dataCard.name} ({date.getFullYear()})
+                    {cardData.title ?? cardData.name} ({date.getFullYear()})
                   </Typography>
                   <Facts>
                     <FactsItem>{date.toLocaleDateString("en-US")}</FactsItem>
                     <FactsItem>
-                      {dataCard.genres.map((item) => (
+                      {cardData.genres.map((item) => (
                         <Typography
                           sx={{ marginRight: "5px", display: "flex" }}
                           key={item.id}
@@ -305,16 +291,16 @@ const MovieCard = (props) => {
                     </FactsItem>
                     <FactsItem>
                       {getTimeFromMins(
-                        dataCard.runtime ?? dataCard.episode_run_time[0]
+                        cardData.runtime ?? cardData.episode_run_time[0]
                       )}
                     </FactsItem>
                   </Facts>
                 </TitleInform>
                 <Actions>
                   <VoteRate>
-                    <Typography>{dataCard.vote_average * 10}</Typography>
+                    <Typography>{cardData.vote_average * 10}</Typography>
                     <sup>%</sup>
-                    <CustomizedMovieScore rate={dataCard.vote_average} />
+                    <CustomizedMovieScore rate={cardData.vote_average} />
                   </VoteRate>
                   <Typography
                     sx={{ width: "15px", marginRight: "40px", color: "white" }}
@@ -337,14 +323,14 @@ const MovieCard = (props) => {
                       marginBottom: "15px",
                     }}
                   >
-                    {dataCard.tagline}
+                    {cardData.tagline}
                   </Typography>
                   <Typography variant="h6">Overview</Typography>
-                  <Typography variant="body3">{dataCard.overview}</Typography>
+                  <Typography variant="body3">{cardData.overview}</Typography>
                 </Overview>
                 <CoreCrew>
                   {coreCrew.map((item) => (
-                    <CoreCrewItem>
+                    <CoreCrewItem key={item.id}>
                       <Typography>{item.name}</Typography>
                       <Typography variant="body3">{item.job}</Typography>
                     </CoreCrewItem>

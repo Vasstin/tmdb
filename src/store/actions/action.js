@@ -109,6 +109,59 @@ export const fetchLatestTvFail = (error) => {
   };
 };
 
+export const fetchCardDataStart = () => {
+  return {
+    type: actionTypes.FETCH_CARD_DATA_START,
+  };
+};
+export const fetchCardDataSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_CARD_DATA_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchCardDataFail = (error) => {
+  return {
+    type: actionTypes.FETCH_CARD_DATA_FAIL,
+    error: error,
+  };
+};
+export const fetchTrailersStart = () => {
+  return {
+    type: actionTypes.FETCH_TRAILERS_START,
+  };
+};
+export const fetchTrailersSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_TRAILERS_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchTrailersFail = (error) => {
+  return {
+    type: actionTypes.FETCH_TRAILERS_FAIL,
+    error: error,
+  };
+};
+export const fetchCrewStart = () => {
+  return {
+    type: actionTypes.FETCH_CREW_START,
+  };
+};
+export const fetchCrewSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_CREW_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchCrewFail = (error) => {
+  return {
+    type: actionTypes.FETCH_CREW_FAIL,
+    error: error,
+  };
+};
+
+
 export const fetchPopularMovies = () => {
   return (dispatch) => {
     dispatch(fetchPopularMoviesStart());
@@ -167,8 +220,82 @@ export const fetchLatestTv = () => {
     dispatch(fetchLatestTvStart());
     tmdbUrl
       .get(`tv/on_the_air?api_key=${apiKey}&language=en-US&page=1`)
-      .then((response) => dispatch(fetchLatestTvSuccess(response.data.results))
+      .then((response) =>
+        dispatch(fetchLatestTvSuccess(response.data.results))
       );
   };
 };
 
+export const fetchCardData = (id, mediaType) => {
+  return (dispatch) => {
+    dispatch(fetchCardDataStart());
+    tmdbUrl
+      .get(`${mediaType}/${id}?api_key=${apiKey}&language=en-US`)
+      .then((response) => dispatch(fetchCardDataSuccess(response.data)));
+  };
+};
+
+export const fetchTrailers = (id, mediaType) => {
+  return (dispatch) => {
+    dispatch(fetchTrailersStart());
+    tmdbUrl
+      .get(`${mediaType}/${id}/videos?api_key=${apiKey}&language=en-US`)
+      .then((response) =>
+        dispatch(
+          fetchTrailersSuccess(
+            response.data.results.filter((item) =>
+              item.name.includes("Trailer")
+            )
+          )
+        )
+      );
+  };
+};
+
+export const fetchCrew = (id, mediaType) => {
+  return (dispatch) => {
+    dispatch(fetchCrewStart());
+    tmdbUrl
+      .get(`${mediaType}/${id}/credits?api_key=${apiKey}&language=en-US`)
+      .then((response) => {
+        const director = response.data.crew.filter(
+          (item) => item.job === "Director"
+        );
+        const screenplay = response.data.crew.filter(
+          (item) => item.job === "Screenplay"
+        );
+        dispatch(fetchCrewSuccess([...director, ...screenplay]))
+      })
+  };
+};
+
+// useEffect(() => {
+//   tmdbUrl
+//     .get(
+//       `${locationState.state}/${id}/credits?api_key=${apiKey}&language=en-US`
+//     )
+//     .then((response) => {
+//       setCredits(response.data);
+//       const director = response.data.crew.filter(
+//         (item) => item.job === "Director"
+//       );
+//       const screenplay = response.data.crew.filter(
+//         (item) => item.job === "Screenplay"
+//       );
+//       setCoreCrew([...director, ...screenplay]);
+//     });
+// }, [id, locationState.state]);
+
+
+
+// useEffect(() => {
+//   let isSubscribed = true;
+//   tmdbUrl
+//     .get(
+//       `${locationState.state}/${cardData.id}/videos?api_key=${apiKey}&language=en-US`
+//     )
+//     .then((response) =>setTrailers(response.data.results.filter((item)=>item.name.includes("Trailer")))
+//         : null
+//     );
+//   return () => (isSubscribed = false);
+// }, [locationState.state, cardData.id]);

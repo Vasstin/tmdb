@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState, useEffect} from "react";
+import tmdbUrl from "../../../utility/tmdbUrl";
+import apiKey from "../../../utility/apiKey";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -8,14 +9,12 @@ import { styled } from "@mui/material/styles";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box } from "@mui/system";
 import { IconButton } from "@mui/material";
-import tmdbUrl from "../../../utility/tmdbUrl";
-import apiKey from "../../../utility/apiKey";
 import ModalTrailer from "./ModalTrailer";
 import Skeleton from "@mui/material/Skeleton";
 
 const TrailerCard = (props) => {
   const [trailers, setTrailers] = useState([]);
-
+  
   useEffect(() => {
     let isSubscribed = true;
     tmdbUrl
