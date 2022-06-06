@@ -76,7 +76,7 @@ export default function MediaCard(props) {
   };
 
   getReleaseDate(props.data.release_date);
-
+  
   return (
     <CustomizedCard /*onClick={() => handleClick()}*/>
       {!props.data.poster_path ? (

@@ -9,10 +9,11 @@ import tmdbUrl from "../../utility/tmdbUrl";
 
 const MoviesTabs = (props) => {
   const dispatch = useDispatch();
-
+ 
   const movies = useSelector((state) => {
     return state.movies.popular.movies;
   });
+
   const tvs = useSelector((state) => {
     return state.movies.popular.tvs;
   });
@@ -70,7 +71,7 @@ const MoviesTabs = (props) => {
     onFetchTrandingPerDay,
     onFetchTrandingPerWeek,
     onFetchNowPlayingMovies,
-    onFetchLatestTvs
+    onFetchLatestTvs,
   ]);
 
   const [bg, setBg] = useState("");
@@ -78,7 +79,6 @@ const MoviesTabs = (props) => {
   // const [open, setOpen] = useState(false);
   // const [idMovies, setIdMovies] = useState("");
   // const [typeTab, setTypeTab] = useState("");
-  
 
   const handleNowPlayingId = (bg, id, typeTab) => {
     setBg(bg);
@@ -93,10 +93,11 @@ const MoviesTabs = (props) => {
     let isSubscribed = true;
     tmdbUrl
       .get(`movie/now_playing?api_key=${apiKey}&language=en-US&page=1`)
-      .then((response) => isSubscribed ? setBg(response.data.results[0].backdrop_path) : null);
-      return () => (isSubscribed = false)
+      .then((response) =>
+        isSubscribed ? setBg(response.data.results[0].backdrop_path) : null
+      );
+    return () => (isSubscribed = false);
   }, []);
- 
 
   // useEffect(async() => {
   //   const response = await tmdbUrl.get(
@@ -106,18 +107,16 @@ const MoviesTabs = (props) => {
   //   setTrailers(results)
   // }, [idTrailers]);
 
-  // console.log(idMovies)
   return (
     <div className="Wrapper">
-      {/* <ModalTrailer typeTab={typeTab} toggle={open} toggleModal={toggleModal} idMovies={idMovies}/> */}
       <TabsContainer
         title={"What's Popular"}
         tabLabelOne={"Movies"}
         tabLabelTwo={"On Tv"}
         tabOne={movies}
         tabTwo={tvs}
-        moviesType={'movie'}
-        tvsType={'tv'}
+        moviesType={"movie"}
+        tvsType={"tv"}
       />
       <TabsContainer
         title={"Latest Trailers"}
@@ -127,7 +126,11 @@ const MoviesTabs = (props) => {
         tabTwo={latestTv}
         trailerCard={true}
         handleNowPlayingId={handleNowPlayingId}
-        bgImage={bg ? (`url('https://image.tmdb.org/t/p/w1920_and_h600_multi_faces_filter(duotone,032541,01b4e4)/${bg}')`) : 'linear-gradient(to left, #032541 0%, #01b4e4 100%)'}
+        bgImage={
+          bg
+            ? `url('https://image.tmdb.org/t/p/w1920_and_h600_multi_faces_filter(duotone,032541,01b4e4)/${bg}')`
+            : "linear-gradient(to left, #032541 0%, #01b4e4 100%)"
+        }
         // bgImage={
         //   bg === ""
         //     ? "linear-gradient(to left, #032541 0%, #01b4e4 100%)"

@@ -23,15 +23,15 @@ const MovieCard = (props) => {
   const dispatch = useDispatch();
 
   const cardData = useSelector((state) => {
-    return state.movies.cardData.data
+    return state.movies.cardData.data;
   });
-  
+
   const trailers = useSelector((state) => {
-    return state.movies.cardData.trailers
+    return state.movies.cardData.trailers;
   });
-  
+
   const coreCrew = useSelector((state) => {
-    return state.movies.cardData.crew
+    return state.movies.cardData.crew;
   });
 
   const onFetchCardData = useCallback(
@@ -47,20 +47,19 @@ const MovieCard = (props) => {
     [dispatch, id, locationState.state]
   );
 
-  
-  useEffect(()=>{
-    onFetchCardData(id, locationState.state)
-    onFetchTrailers(id, locationState.state)
-    onFetchCrew(id, locationState.state)
-  }, [onFetchCardData, onFetchTrailers, onFetchCrew,id, locationState.state])
-  
+  useEffect(() => {
+    onFetchCardData(id, locationState.state);
+    onFetchTrailers(id, locationState.state);
+    onFetchCrew(id, locationState.state);
+  }, [onFetchCardData, onFetchTrailers, onFetchCrew, id, locationState.state]);
+
   const toggleModal = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   const date = new Date(cardData.release_date ?? cardData.first_air_date);
   function getTimeFromMins(mins) {
@@ -191,7 +190,7 @@ const MovieCard = (props) => {
     width: "100%",
   });
 
-  const FactsItem = styled(Typography)({
+  const FactsItem = styled(Box)({
     position: "relative",
     display: "flex",
     paddingLeft: "25px",
@@ -244,7 +243,7 @@ const MovieCard = (props) => {
     flexBasis: "33%",
     paddingBottom: "15px",
   });
-  
+
   return (
     <CustomizedBox>
       {cardData.id ? (
@@ -278,21 +277,27 @@ const MovieCard = (props) => {
                     {cardData.title ?? cardData.name} ({date.getFullYear()})
                   </Typography>
                   <Facts>
-                    <FactsItem>{date.toLocaleDateString("en-US")}</FactsItem>
+                    <FactsItem>
+                      <Typography>
+                        {date.toLocaleDateString("en-US")}
+                      </Typography>
+                    </FactsItem>
                     <FactsItem>
                       {cardData.genres.map((item) => (
                         <Typography
                           sx={{ marginRight: "5px", display: "flex" }}
-                          key={item.id}
+                          key={item.id + 1}
                         >
                           {item.name}
                         </Typography>
                       ))}
                     </FactsItem>
                     <FactsItem>
-                      {getTimeFromMins(
-                        cardData.runtime ?? cardData.episode_run_time[0]
-                      )}
+                      <Typography>
+                        {getTimeFromMins(
+                          cardData.runtime ?? cardData.episode_run_time[0]
+                        )}
+                      </Typography>
                     </FactsItem>
                   </Facts>
                 </TitleInform>
@@ -330,7 +335,7 @@ const MovieCard = (props) => {
                 </Overview>
                 <CoreCrew>
                   {coreCrew.map((item) => (
-                    <CoreCrewItem key={item.id}>
+                    <CoreCrewItem key={item.id + 1}>
                       <Typography>{item.name}</Typography>
                       <Typography variant="body3">{item.job}</Typography>
                     </CoreCrewItem>

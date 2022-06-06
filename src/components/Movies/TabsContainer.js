@@ -83,7 +83,6 @@ const TabsContainer = (props) => {
     setValue(newValue);
   };
 
-  //console.log(props)
   /*style={{background: `linear-gradient(rgba(3, 37, 65, 0.5) 0%, rgba(1, 180, 228, 0.5)100%), url(https://image.tmdb.org/t/p/original/${props.trandingImage})`}}*/
   return (
     <Box
@@ -137,7 +136,11 @@ const TabsContainer = (props) => {
               toggleModal={props.toggleModal}
             />
           ) : (
-            <Link key={item.id} to={`/${item.media_type ?? props.moviesType}/${item.id}`} state={item.media_type ?? props.moviesType}>
+            <Link
+              key={item.id}
+              to={`/${item.media_type ?? props.moviesType}/${item.id}`}
+              state={item.media_type ?? props.moviesType}
+            >
               <TabPanelCard data={item} />
             </Link>
           )
@@ -154,7 +157,11 @@ const TabsContainer = (props) => {
               toggleModal={props.toggleModal}
             />
           ) : (
-            <Link key={item.id} to={`/${item.media_type ?? props.tvsType}/${item.id}`} state={item.media_type ?? props.tvsType}>
+            <Link
+              key={item.id}
+              to={`/${item.media_type ?? props.tvsType}/${item.id}`}
+              state={item.media_type ?? props.tvsType}
+            >
               <TabPanelCard data={item} />
             </Link>
           )

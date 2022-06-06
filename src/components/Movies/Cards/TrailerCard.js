@@ -1,4 +1,7 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+// import * as actions from "../../../store/actions/action";
+
 import tmdbUrl from "../../../utility/tmdbUrl";
 import apiKey from "../../../utility/apiKey";
 import Card from "@mui/material/Card";
@@ -14,7 +17,20 @@ import Skeleton from "@mui/material/Skeleton";
 
 const TrailerCard = (props) => {
   const [trailers, setTrailers] = useState([]);
-  
+  // const [id, setId] = useState()
+
+  // const dispatch = useDispatch();
+  // const trailers = useSelector((state) => {
+  //   return state.movies.cardData.trailers
+  // });
+  // const onFetchTrailers = useCallback(
+  //   () => dispatch(actions.fetchTrailers(id, props.type)),
+  //   [dispatch, id, props.type]
+  // );
+
+  // useEffect(()=>{
+  //   onFetchTrailers(id, props.type)
+  // }, [onFetchTrailers, id, props.type])
   useEffect(() => {
     let isSubscribed = true;
     tmdbUrl
@@ -88,9 +104,10 @@ const TrailerCard = (props) => {
   const toggleModal = () => {
     setOpen(!open);
   };
-
+  
   return (
     <CustomizedCard
+    /*onClick={()=>setId(props.data.id)}*/
       sx={{ transform: `scale(${props.scale})` }}
       onMouseEnter={() =>
         props.handleNowPlayingId(
