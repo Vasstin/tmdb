@@ -7,5 +7,6 @@ export {
   fetchLatestTv,
   fetchCardData,
   fetchTrailers,
-  fetchCrew
+  fetchCrew,
+  cleanupCardData
 } from './action'

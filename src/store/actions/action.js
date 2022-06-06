@@ -126,6 +126,14 @@ export const fetchCardDataFail = (error) => {
     error: error,
   };
 };
+
+export const cleanupCardData = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_CARD_DATA,
+    payload: payload
+  }
+}
+
 export const fetchTrailersStart = () => {
   return {
     type: actionTypes.FETCH_TRAILERS_START,

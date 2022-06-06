@@ -63,6 +63,14 @@ const setCardData = (state, action) => {
     cardData: { ...state.cardData, data: action.payload },
   };
 };
+
+const cleanupCardData = (state, action) => {
+  return {
+    ...state,
+    cardData: {...state.cardData, data: []}
+  }
+}
+
 const setTrailers = (state, action) => {
   return {
     ...state,
@@ -120,6 +128,8 @@ const moviesReducer = (state = initialState, action) => {
       return setCardData(state, action);
     case actionTypes.FETCH_CARD_DATA_FAIL:
       return { ...state };
+    case actionTypes.CLEANUP_CARD_DATA:
+      return cleanupCardData(state, action);
     case actionTypes.FETCH_TRAILERS_START:
       return { ...state };
     case actionTypes.FETCH_TRAILERS_SUCCESS:

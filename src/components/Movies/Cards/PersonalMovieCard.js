@@ -20,6 +20,10 @@ const MovieCard = (props) => {
   const locationState = useLocation();
   const [open, setOpen] = useState(false);
 
+  const toggleModal = () => {
+    setOpen(!open);
+  };
+
   const dispatch = useDispatch();
 
   const cardData = useSelector((state) => {
@@ -47,15 +51,18 @@ const MovieCard = (props) => {
     [dispatch, id, locationState.state]
   );
 
+  // const onCleanupCardData = useCallback(
+  //   () => dispatch(actions.cleanupCardData()),
+  //   [dispatch]
+  // )
+
   useEffect(() => {
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
     onFetchCrew(id, locationState.state);
-  }, [onFetchCardData, onFetchTrailers, onFetchCrew, id, locationState.state]);
 
-  const toggleModal = () => {
-    setOpen(!open);
-  };
+    return () => dispatch(actions.cleanupCardData())
+  }, [onFetchCardData, onFetchTrailers, onFetchCrew, dispatch, id, locationState.state]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -284,11 +291,8 @@ const MovieCard = (props) => {
                     </FactsItem>
                     <FactsItem>
                       {cardData.genres.map((item, index) => (
-                        <Typography
-                          sx={{ display: "flex" }}
-                          key={item.id + 1}
-                        >
-                          {(index ? ', ' : '') + item.name}
+                        <Typography sx={{ display: "flex" }} key={item.id + 1}>
+                          {(index ? ", " : "") + item.name}
                         </Typography>
                       ))}
                     </FactsItem>
