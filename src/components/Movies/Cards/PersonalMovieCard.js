@@ -283,12 +283,12 @@ const MovieCard = (props) => {
                       </Typography>
                     </FactsItem>
                     <FactsItem>
-                      {cardData.genres.map((item) => (
+                      {cardData.genres.map((item, index) => (
                         <Typography
-                          sx={{ marginRight: "5px", display: "flex" }}
+                          sx={{ display: "flex" }}
                           key={item.id + 1}
                         >
-                          {item.name}
+                          {(index ? ', ' : '') + item.name}
                         </Typography>
                       ))}
                     </FactsItem>
