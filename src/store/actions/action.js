@@ -151,9 +151,10 @@ export const fetchTrailersFail = (error) => {
     error: error,
   };
 };
-export const fetchCrewStart = () => {
+
+export const fetchCrewAndCastStart = () => {
   return {
-    type: actionTypes.FETCH_CREW_START,
+    type: actionTypes.FETCH_CREW_AND_CAST_START,
   };
 };
 export const fetchCrewSuccess = (payload) => {
@@ -162,9 +163,15 @@ export const fetchCrewSuccess = (payload) => {
     payload: payload,
   };
 };
-export const fetchCrewFail = (error) => {
+export const fetchCastSuccess = (payload) => {
   return {
-    type: actionTypes.FETCH_CREW_FAIL,
+    type: actionTypes.FETCH_CAST_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchCrewAndCastFail = (error) => {
+  return {
+    type: actionTypes.FETCH_CREW_AND_CAST_FAIL,
     error: error,
   };
 };
@@ -260,9 +267,9 @@ export const fetchTrailers = (id, mediaType) => {
   };
 };
 
-export const fetchCrew = (id, mediaType) => {
+export const fetchCrewAndCast = (id, mediaType) => {
   return (dispatch) => {
-    dispatch(fetchCrewStart());
+    dispatch(fetchCrewAndCastStart());
     tmdbUrl
       .get(`${mediaType}/${id}/credits?api_key=${apiKey}&language=en-US`)
       .then((response) => {
@@ -273,6 +280,7 @@ export const fetchCrew = (id, mediaType) => {
           (item) => item.job === "Screenplay"
         );
         dispatch(fetchCrewSuccess([...director, ...screenplay]))
+        dispatch(fetchCastSuccess(response.data.cast))
       })
   };
 };

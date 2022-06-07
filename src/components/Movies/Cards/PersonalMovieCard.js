@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../store/actions/action";
 import { styled } from "@mui/material/styles";
@@ -14,16 +14,18 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { IconButton } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ModalTrailer from "./ModalTrailer";
+import ActorCard from "./ActorCard";
+import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 
 const MovieCard = (props) => {
+  const [open, setOpen] = useState(false);
   const { id } = useParams();
   const locationState = useLocation();
-  const [open, setOpen] = useState(false);
+  const scrollTab = useHorizontalScroll();
 
   const toggleModal = () => {
     setOpen(!open);
   };
-
   const dispatch = useDispatch();
 
   const cardData = useSelector((state) => {
@@ -38,6 +40,10 @@ const MovieCard = (props) => {
     return state.movies.cardData.crew;
   });
 
+  const cast = useSelector((state) => {
+    return state.movies.cardData.cast;
+  });
+
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
@@ -46,23 +52,25 @@ const MovieCard = (props) => {
     () => dispatch(actions.fetchTrailers(id, locationState.state)),
     [dispatch, id, locationState.state]
   );
-  const onFetchCrew = useCallback(
-    () => dispatch(actions.fetchCrew(id, locationState.state)),
+  const onFetchCrewAndCast = useCallback(
+    () => dispatch(actions.fetchCrewAndCast(id, locationState.state)),
     [dispatch, id, locationState.state]
   );
-
-  // const onCleanupCardData = useCallback(
-  //   () => dispatch(actions.cleanupCardData()),
-  //   [dispatch]
-  // )
 
   useEffect(() => {
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
-    onFetchCrew(id, locationState.state);
+    onFetchCrewAndCast(id, locationState.state);
 
-    return () => dispatch(actions.cleanupCardData())
-  }, [onFetchCardData, onFetchTrailers, onFetchCrew, dispatch, id, locationState.state]);
+    return () => dispatch(actions.cleanupCardData());
+  }, [
+    onFetchCardData,
+    onFetchTrailers,
+    onFetchCrewAndCast,
+    dispatch,
+    id,
+    locationState.state,
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -156,7 +164,7 @@ const MovieCard = (props) => {
 
   const CustomizedCard = styled(Card)({
     display: "flex",
-    padding: "50px ",
+    padding: "30px ",
     background: "transparent",
     boxShadow: "none",
   });
@@ -170,7 +178,7 @@ const MovieCard = (props) => {
   });
   const CustomizedBox = styled(Box)({
     marginTop: "120px",
-    minHeight: "800px",
+    // minHeight: "800px",
   });
 
   const BackgroundBlur = styled(Box)({
@@ -182,6 +190,7 @@ const MovieCard = (props) => {
     backgroundImage: `url("https://image.tmdb.org/t/p/original/${cardData.backdrop_path}")`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
+    marginBottom: "30px",
   });
 
   const ContentWrapper = styled(Box)({
@@ -251,6 +260,54 @@ const MovieCard = (props) => {
     paddingBottom: "15px",
   });
 
+  const MovieInformSection = styled(Box)({
+    width: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+    // padding: "0 30px ",
+    marginBottom: "30px",
+  });
+
+  const CastWrapper = styled(Box)({
+    display: "flex",
+    flexWrap: "wrap",
+    width: "80%",
+  });
+
+  const ScrollWrapper = styled(Box)({
+    display: "flex",
+    flexWrap: "nowrap",
+    padding: "0 30px ",
+    overflow: "scroll",
+    "::-webkit-scrollbar": {
+      height: "10px",
+    },
+    "::-webkit-scrollbar-thumb": {
+      height: "5px",
+      backgroundColor: "#032541",
+      borderRadius: "10px",
+    },
+    "::-webkit-scrollbar-corner": {
+      background: "rgba(0,0,0,0)",
+    },
+  });
+
+  const BaseInfornation = styled(Box)({
+    display: "flex",
+    flexWrap: 'wrap',
+    width: "20%",
+    paddingLeft: "20px",
+    alignContent: "center",
+    boxSizing: "border-box",
+  });
+
+  const BaseInfornationItem = styled(Box)({
+    display: "flex",
+    width: '100%',
+    flexDirection: "column",
+  });
+
+  
   return (
     <CustomizedBox>
       {cardData.id ? (
@@ -339,7 +396,7 @@ const MovieCard = (props) => {
                 </Overview>
                 <CoreCrew>
                   {coreCrew.map((item) => (
-                    <CoreCrewItem key={item.id + 1}>
+                    <CoreCrewItem key={item.id}>
                       <Typography>{item.name}</Typography>
                       <Typography variant="body3">{item.job}</Typography>
                     </CoreCrewItem>
@@ -352,6 +409,44 @@ const MovieCard = (props) => {
       ) : (
         <LinearProgress color={"primary"} />
       )}
+      <MovieInformSection className="Wrapper">
+        <CastWrapper>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "15px", paddingLeft: "30px" }}
+          >
+            Top Cast
+          </Typography>
+          <ScrollWrapper ref={scrollTab}>
+            {cast.slice(0, 10).map((item) => (
+              <ActorCard key={item.id} data={item} />
+            ))}
+            <Link style={{display: 'flex', alignItems: 'center'}} to={'/'}><Typography sx={{width: '100px', textAlign: 'center'}}>View more</Typography></Link>
+          </ScrollWrapper>
+        </CastWrapper>
+        <BaseInfornation>
+          <BaseInfornationItem>
+            <Typography variant="h6">Status:</Typography>
+            <Typography variant="body2">{cardData.status}</Typography>
+          </BaseInfornationItem>
+          <BaseInfornationItem>
+            <Typography variant="h6">Original Language:</Typography>
+            <Typography variant="body2">
+              {cardData.original_language === "en"
+                ? "English"
+                : cardData.original_language}
+            </Typography>
+          </BaseInfornationItem>
+          <BaseInfornationItem>
+            <Typography variant="h6">Budget: </Typography>
+            <Typography variant="body2">${cardData.budget}</Typography>{" "}
+          </BaseInfornationItem>
+          <BaseInfornationItem>
+            <Typography variant="h6">Revenue: </Typography>
+            <Typography variant="body2">${cardData.revenue}</Typography>
+          </BaseInfornationItem>
+        </BaseInfornation>
+      </MovieInformSection>
     </CustomizedBox>
   );
 };

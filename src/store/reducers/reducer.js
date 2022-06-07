@@ -17,8 +17,8 @@ const initialState = {
     data: {},
     cast: [],
     crew: [],
-    trailers:[]
-  }
+    trailers: [],
+  },
 };
 
 const setPopularMovies = (state, action) => {
@@ -48,13 +48,13 @@ const setTrandingPerWeek = (state, action) => {
 const setNowPlayingMovies = (state, action) => {
   return {
     ...state,
-    nowPlaying: { ...state.nowPlaying, movies: action.payload},
+    nowPlaying: { ...state.nowPlaying, movies: action.payload },
   };
 };
 const setLatestTv = (state, action) => {
   return {
     ...state,
-    nowPlaying: { ...state.nowPlaying, tvs: action.payload},
+    nowPlaying: { ...state.nowPlaying, tvs: action.payload },
   };
 };
 const setCardData = (state, action) => {
@@ -67,9 +67,9 @@ const setCardData = (state, action) => {
 const cleanupCardData = (state, action) => {
   return {
     ...state,
-    cardData: {...state.cardData, data: []}
-  }
-}
+    cardData: { ...state.cardData, data: [] },
+  };
+};
 
 const setTrailers = (state, action) => {
   return {
@@ -81,6 +81,12 @@ const setCrew = (state, action) => {
   return {
     ...state,
     cardData: { ...state.cardData, crew: action.payload },
+  };
+};
+const setCast = (state, action) => {
+  return {
+    ...state,
+    cardData: { ...state.cardData, cast: action.payload },
   };
 };
 
@@ -136,11 +142,13 @@ const moviesReducer = (state = initialState, action) => {
       return setTrailers(state, action);
     case actionTypes.FETCH_TRAILERS_FAIL:
       return { ...state };
-    case actionTypes.FETCH_CREW_START:
+    case actionTypes.FETCH_CREW_AND_CAST_START:
       return { ...state };
     case actionTypes.FETCH_CREW_SUCCESS:
       return setCrew(state, action);
-    case actionTypes.FETCH_CREW_FAIL:
+    case actionTypes.FETCH_CAST_SUCCESS:
+      return setCast(state, action);
+    case actionTypes.FETCH_CREW_AND_CAST_FAIL:
       return { ...state };
     default:
       return state;
