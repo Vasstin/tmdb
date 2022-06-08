@@ -41,7 +41,6 @@ const ActorCard = (props) => {
     <CustomizedCard /*onClick={() => handleClick()}*/>
       {!props.data.profile_path ? (
         <Skeleton
-          sx={{ borderRadius: "10px" }}
           variant="rectangular"
           width={150}
           height={225}
