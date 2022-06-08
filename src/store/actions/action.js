@@ -280,13 +280,7 @@ export const fetchCrewAndCast = (id, mediaType) => {
     tmdbUrl
       .get(`${mediaType}/${id}/credits?api_key=${apiKey}&language=en-US`)
       .then((response) => {
-        const director = response.data.crew.filter(
-          (item) => item.job === "Director"
-        );
-        const screenplay = response.data.crew.filter(
-          (item) => item.job === "Screenplay"
-        );
-        dispatch(fetchCrewSuccess([...director, ...screenplay]))
+        dispatch(fetchCrewSuccess(response.data.crew))
         dispatch(fetchCastSuccess(response.data.cast))
       })
   };

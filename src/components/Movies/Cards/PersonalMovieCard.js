@@ -26,20 +26,25 @@ const MovieCard = (props) => {
   const toggleModal = () => {
     setOpen(!open);
   };
-  const dispatch = useDispatch();
 
+  function coreCrewFilter(item) {
+    return item.job === "Director" || item.job === "Screenplay"
+  }
+
+  const dispatch = useDispatch();
+  
   const cardData = useSelector((state) => {
     return state.movies.cardData.data;
   });
-
+  
   const trailers = useSelector((state) => {
     return state.movies.cardData.trailers;
   });
-
+  
   const coreCrew = useSelector((state) => {
     return state.movies.cardData.crew;
   });
-
+  
   const cast = useSelector((state) => {
     return state.movies.cardData.cast;
   });
@@ -47,8 +52,8 @@ const MovieCard = (props) => {
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
-  );
-  const onFetchTrailers = useCallback(
+    );
+    const onFetchTrailers = useCallback(
     () => dispatch(actions.fetchTrailers(id, locationState.state)),
     [dispatch, id, locationState.state]
   );
@@ -311,7 +316,7 @@ const MovieCard = (props) => {
     width: "100%",
     flexDirection: "column",
   });
-  console.log(cardData, cast);
+
   return (
     <CustomizedBox>
       {cardData.id && cast.length > 0 ? (
@@ -407,7 +412,7 @@ const MovieCard = (props) => {
                     <Typography variant="body3">{cardData.overview}</Typography>
                   </Overview>
                   <CoreCrew>
-                    {coreCrew.map((item) => (
+                    {coreCrew.filter(item => coreCrewFilter(item)).map((item) => (
                       <CoreCrewItem key={item.id}>
                         <Typography>{item.name}</Typography>
                         <Typography variant="body3">{item.job}</Typography>
@@ -432,7 +437,7 @@ const MovieCard = (props) => {
                 ))}
                 <Link
                   style={{ display: "flex", alignItems: "center" }}
-                  to={"/"}
+                  to={`/${locationState.state}/${cardData.id}/cast`}
                 >
                   <Typography sx={{ width: "100px", textAlign: "center" }}>
                     View more
@@ -465,7 +470,7 @@ const MovieCard = (props) => {
           </MovieInformSection>
         </div>
       ) : (
-        <LinearProgress sx={{ marginBottom: "800px" }} color={"primary"} />
+        <LinearProgress sx={{ marginBottom: "800px", transition: 'all 1s' }} color={"primary"} />
       )}
     </CustomizedBox>
   );

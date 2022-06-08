@@ -106,10 +106,10 @@ const MoviesTabs = (props) => {
   //   const results =  response.data.results
   //   setTrailers(results)
   // }, [idTrailers]);
-
+  
   return (
     <div className="Wrapper">
-      <TabsContainer
+      <TabsContainer 
         title={"What's Popular"}
         tabLabelOne={"Movies"}
         tabLabelTwo={"On Tv"}
