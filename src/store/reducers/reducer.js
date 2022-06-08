@@ -90,6 +90,13 @@ const setCast = (state, action) => {
   };
 };
 
+const cleanupCast = (state, action) => {
+  return {
+    ...state,
+    cardData: { ...state.cardData, cast: [] },
+  };
+};
+
 const moviesReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_POPULAR_MOVIES_START:
@@ -150,6 +157,8 @@ const moviesReducer = (state = initialState, action) => {
       return setCast(state, action);
     case actionTypes.FETCH_CREW_AND_CAST_FAIL:
       return { ...state };
+    case actionTypes.CLEANUP_CAST:
+      return cleanupCast(state, action);
     default:
       return state;
   }

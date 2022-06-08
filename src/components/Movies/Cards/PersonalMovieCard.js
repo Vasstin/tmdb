@@ -62,7 +62,12 @@ const MovieCard = (props) => {
     onFetchTrailers(id, locationState.state);
     onFetchCrewAndCast(id, locationState.state);
 
-    return () => dispatch(actions.cleanupCardData());
+    return () =>  {
+      
+        dispatch(actions.cleanupCardData())
+        dispatch(actions.cleanupCast())
+      
+    }
   }, [
     onFetchCardData,
     onFetchTrailers,
@@ -306,7 +311,7 @@ const MovieCard = (props) => {
     width: "100%",
     flexDirection: "column",
   });
-  console.log(cardData, cast)
+  console.log(cardData, cast);
   return (
     <CustomizedBox>
       {cardData.id && cast.length > 0 ? (
@@ -417,7 +422,7 @@ const MovieCard = (props) => {
             <CastWrapper>
               <Typography
                 variant="h5"
-                sx={{ marginBottom: "15px", paddingLeft: "30px" }}
+                sx={{ width: '100%', marginBottom: "15px", paddingLeft: "30px" }}
               >
                 Top Cast
               </Typography>
@@ -460,7 +465,7 @@ const MovieCard = (props) => {
           </MovieInformSection>
         </div>
       ) : (
-        <LinearProgress sx={{marginBottom: '800px'}} color={"primary"} />
+        <LinearProgress sx={{ marginBottom: "800px" }} color={"primary"} />
       )}
     </CustomizedBox>
   );

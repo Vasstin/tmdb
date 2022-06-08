@@ -176,6 +176,13 @@ export const fetchCrewAndCastFail = (error) => {
   };
 };
 
+export const cleanupCast = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_CAST,
+    payload: payload
+  }
+}
+
 
 export const fetchPopularMovies = () => {
   return (dispatch) => {
