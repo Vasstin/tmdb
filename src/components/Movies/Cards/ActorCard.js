@@ -10,7 +10,8 @@ import Skeleton from "@mui/material/Skeleton";
 const ActorCard = (props) => {
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
-    //borderRadius: "10px",
+    background: "#032541",
+    transition: 'all 1s'
   });
 
   const Content = styled(CardContent)({

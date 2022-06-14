@@ -3,15 +3,17 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../store/actions/action";
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Skeleton,
+  IconButton,
+  LinearProgress,
+} from "@mui/material";
 import MovieScore from "../../../utility/MovieScore";
-import { Skeleton } from "@mui/material";
-import LinearProgress from "@mui/material/LinearProgress";
-import { IconButton } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ModalTrailer from "./ModalTrailer";
 import ActorCard from "./ActorCard";
@@ -28,23 +30,23 @@ const MovieCard = (props) => {
   };
 
   function coreCrewFilter(item) {
-    return item.job === "Director" || item.job === "Screenplay"
+    return item.job === "Director" || item.job === "Screenplay";
   }
 
   const dispatch = useDispatch();
-  
+
   const cardData = useSelector((state) => {
     return state.movies.cardData.data;
   });
-  
+
   const trailers = useSelector((state) => {
     return state.movies.cardData.trailers;
   });
-  
-  const coreCrew = useSelector((state) => {
+
+  const crew = useSelector((state) => {
     return state.movies.cardData.crew;
   });
-  
+
   const cast = useSelector((state) => {
     return state.movies.cardData.cast;
   });
@@ -52,8 +54,8 @@ const MovieCard = (props) => {
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
-    );
-    const onFetchTrailers = useCallback(
+  );
+  const onFetchTrailers = useCallback(
     () => dispatch(actions.fetchTrailers(id, locationState.state)),
     [dispatch, id, locationState.state]
   );
@@ -67,12 +69,10 @@ const MovieCard = (props) => {
     onFetchTrailers(id, locationState.state);
     onFetchCrewAndCast(id, locationState.state);
 
-    return () =>  {
-      
-        dispatch(actions.cleanupCardData())
-        dispatch(actions.cleanupCast())
-      
-    }
+    return () => {
+      dispatch(actions.cleanupCardData());
+      //dispatch(actions.cleanupCast());
+    };
   }, [
     onFetchCardData,
     onFetchTrailers,
@@ -87,6 +87,7 @@ const MovieCard = (props) => {
   }, []);
 
   const date = new Date(cardData.release_date ?? cardData.first_air_date);
+  const fullYear = date.getFullYear();
   function getTimeFromMins(mins) {
     if (mins < 60) {
       return `${mins}m`;
@@ -348,7 +349,7 @@ const MovieCard = (props) => {
                 <ContentWrapper>
                   <TitleInform>
                     <Typography variant="h4" width={"100%"}>
-                      {cardData.title ?? cardData.name} ({date.getFullYear()})
+                      {cardData.title ?? cardData.name} ({fullYear})
                     </Typography>
                     <Facts>
                       <FactsItem>
@@ -412,12 +413,14 @@ const MovieCard = (props) => {
                     <Typography variant="body3">{cardData.overview}</Typography>
                   </Overview>
                   <CoreCrew>
-                    {coreCrew.filter(item => coreCrewFilter(item)).map((item) => (
-                      <CoreCrewItem key={item.id}>
-                        <Typography>{item.name}</Typography>
-                        <Typography variant="body3">{item.job}</Typography>
-                      </CoreCrewItem>
-                    ))}
+                    {crew
+                      .filter((item) => coreCrewFilter(item))
+                      .map((item) => (
+                        <CoreCrewItem key={item.id}>
+                          <Typography>{item.name}</Typography>
+                          <Typography variant="body3">{item.job}</Typography>
+                        </CoreCrewItem>
+                      ))}
                   </CoreCrew>
                 </ContentWrapper>
               </CustomizedCard>
@@ -427,7 +430,11 @@ const MovieCard = (props) => {
             <CastWrapper>
               <Typography
                 variant="h5"
-                sx={{ width: '100%', marginBottom: "15px", paddingLeft: "30px" }}
+                sx={{
+                  width: "100%",
+                  marginBottom: "15px",
+                  paddingLeft: "30px",
+                }}
               >
                 Top Cast
               </Typography>
@@ -438,6 +445,11 @@ const MovieCard = (props) => {
                 <Link
                   style={{ display: "flex", alignItems: "center" }}
                   to={`/${locationState.state}/${cardData.id}/cast`}
+                  state={{
+                    poster: cardData.poster_path,
+                    title: cardData.title ?? cardData.name,
+                    year: fullYear
+                  }}
                 >
                   <Typography sx={{ width: "100px", textAlign: "center" }}>
                     View more
@@ -470,7 +482,10 @@ const MovieCard = (props) => {
           </MovieInformSection>
         </div>
       ) : (
-        <LinearProgress sx={{ marginBottom: "800px", transition: 'all 1s' }} color={"primary"} />
+        <LinearProgress
+          sx={{ marginBottom: "800px", transition: "all 1s" }}
+          color={"primary"}
+        />
       )}
     </CustomizedBox>
   );

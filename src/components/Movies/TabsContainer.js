@@ -12,6 +12,7 @@ import "./TabsContainer.css";
 import Typography from "@mui/material/Typography";
 import TrailerCard from "./Cards/TrailerCard";
 import { Link } from "react-router-dom";
+import Skeleton from "@mui/material/Skeleton";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -76,13 +77,12 @@ const Wrapper = styled(Box)({
   display: "flex",
   marginLeft: "100px",
 });
-
 const TabsContainer = (props) => {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  
   /*style={{background: `linear-gradient(rgba(3, 37, 65, 0.5) 0%, rgba(1, 180, 228, 0.5)100%), url(https://image.tmdb.org/t/p/original/${props.trandingImage})`}}*/
   return (
     <Box
@@ -125,25 +125,34 @@ const TabsContainer = (props) => {
         </Box>
       </Wrapper>
       <TabPanel value={value} index={0}>
-        {props.tabOne.map((item) =>
-          props.trailerCard ? (
-            <TrailerCard
-              type={"movie"}
-              key={item.id}
-              data={item}
-              handleNowPlayingId={props.handleNowPlayingId}
-              scale={props.scale}
-              toggleModal={props.toggleModal}
-            />
-          ) : (
-            <Link
-              key={item.id}
-              to={`/${item.media_type ?? props.moviesType}/${item.id}`}
-              state={item.media_type ?? props.moviesType}
-            >
-              <TabPanelCard data={item} />
-            </Link>
+        {props.tabOne.length > 0 ? (
+          props.tabOne.map((item) =>
+            props.trailerCard ? (
+              <TrailerCard
+                type={"movie"}
+                key={item.id}
+                data={item}
+                handleNowPlayingId={props.handleNowPlayingId}
+                scale={props.scale}
+                toggleModal={props.toggleModal}
+              />
+            ) : (
+              <Link
+                key={item.id}
+                to={`/${item.media_type ?? props.moviesType}/${item.id}`}
+                state={item.media_type ?? props.moviesType}
+              >
+                <TabPanelCard data={item}/>
+              </Link>
+            )
           )
+        ) : (
+          <Skeleton
+            sx={{ borderRadius: "10px" }}
+            variant="rectangular"
+            width={"100%"}
+            height={380}
+          />
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
