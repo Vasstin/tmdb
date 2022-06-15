@@ -1,8 +1,6 @@
 import React from "react";
-
-import TabPanelCard from "./Cards/TabPanelCard";
-import { useHorizontalScroll } from "../../utility/horizontalScroll";
-
+import TabContainerCard from "./TabContainerCard";
+import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -10,7 +8,7 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import "./TabsContainer.css";
 import Typography from "@mui/material/Typography";
-import TrailerCard from "./Cards/TrailerCard";
+import TrailerCard from "../Cards/TrailerCard";
 import { Link } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -82,7 +80,7 @@ const TabsContainer = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+
   /*style={{background: `linear-gradient(rgba(3, 37, 65, 0.5) 0%, rgba(1, 180, 228, 0.5)100%), url(https://image.tmdb.org/t/p/original/${props.trandingImage})`}}*/
   return (
     <Box
@@ -142,7 +140,7 @@ const TabsContainer = (props) => {
                 to={`/${item.media_type ?? props.moviesType}/${item.id}`}
                 state={item.media_type ?? props.moviesType}
               >
-                <TabPanelCard data={item}/>
+                <TabContainerCard data={item} />
               </Link>
             )
           )
@@ -171,7 +169,7 @@ const TabsContainer = (props) => {
               to={`/${item.media_type ?? props.tvsType}/${item.id}`}
               state={item.media_type ?? props.tvsType}
             >
-              <TabPanelCard data={item} />
+              <TabContainerCard data={item} />
             </Link>
           )
         )}

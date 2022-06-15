@@ -11,3 +11,10 @@ code {
     monospace;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+sup {
+  font-size: 7px;
+}

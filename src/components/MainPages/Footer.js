@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import footerLogo from "../assets/img/footer-logo.svg";
+import footerLogo from "../../assets/img/footer-logo.svg";
 
 const Footer = (props) => {
   const CustomStack = styled(Stack)`
@@ -30,7 +30,7 @@ const Footer = (props) => {
     <Box height={150} sx={{ backgroundColor: "primary.main" }}>
       <Wrapper>
         <Link to="/">
-          <img width={150} height={150} src={footerLogo} alt='footer-logo'/>
+          <img width={150} height={150} src={footerLogo} alt="footer-logo" />
         </Link>
         <CustomStack>
           <CustomLink to="/">About us</CustomLink>

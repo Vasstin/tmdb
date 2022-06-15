@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 
 import Box from "@mui/material/Box";
-import tmdbUrl from "../utility/tmdbUrl";
-import apiKey from "../utility/apiKey";
+import tmdbUrl from "../../utility/tmdbUrl";
+import apiKey from "../../utility/apiKey";
 
 const WelcomeSection = (props) => {
   const [image, setImage] = useState([]);

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
 
-const ActorCard = (props) => {
+const ShortActorCard = (props) => {
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
     background: "#032541",
@@ -63,4 +63,4 @@ const ActorCard = (props) => {
   );
 };
 
-export default ActorCard;
+export default ShortActorCard;

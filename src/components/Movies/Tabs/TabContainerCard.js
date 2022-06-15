@@ -1,15 +1,13 @@
 import * as React from "react";
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
-
 import MovieScore from "../../../utility/MovieScore";
-import "./Card.css";
 import { Box } from "@mui/system";
+
 const ImgWrapper = styled(CardMedia)({
   minHeight: "200px",
   borderRadius: "10px",
@@ -49,10 +47,10 @@ const CustomizedCard = styled(Card)`
   background: transparent;
   box-shadow: none;
   transition: all 1s;
-    &:hover {
-      transform: scale(1.1);
-      transition: all 1s;
-    }
+  &:hover {
+    transform: scale(1.1);
+    transition: all 1s;
+  }
 `;
 
 const CustomizedMovieScore = styled(MovieScore)`
@@ -61,7 +59,7 @@ const CustomizedMovieScore = styled(MovieScore)`
   left: 0;
 `;
 
-export default function MediaCard(props) {
+export default function TabContainerCard(props) {
   // let navigate = useNavigate();
   // function handleClick() {
   //   navigate(`/movies/${props.data.id}`);
@@ -76,7 +74,7 @@ export default function MediaCard(props) {
   };
 
   getReleaseDate(props.data.release_date);
-  
+
   return (
     <CustomizedCard /*onClick={() => handleClick()}*/>
       {!props.data.poster_path ? (

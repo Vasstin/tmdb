@@ -9,13 +9,13 @@
 // import IconButton from "@mui/material/IconButton";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import PersonalMovieCard from "./components/Movies/Cards/PersonalMovieCard";
-import Layout from "./components/Layout";
-import MainPage from "./components/MainPage";
-import Actors from './components/Placeholders/Actros'
-import Movies from './components/Placeholders/Movies'
-import CastAndCrew from "./components/Movies/Cards/CastAndCrew";
-import NotFoundPage from './components/Placeholders/NotFoundPage'
+import PersonalMovieCard from "./components/Movies/Cards/MovieCard";
+import Layout from "./components/MainPages/Layout";
+import MainPage from "./components/MainPages/MainPage";
+import Actors from "./components/Placeholders/Actros";
+import Movies from "./components/Placeholders/Movies";
+import CastAndCrew from "./components/People/CastAndCrew";
+import NotFoundPage from "./components/Placeholders/NotFoundPage";
 // const theme = createTheme({
 //   palette: {
 //     primary: {
@@ -62,20 +62,20 @@ function App() {
   //   }
   // `;
 
-    return(
-      <Routes>
-        <Route path='/' element={<Layout/>}>
-          <Route index element={<MainPage/>}/>
-          <Route path="movie" element={<Movies/>}/>
-          <Route path="actor" element={<Actors/>}/>
-          <Route path="movie/:id" element={<PersonalMovieCard/>}/>
-          <Route path="movie/:id/cast" element={<CastAndCrew/>}/>
-          <Route path="tv/:id" element={<PersonalMovieCard/>}/>
-          <Route path="tv/:id/cast" element={<CastAndCrew/>}/>
-          <Route path="*" element={<NotFoundPage/>}/>
-        </Route>
-      </Routes>
-    )
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<MainPage />} />
+        <Route path="movie" element={<Movies />} />
+        <Route path="actor" element={<Actors />} />
+        <Route path="movie/:id" element={<PersonalMovieCard />} />
+        <Route path="movie/:id/cast" element={<CastAndCrew />} />
+        <Route path="tv/:id" element={<PersonalMovieCard />} />
+        <Route path="tv/:id/cast" element={<CastAndCrew />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  );
   // return (
   //   <div className="App">
   //     <ThemeProvider theme={theme}>

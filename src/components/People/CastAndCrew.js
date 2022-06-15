@@ -13,7 +13,7 @@ import {
   LinearProgress,
   Button,
 } from "@mui/material";
-import CastAndCrewCard from "./CastAndCrewCard";
+import CastAndCrewCard from "./Cards/CastAndCrewCard";
 
 const CastAndCrew = (props) => {
   const location = useLocation();

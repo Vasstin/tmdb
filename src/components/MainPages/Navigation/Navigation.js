@@ -9,8 +9,8 @@ import NavigationItem from "./NavigationItem";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import navLogo from "../../assets/img/nav-logo.svg";
-import { useHideHeader } from "../../utility/hideHeader";
+import navLogo from "../../../assets/img/nav-logo.svg";
+import { useHideHeader } from "../../../utility/hideHeader";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

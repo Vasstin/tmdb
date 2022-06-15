@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../store/actions/action";
-import Image from "../../assets/img/tranding.svg";
+import * as actions from "../../../store/actions/action";
+import Image from "../../../assets/img/tranding.svg";
 import TabsContainer from "./TabsContainer";
-import apiKey from "../../utility/apiKey";
-import tmdbUrl from "../../utility/tmdbUrl";
+import apiKey from "../../../utility/apiKey";
+import tmdbUrl from "../../../utility/tmdbUrl";
 import { Skeleton } from "@mui/material";
 // import ModalTrailer from "./Cards/ModalTrailer";
 

@@ -5,7 +5,7 @@ import { purple } from "@mui/material/colors";
 import Footer from "./Footer";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import IconButton from "@mui/material/IconButton";
-import {  Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -61,7 +61,7 @@ function Layout() {
       <ThemeProvider theme={theme}>
         <Navigation />
         <Wrapper>
-          <Outlet/>
+          <Outlet />
         </Wrapper>
         <Footer />
         <Anchor onClick={(event) => anchor(event)}>

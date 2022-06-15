@@ -16,7 +16,7 @@ import {
 import MovieScore from "../../../utility/MovieScore";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ModalTrailer from "./ModalTrailer";
-import ActorCard from "./ActorCard";
+import ShortActorCard from "../../People/Cards/ShortActorCard";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 
 const MovieCard = (props) => {
@@ -440,7 +440,7 @@ const MovieCard = (props) => {
               </Typography>
               <ScrollWrapper ref={scrollTab}>
                 {cast.slice(0, 10).map((item) => (
-                  <ActorCard key={item.id} data={item} />
+                  <ShortActorCard key={item.id} data={item} />
                 ))}
                 <Link
                   style={{ display: "flex", alignItems: "center" }}
