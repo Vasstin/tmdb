@@ -149,6 +149,7 @@ const CastAndCrew = (props) => {
                 <Typography variant="h6">{item}</Typography>
                 {crew.filter(filterItem => filterItem.department === item).map(crewItem => (
                   <CastAndCrewCard
+                  key={crewItem.id}
                   profile_path={crewItem.profile_path}
                   name={crewItem.name}
                   job={crewItem.job}

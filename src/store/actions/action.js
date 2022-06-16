@@ -274,11 +274,11 @@ export const fetchTrailers = (id, mediaType) => {
   };
 };
 
-export const fetchCrewAndCast = (id, mediaType) => {
+export const fetchCrewAndCast = (id, mediaType, credits) => {
   return (dispatch) => {
     dispatch(fetchCrewAndCastStart());
     tmdbUrl
-      .get(`${mediaType}/${id}/credits?api_key=${apiKey}&language=en-US`)
+      .get(`${mediaType}/${id}/${credits}?api_key=${apiKey}&language=en-US`)
       .then((response) => {
         dispatch(fetchCrewSuccess(response.data.crew))
         dispatch(fetchCastSuccess(response.data.cast))

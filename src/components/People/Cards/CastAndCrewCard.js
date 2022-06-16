@@ -23,6 +23,7 @@ const CastAndCrewCard = (props) => {
     background: "#032541",
     width: "70px",
     height: "70px",
+    borderRadius: "5px",
   });
 
   const Content = styled(CardContent)({
@@ -35,7 +36,10 @@ const CastAndCrewCard = (props) => {
   return (
     <CustomizedCard /*onClick={() => handleClick()}*/>
       {!props.profile_path ? (
-        <Skeleton variant="rectangular" width={70} height={70} />
+        <Skeleton
+          sx={{ borderRadius: "5px", width: "70px", height: "70px" }}
+          variant="rectangular"
+        />
       ) : (
         <ImgWrapper
           component="img"

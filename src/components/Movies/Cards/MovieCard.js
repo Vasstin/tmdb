@@ -18,6 +18,8 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ModalTrailer from "./ModalTrailer";
 import ShortActorCard from "../../People/Cards/ShortActorCard";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
+import tmdbUrl from "../../../utility/tmdbUrl";
+import apiKey from "../../../utility/apiKey";
 
 const MovieCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -51,6 +53,8 @@ const MovieCard = (props) => {
     return state.movies.cardData.cast;
   });
 
+  let credits = locationState.state === 'movie' ? 'credits' : 'aggregate_credits';
+
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
@@ -60,14 +64,14 @@ const MovieCard = (props) => {
     [dispatch, id, locationState.state]
   );
   const onFetchCrewAndCast = useCallback(
-    () => dispatch(actions.fetchCrewAndCast(id, locationState.state)),
-    [dispatch, id, locationState.state]
+    () => dispatch(actions.fetchCrewAndCast(id, locationState.state, credits)),
+    [dispatch, id, locationState.state, credits]
   );
-
+  
   useEffect(() => {
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
-    onFetchCrewAndCast(id, locationState.state);
+    onFetchCrewAndCast(id, locationState.state, credits);
 
     return () => {
       dispatch(actions.cleanupCardData());
@@ -80,11 +84,18 @@ const MovieCard = (props) => {
     dispatch,
     id,
     locationState.state,
+    credits
   ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // useEffect(()=> {
+  //   tmdbUrl
+  //     .get(`tv/${id}/aggregate_credits?api_key=${apiKey}&language=en-US`)
+  //     .then(res => console.log(res.data))
+  // },[])
 
   const date = new Date(cardData.release_date ?? cardData.first_air_date);
   const fullYear = date.getFullYear();
