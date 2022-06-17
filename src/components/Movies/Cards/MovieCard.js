@@ -18,8 +18,9 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ModalTrailer from "./ModalTrailer";
 import ShortActorCard from "../../People/Cards/ShortActorCard";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
-import tmdbUrl from "../../../utility/tmdbUrl";
-import apiKey from "../../../utility/apiKey";
+// import tmdbUrl from "../../../utility/tmdbUrl";
+// import apiKey from "../../../utility/apiKey";
+import TabsContainer from "../Tabs/TabsContainer";
 
 const MovieCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -39,6 +40,12 @@ const MovieCard = (props) => {
 
   const cardData = useSelector((state) => {
     return state.movies.cardData.data;
+  });
+  const recommendations = useSelector((state) => {
+    return state.movies.advicedMovies.recommendations;
+  });
+  const similar = useSelector((state) => {
+    return state.movies.advicedMovies.similar;
   });
 
   const trailers = useSelector((state) => {
@@ -67,11 +74,17 @@ const MovieCard = (props) => {
     () => dispatch(actions.fetchCrewAndCast(id, locationState.state, credits)),
     [dispatch, id, locationState.state, credits]
   );
-  
+  const onFetchRecommendAndSimilarMovies = useCallback(
+    () => dispatch(actions.fetchRecommendAndSimilarMovies(id, locationState.state, ['recommendations', 'similar'])),
+    [dispatch, id, locationState.state]
+  );
+
+
   useEffect(() => {
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
     onFetchCrewAndCast(id, locationState.state, credits);
+    onFetchRecommendAndSimilarMovies(id, locationState.state);
 
     return () => {
       dispatch(actions.cleanupCardData());
@@ -81,6 +94,7 @@ const MovieCard = (props) => {
     onFetchCardData,
     onFetchTrailers,
     onFetchCrewAndCast,
+    onFetchRecommendAndSimilarMovies,
     dispatch,
     id,
     locationState.state,
@@ -482,15 +496,23 @@ const MovieCard = (props) => {
                 </Typography>
               </BaseInfornationItem>
               <BaseInfornationItem>
-                <Typography variant="h6">Budget: </Typography>
-                <Typography variant="body2">${cardData.budget}</Typography>{" "}
+                <Typography variant="h6">{locationState.state === 'movie' ? 'Budget:' : 'Network:'}</Typography>
+                <Typography variant="body2">{locationState.state === 'movie' ? `$${cardData.budget}` : `${cardData.networks[0].name}`}</Typography>{" "}
               </BaseInfornationItem>
               <BaseInfornationItem>
-                <Typography variant="h6">Revenue: </Typography>
-                <Typography variant="body2">${cardData.revenue}</Typography>
+                <Typography variant="h6">{locationState.state === 'movie' ? 'Revenue:' : 'Type:'}</Typography>
+                <Typography variant="body2">{locationState.state === 'movie' ? `$${cardData.revenue}` : `${cardData.type}`}</Typography>
               </BaseInfornationItem>
             </BaseInfornation>
           </MovieInformSection>
+          <TabsContainer 
+            title={"TMDB Advises"}
+            tabLabelOne={"Recommendations"}
+            tabLabelTwo={"Similar"}
+            tabOne={recommendations}
+            tabTwo={similar}
+            tvsType={locationState.state}
+            moviesType={locationState.state}/>
         </div>
       ) : (
         <LinearProgress

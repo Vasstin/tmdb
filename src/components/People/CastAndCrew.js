@@ -4,13 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import {
   Box,
-  Card,
-  CardContent,
+  // Card,
+  // CardContent,
   CardMedia,
   Typography,
-  Skeleton,
-  IconButton,
-  LinearProgress,
+  // Skeleton,
+  // IconButton,
+  // LinearProgress,
   Button,
 } from "@mui/material";
 import CastAndCrewCard from "./Cards/CastAndCrewCard";

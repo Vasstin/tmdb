@@ -13,6 +13,10 @@ const initialState = {
     movies: [],
     tvs: [],
   },
+  advicedMovies: {
+    recommendations: [],
+    similar: [],
+  },
   cardData: {
     data: {},
     cast: [],
@@ -97,6 +101,19 @@ const cleanupCast = (state, action) => {
   };
 };
 
+const setRecommendationsMovies = (state, action) => {
+  return {
+    ...state,
+    advicedMovies: { ...state.advicedMovies, recommendations: action.payload },
+  };
+};
+const setSimilarMovies = (state, action) => {
+  return {
+    ...state,
+    advicedMovies: { ...state.advicedMovies, similar: action.payload },
+  };
+};
+
 const moviesReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_POPULAR_MOVIES_START:
@@ -159,6 +176,14 @@ const moviesReducer = (state = initialState, action) => {
       return { ...state };
     case actionTypes.CLEANUP_CAST:
       return cleanupCast(state, action);
+    case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_START:
+      return { ...state };
+    case actionTypes.FETCH_RECOMMEND_SUCCESS:
+      return setRecommendationsMovies(state, action);
+    case actionTypes.FETCH_SIMILAR_SUCCESS:
+      return setSimilarMovies(state, action);
+    case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_FAIL:
+      return { ...state };
     default:
       return state;
   }

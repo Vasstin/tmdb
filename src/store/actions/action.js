@@ -183,6 +183,30 @@ export const cleanupCast = (payload) => {
   }
 }
 
+export const fetchRecommendAndSimilarMoviesStart = () => {
+  return {
+    type: actionTypes.FETCH_RECOMMEND_AND_SIMILAR_START,
+  };
+};
+export const fetchRecommendMoviesSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_RECOMMEND_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchSimilarMoviesSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_SIMILAR_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchRecommendAndSimilarMoviesFail = (error) => {
+  return {
+    type: actionTypes.FETCH_RECOMMEND_AND_SIMILAR_FAIL,
+    error: error,
+  };
+};
+
 
 export const fetchPopularMovies = () => {
   return (dispatch) => {
@@ -282,6 +306,21 @@ export const fetchCrewAndCast = (id, mediaType, credits) => {
       .then((response) => {
         dispatch(fetchCrewSuccess(response.data.crew))
         dispatch(fetchCastSuccess(response.data.cast))
+      })
+  };
+};
+export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
+  return (dispatch) => {
+    dispatch(fetchRecommendAndSimilarMoviesStart());
+    tmdbUrl
+      .get(`${mediaType}/${id}/${section[0]}?api_key=${apiKey}&language=en-US`)
+      .then((response) => {
+        dispatch(fetchRecommendMoviesSuccess(response.data.results.slice(0,10)))
+      })
+    tmdbUrl
+      .get(`${mediaType}/${id}/${section[1]}?api_key=${apiKey}&language=en-US`)
+      .then((response) => {
+        dispatch(fetchSimilarMoviesSuccess(response.data.results.slice(0,10)))
       })
   };
 };

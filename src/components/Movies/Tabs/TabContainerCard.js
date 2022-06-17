@@ -11,6 +11,7 @@ import { Box } from "@mui/system";
 const ImgWrapper = styled(CardMedia)({
   minHeight: "200px",
   borderRadius: "10px",
+  background: "#032541",
 });
 
 const Content = styled(CardContent)({
@@ -93,7 +94,7 @@ export default function TabContainerCard(props) {
       )}
 
       <VoteRate>
-        <Typography>{props.data.vote_average * 10}</Typography>
+        <Typography>{Math.floor(props.data.vote_average * 10)}</Typography>
         <sup>%</sup>
         <CustomizedMovieScore rate={props.data.vote_average} />
       </VoteRate>

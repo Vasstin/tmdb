@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import TabContainerCard from "./TabContainerCard";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import PropTypes from "prop-types";
@@ -80,10 +80,13 @@ const TabsContainer = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   /*style={{background: `linear-gradient(rgba(3, 37, 65, 0.5) 0%, rgba(1, 180, 228, 0.5)100%), url(https://image.tmdb.org/t/p/original/${props.trandingImage})`}}*/
   return (
     <Box
+      className="Wrapper"
       sx={{
         position: "relative",
         width: "100%",

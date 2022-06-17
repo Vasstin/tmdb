@@ -9,5 +9,6 @@ export {
   fetchTrailers,
   fetchCrewAndCast,
   cleanupCardData,
-  cleanupCast
+  cleanupCast,
+  fetchRecommendAndSimilarMovies
 } from './action'
