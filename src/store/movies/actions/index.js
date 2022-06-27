@@ -11,4 +11,4 @@ export {
   cleanupCardData,
   cleanupCast,
   fetchRecommendAndSimilarMovies
-} from './action'
+} from './movies'

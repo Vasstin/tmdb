@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../store/actions/action";
+import * as actions from "../../../store/movies/actions/movies";
 import Image from "../../../assets/img/tranding.svg";
 import TabsContainer from "./TabsContainer";
 import apiKey from "../../../utility/apiKey";

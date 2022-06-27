@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
 
 const ShortActorCard = (props) => {
+
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
     background: "#032541",
@@ -23,9 +24,9 @@ const ShortActorCard = (props) => {
   });
 
   const CustomizedCard = styled(Card)`
-    flex: 0 0 auto;
+    /* flex: 0 0 auto; */
     width: 150px;
-    height: 330px;
+    /* min-height: 330px; */
     margin-right: 15px;
     background: transparent;
     box-shadow: 1px solid lightgray;
@@ -55,7 +56,7 @@ const ShortActorCard = (props) => {
       )}
       <Content>
         <Typography>{props.data.name}</Typography>
-        <Typography variant="body2">
+        <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
           {props.data.character}
         </Typography>
       </Content>

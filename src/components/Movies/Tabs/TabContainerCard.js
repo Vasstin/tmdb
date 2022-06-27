@@ -107,7 +107,7 @@ export default function TabContainerCard(props) {
         >
           {props.data.title ?? props.data.name}
         </Typography>
-        <Typography variant="body2">
+        <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
           {getReleaseDate(props.data.release_date ?? props.data.first_air_date)}
         </Typography>
       </Content>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../store/actions/action";
+import * as actions from "../../../store/movies/actions/movies";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -60,7 +60,8 @@ const MovieCard = (props) => {
     return state.movies.cardData.cast;
   });
 
-  let credits = locationState.state === 'movie' ? 'credits' : 'aggregate_credits';
+  let credits =
+    locationState.state === "movie" ? "credits" : "aggregate_credits";
 
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
@@ -75,10 +76,15 @@ const MovieCard = (props) => {
     [dispatch, id, locationState.state, credits]
   );
   const onFetchRecommendAndSimilarMovies = useCallback(
-    () => dispatch(actions.fetchRecommendAndSimilarMovies(id, locationState.state, ['recommendations', 'similar'])),
+    () =>
+      dispatch(
+        actions.fetchRecommendAndSimilarMovies(id, locationState.state, [
+          "recommendations",
+          "similar",
+        ])
+      ),
     [dispatch, id, locationState.state]
   );
-
 
   useEffect(() => {
     onFetchCardData(id, locationState.state);
@@ -98,7 +104,7 @@ const MovieCard = (props) => {
     dispatch,
     id,
     locationState.state,
-    credits
+    credits,
   ]);
 
   useEffect(() => {
@@ -343,6 +349,9 @@ const MovieCard = (props) => {
     flexDirection: "column",
   });
 
+  const CustomLink = styled(Link)({
+    display: 'flex'
+  })
   return (
     <CustomizedBox>
       {cardData.id && cast.length > 0 ? (
@@ -465,7 +474,9 @@ const MovieCard = (props) => {
               </Typography>
               <ScrollWrapper ref={scrollTab}>
                 {cast.slice(0, 10).map((item) => (
-                  <ShortActorCard key={item.id} data={item} />
+                  <CustomLink to={`/actor/${item.id}`} key={item.id}>
+                    <ShortActorCard key={item.id} data={item} />
+                  </CustomLink>
                 ))}
                 <Link
                   style={{ display: "flex", alignItems: "center" }}
@@ -473,7 +484,7 @@ const MovieCard = (props) => {
                   state={{
                     poster: cardData.poster_path,
                     title: cardData.title ?? cardData.name,
-                    year: fullYear
+                    year: fullYear,
                   }}
                 >
                   <Typography sx={{ width: "100px", textAlign: "center" }}>
@@ -496,23 +507,36 @@ const MovieCard = (props) => {
                 </Typography>
               </BaseInfornationItem>
               <BaseInfornationItem>
-                <Typography variant="h6">{locationState.state === 'movie' ? 'Budget:' : 'Network:'}</Typography>
-                <Typography variant="body2">{locationState.state === 'movie' ? `$${cardData.budget}` : `${cardData.networks[0].name}`}</Typography>{" "}
+                <Typography variant="h6">
+                  {locationState.state === "movie" ? "Budget:" : "Network:"}
+                </Typography>
+                <Typography variant="body2">
+                  {locationState.state === "movie"
+                    ? `$${cardData.budget}`
+                    : `${cardData.networks[0].name}`}
+                </Typography>{" "}
               </BaseInfornationItem>
               <BaseInfornationItem>
-                <Typography variant="h6">{locationState.state === 'movie' ? 'Revenue:' : 'Type:'}</Typography>
-                <Typography variant="body2">{locationState.state === 'movie' ? `$${cardData.revenue}` : `${cardData.type}`}</Typography>
+                <Typography variant="h6">
+                  {locationState.state === "movie" ? "Revenue:" : "Type:"}
+                </Typography>
+                <Typography variant="body2">
+                  {locationState.state === "movie"
+                    ? `$${cardData.revenue}`
+                    : `${cardData.type}`}
+                </Typography>
               </BaseInfornationItem>
             </BaseInfornation>
           </MovieInformSection>
-          <TabsContainer 
+          <TabsContainer
             title={"TMDB Advises"}
             tabLabelOne={"Recommendations"}
             tabLabelTwo={"Similar"}
             tabOne={recommendations}
             tabTwo={similar}
             tvsType={locationState.state}
-            moviesType={locationState.state}/>
+            moviesType={locationState.state}
+          />
         </div>
       ) : (
         <LinearProgress
