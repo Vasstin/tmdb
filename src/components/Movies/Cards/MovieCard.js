@@ -412,7 +412,7 @@ const MovieCard = (props) => {
                   </TitleInform>
                   <Actions>
                     <VoteRate>
-                      <Typography>{cardData.vote_average * 10}</Typography>
+                      <Typography>{Math.floor(cardData.vote_average * 10)}</Typography>
                       <sup>%</sup>
                       <CustomizedMovieScore rate={cardData.vote_average} />
                     </VoteRate>

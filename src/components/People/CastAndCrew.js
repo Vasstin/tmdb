@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -74,28 +74,28 @@ const CastAndCrew = (props) => {
   });
 
   const CastAndCrew = styled("section")({
-    display: 'flex',
+    display: "flex",
   });
 
   const Cast = styled(Box)({
-    width: '500px',
+    width: "500px",
     paddingLeft: "30px",
   });
   const Crew = styled(Box)({
-    width: '500px',
+    width: "500px",
     paddingLeft: "30px",
   });
-  function filterCrew(crew){
-    let department = []
-    crew.map(item => {
-      if(!department.includes(item.department)){
-        department.push(item.department)
+  function filterCrew(crew) {
+    let department = [];
+    crew.forEach((item) => {
+      if (!department.includes(item.department)) {
+        department.push(item.department);
       }
-    })
-    return department.sort()
+    });
+    return department.sort();
   }
-  let departmentArray = filterCrew(crew)
-
+  let departmentArray = filterCrew(crew);
+  
   return (
     <CastomBox>
       <BackgroundBlur>
@@ -113,7 +113,6 @@ const CastAndCrew = (props) => {
               >
                 {location.state.title} ({location.state.year})
               </Typography>
-              
             </MovieTitle>
             <CastomButton onClick={goBack}>Back to main</CastomButton>
           </MovieInform>
@@ -128,11 +127,13 @@ const CastAndCrew = (props) => {
             </Typography>
           </Typography>
           {cast.map((item) => (
-            <CastAndCrewCard
-              profile_path={item.profile_path}
-              name={item.name}
-              character={item.character}
-            />
+            <Link to={`/actor/${item.id}`} key={item.id}>
+              <CastAndCrewCard
+                profile_path={item.profile_path}
+                name={item.name}
+                character={item.character}
+              />
+            </Link>
           ))}
         </Cast>
         <Crew>
@@ -143,25 +144,24 @@ const CastAndCrew = (props) => {
             </Typography>
           </Typography>
           {departmentArray.map((item) => {
-            return(
+            return (
               <div>
-
                 <Typography variant="h6">{item}</Typography>
-                {crew.filter(filterItem => filterItem.department === item).map(crewItem => (
-                  <CastAndCrewCard
-                  key={crewItem.id}
-                  profile_path={crewItem.profile_path}
-                  name={crewItem.name}
-                  job={crewItem.job}
-                />
-                ))}
+                {crew
+                  .filter((filterItem) => filterItem.department === item)
+                  .map((crewItem) => (
+                    <Link to={`/actor/${crewItem.id}`} key={crewItem.id}>
+                      <CastAndCrewCard
+                        key={crewItem.id}
+                        profile_path={crewItem.profile_path}
+                        name={crewItem.name}
+                        job={crewItem.job}
+                      />
+                    </Link>
+                  ))}
               </div>
-              
-              
-            )
-          }
-            
-          )}
+            );
+          })}
         </Crew>
       </CastAndCrew>
     </CastomBox>

@@ -23,9 +23,14 @@ const ActorCard = (props) => {
   const cast = useSelector((state) => {
     return state.peoples.cardData.cast;
   });
+  const crew = useSelector((state) => {
+    return state.peoples.cardData.crew;
+  });
 
-  const filteredCast = cast.filter(item=> item.media_type === 'movie').sort((a, b) => b.popularity - a.popularity).slice(0,10)
-  
+  const filteredCast = cast
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 10);
+
   const { id } = useParams();
   const locationState = useLocation();
   const scrollTab = useHorizontalScroll();
@@ -43,9 +48,9 @@ const ActorCard = (props) => {
     setIsReadMore(!isReadMore);
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   const dispatch = useDispatch();
 
@@ -91,14 +96,17 @@ const ActorCard = (props) => {
       color: "#032541",
     },
   });
+
   const InformSection = styled(Box)({
     display: "flex",
     // flexDirection: 'column',
   });
+
   const PersonalInform = styled(Box)({
     display: "flex",
     flexDirection: "column",
-    marginRight: '65px'
+    //marginRight: '30px',
+    width: "20%",
   });
 
   const PersonalInformItem = styled(Box)({
@@ -109,14 +117,15 @@ const ActorCard = (props) => {
   });
 
   const KnownFor = styled(Box)({
-    width: "100%",
-    
+    paddingLeft: "80px",
+    width: "80%",
   });
 
   const ScrollWrapper = styled(Box)({
     display: "flex",
     flexWrap: "nowrap",
     padding: "30px",
+    marginBottom: "30px",
     overflow: "scroll",
     "::-webkit-scrollbar": {
       height: "10px",
@@ -131,8 +140,46 @@ const ActorCard = (props) => {
     },
   });
   const CustomLink = styled(Link)({
-    display: 'flex'
-  })
+    display: "flex",
+  });
+
+  const CastAndCrew = styled(Box)({});
+
+  const CastAndCrewWrapper = styled(Box)({
+    boxShadow: "0 2px 8px rgb(0 0 0 / 10%)",
+    border: "1px solid #e3e3e3",
+  });
+
+  const CastAndCrewItem = styled(Box)({
+    marginBottom: "30px",
+  });
+  
+  const CastAndCrewInfo = styled(Box)({
+    display: "flex",
+    padding: "10px",
+  });
+
+  const CastAndCrewInfoDate = styled(Typography)({});
+  const CastAndCrewInfoTitle = styled(Typography)({});
+
+  function filterCrew(crew) {
+    let department = [];
+    crew.forEach((item) => {
+      if (!department.includes(item.department)) {
+        department.push(item.department);
+      }
+    });
+    return department.sort();
+  }
+  let departmentArray = filterCrew(crew);
+
+  function getFullYear(date) {
+    if (!date) {
+      return "—";
+    }
+    return new Date(date).getFullYear();
+  }
+
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
@@ -204,16 +251,105 @@ const ActorCard = (props) => {
                 Known For
               </Typography>
               <ScrollWrapper ref={scrollTab}>
-                {filteredCast.map(item=>(
+                {filteredCast.map((item) => (
                   <CustomLink
-                  key={item.id}
-                  to={`/${item.media_type ?? props.moviesType}/${item.id}`}
-                  state={item.media_type ?? props.moviesType}
-                >
-                  <TabContainerCard data={item} />
-                </CustomLink>
+                    key={item.id}
+                    to={`/${item.media_type ?? props.moviesType}/${item.id}`}
+                    state={item.media_type ?? props.moviesType}
+                  >
+                    <TabContainerCard data={item} />
+                  </CustomLink>
                 ))}
               </ScrollWrapper>
+              <CastAndCrew>
+                <CastAndCrewItem>
+                  <Typography variant="h6">Acting</Typography>
+                  <CastAndCrewWrapper>
+                    {cast
+                      .filter(
+                        (item) => !item.first_air_date && !item.release_date
+                      )
+                      .map((item) => (
+                        <CastAndCrewInfo>
+                          <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
+                          <CastAndCrewInfoTitle>
+                            {item.title ?? item.name}
+                          </CastAndCrewInfoTitle>
+                        </CastAndCrewInfo>
+                      ))}
+                    {cast
+                      .filter(
+                        (item) => item.release_date ?? item.first_air_date
+                      )
+                      .sort(
+                        (a, b) =>
+                          new Date(b.release_date ?? b.first_air_date) -
+                          new Date(a.release_date ?? a.first_air_date)
+                      )
+                      .map((item) => (
+                        <CastAndCrewInfo>
+                          <CastAndCrewInfoDate>
+                            {getFullYear(
+                              item.release_date ?? item.first_air_date
+                            )}
+                          </CastAndCrewInfoDate>
+                          <CastAndCrewInfoTitle>
+                            {item.title ?? item.name}
+                          </CastAndCrewInfoTitle>
+                        </CastAndCrewInfo>
+                      ))}
+                  </CastAndCrewWrapper>
+                </CastAndCrewItem>
+                <CastAndCrewItem>
+                  {departmentArray.map((item) => {
+                    return (
+                      <CastAndCrewItem>
+                        <Typography variant="h6">{item}</Typography>
+                        <CastAndCrewWrapper>
+                          {crew
+                            .filter(
+                              (item) =>
+                                !item.first_air_date && !item.release_date
+                            )
+                            .map((item) => (
+                              <CastAndCrewInfo>
+                                <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
+                                <CastAndCrewInfoTitle>
+                                  {item.title ?? item.name}
+                                </CastAndCrewInfoTitle>
+                              </CastAndCrewInfo>
+                            ))}
+                          {crew
+                            .filter(
+                              (item) => item.release_date ?? item.first_air_date
+                            )
+                            .sort(
+                              (a, b) =>
+                                new Date(b.release_date ?? b.first_air_date) -
+                                new Date(a.release_date ?? a.first_air_date)
+                            )
+                            .filter(
+                              (filterItem) => filterItem.department === item
+                            )
+                            .map((crewItem) => (
+                              <CastAndCrewInfo>
+                                <CastAndCrewInfoDate>
+                                  {getFullYear(
+                                    crewItem.release_date ??
+                                      crewItem.first_air_date
+                                  )}
+                                </CastAndCrewInfoDate>
+                                <CastAndCrewInfoTitle>
+                                  {crewItem.title ?? crewItem.name}
+                                </CastAndCrewInfoTitle>
+                              </CastAndCrewInfo>
+                            ))}
+                        </CastAndCrewWrapper>
+                      </CastAndCrewItem>
+                    );
+                  })}
+                </CastAndCrewItem>
+              </CastAndCrew>
             </KnownFor>
           </InformSection>
         </CustomizedBox>

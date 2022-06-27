@@ -57,6 +57,7 @@ export const fetchPeopleCredits = (id) => {
     tmdbUrl
       .get(`person/${id}/combined_credits?api_key=${apiKey}&language=en-US`)
       .then((response) => {
+        console.log(response.data)
         dispatch(fetchPeopleCreditsCastSuccess(response.data.cast));
         dispatch(fetchPeopleCreditsCrewSuccess(response.data.crew));
       });
