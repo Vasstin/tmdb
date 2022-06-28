@@ -62,17 +62,17 @@ const ActorCard = (props) => {
 
   function getFilteredCastAndCrew(array) {
     const uniqueId = [];
-    const newArray = []
-    array.forEach(item=>{
-      if(!uniqueId.includes(item.id)){
-        uniqueId.push(item.id)
-        newArray.push(item)
+    const newArray = [];
+    array.forEach((item) => {
+      if (!uniqueId.includes(item.id)) {
+        uniqueId.push(item.id);
+        newArray.push(item);
       }
-    })
-    return newArray
+    });
+    return newArray;
   }
-  const filteredCast = getFilteredCastAndCrew(cast)
-  const filteredCrew = getFilteredCastAndCrew(crew)
+  const filteredCast = getFilteredCastAndCrew(cast);
+  const filteredCrew = getFilteredCastAndCrew(crew);
 
   // getFilteredCastAndCrew(cast)
   //console.log(cast)
@@ -182,7 +182,7 @@ const ActorCard = (props) => {
   });
   const CustomLink = styled(Link)({
     display: "flex",
-    color: 'inherit',
+    color: "inherit",
     "&:hover": {
       color: "#01b4e4",
     },
@@ -201,8 +201,11 @@ const ActorCard = (props) => {
 
   const CastAndCrewInfo = styled(Box)({
     display: "flex",
+    flexWrap: 'wrap',
     alignItems: "center",
+    textAlign: "middle",
     padding: "10px",
+    borderBottom: "1px solid #e3e3e3"
   });
 
   const CastAndCrewInfoDate = styled(Typography)({
@@ -211,13 +214,21 @@ const ActorCard = (props) => {
     padding: "0 15px",
   });
   const CastAndCrewInfoTitle = styled(Typography)({
-    padding: "0 15px",
+    padding: "0 0 0 15px",
+    display: "flex",
+    alignItems: "center",
+  });
+  const CastAndCrewInfoJob = styled(Typography)({
+    padding: "0 0 0 5px",
+    // color: "lightgray",
+    display: "flex",
+    alignItems: "center",
   });
 
   const UnreleasedBox = styled(Box)({
     borderBottom: "1px solid #e3e3e3",
   });
-
+  console.log(filteredCast)
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
@@ -310,21 +321,32 @@ const ActorCard = (props) => {
                         )
                         .map((item) => (
                           <CastAndCrewInfo>
-                                  <CastAndCrewInfoDate>
-                                    {"—"}
-                                  </CastAndCrewInfoDate>
-                                  <CustomLink
-                                    key={item.id}
-                                    to={`/${
-                                      item.media_type ?? props.moviesType
-                                    }/${item.id}`}
-                                    state={item.media_type ?? props.moviesType}
-                                  >
-                                    <CastAndCrewInfoTitle>
-                                      {item.title ?? item.name}
-                                    </CastAndCrewInfoTitle>
-                                  </CustomLink>
-                                </CastAndCrewInfo>
+                            <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
+                            <CustomLink
+                              key={item.id}
+                              to={`/${item.media_type ?? props.moviesType}/${
+                                item.id
+                              }`}
+                              state={item.media_type ?? props.moviesType}
+                            >
+                              <CastAndCrewInfoTitle>
+                                {item.title ?? item.name}
+                              </CastAndCrewInfoTitle>
+                            </CustomLink>
+                            <CastAndCrewInfoJob
+                              sx={{ fontWeight: "fontWeightLight" }}
+                            >
+                              <Typography
+                                component={"span"}
+                                sx={{ color: "lightgray", paddingRight: "5px" }}
+                              >
+                                {item.episode_count
+                                  ? `(${item.episode_count} episodes)`
+                                  : null}
+                              </Typography>
+                              {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
+                            </CastAndCrewInfoJob>
+                          </CastAndCrewInfo>
                         ))}
                     </UnreleasedBox>
                     {filteredCast
@@ -344,16 +366,29 @@ const ActorCard = (props) => {
                             )}
                           </CastAndCrewInfoDate>
                           <CustomLink
-                                    key={item.id}
-                                    to={`/${
-                                      item.media_type ?? props.moviesType
-                                    }/${item.id}`}
-                                    state={item.media_type ?? props.moviesType}
-                                  >
-                                    <CastAndCrewInfoTitle>
-                                      {item.title ?? item.name}
-                                    </CastAndCrewInfoTitle>
-                                  </CustomLink>
+                            key={item.id}
+                            to={`/${item.media_type ?? props.moviesType}/${
+                              item.id
+                            }`}
+                            state={item.media_type ?? props.moviesType}
+                          >
+                            <CastAndCrewInfoTitle>
+                              {item.title ?? item.name}
+                            </CastAndCrewInfoTitle>
+                          </CustomLink>
+                            <CastAndCrewInfoJob
+                              sx={{ fontWeight: "fontWeightLight" }}
+                            >
+                              <Typography
+                                component={"span"}
+                                sx={{ color: "lightgray", paddingRight: "5px" }}
+                              >
+                                {item.episode_count
+                                  ? `(${item.episode_count} episodes)`
+                                  : null}
+                              </Typography>
+                              {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
+                            </CastAndCrewInfoJob>
                         </CastAndCrewInfo>
                       ))}
                   </CastAndCrewWrapper>
@@ -386,6 +421,22 @@ const ActorCard = (props) => {
                                       {item.title ?? item.name}
                                     </CastAndCrewInfoTitle>
                                   </CustomLink>
+                                    <CastAndCrewInfoJob
+                                      sx={{ fontWeight: "fontWeightLight" }}
+                                    >
+                                      <Typography
+                                        component={"span"}
+                                        sx={{
+                                          color: "lightgray",
+                                          paddingRight: "5px",
+                                        }}
+                                      >
+                                        {item.episode_count
+                                          ? `(${item.episode_count} episodes)`
+                                          : null}
+                                      </Typography>
+                                      {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
+                                    </CastAndCrewInfoJob>
                                 </CastAndCrewInfo>
                               ))}
                           </UnreleasedBox>
@@ -401,25 +452,43 @@ const ActorCard = (props) => {
                             .filter(
                               (filterItem) => filterItem.department === item
                             )
-                            .map((crewItem) => (
+                            .map((item) => (
                               <CastAndCrewInfo>
                                 <CastAndCrewInfoDate>
                                   {getFullYear(
-                                    crewItem.release_date ??
-                                      crewItem.first_air_date
+                                    item.release_date ??
+                                      item.first_air_date
                                   )}
                                 </CastAndCrewInfoDate>
                                 <CustomLink
-                                    key={crewItem.id}
-                                    to={`/${
-                                      crewItem.media_type ?? props.moviesType
-                                    }/${crewItem.id}`}
-                                    state={crewItem.media_type ?? props.moviesType}
+                                  key={item.id}
+                                  to={`/${
+                                    item.media_type ?? props.moviesType
+                                  }/${item.id}`}
+                                  state={
+                                    item.media_type ?? props.moviesType
+                                  }
+                                >
+                                  <CastAndCrewInfoTitle>
+                                    {item.title ?? item.name}
+                                  </CastAndCrewInfoTitle>
+                                </CustomLink>
+                                  <CastAndCrewInfoJob
+                                    sx={{ fontWeight: "fontWeightLight" }}
                                   >
-                                    <CastAndCrewInfoTitle>
-                                      {crewItem.title ?? crewItem.name}
-                                    </CastAndCrewInfoTitle>
-                                  </CustomLink>
+                                    <Typography
+                                      component={"span"}
+                                      sx={{
+                                        color: "lightgray",
+                                        paddingRight: "5px",
+                                      }}
+                                    >
+                                      {item.episode_count
+                                        ? `(${item.episode_count} episodes)`
+                                        : null}
+                                    </Typography>
+                                    {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
+                                  </CastAndCrewInfoJob>
                               </CastAndCrewInfo>
                             ))}
                         </CastAndCrewWrapper>
