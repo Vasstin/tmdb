@@ -1,4 +1,5 @@
 export {
   fetchPeopleCardData
-  fetchPeopleCredits
+  fetchPeopleCredits,
+  cleanupCardData
 } from './peoples'

@@ -43,6 +43,13 @@ export const fetchPeopleCreditsFail = (error) => {
   };
 };
 
+export const cleanupCardData = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_CARD_DATA,
+    payload: payload
+  }
+}
+
 export const fetchPeopleCardData = (id) => {
   return (dispatch) => {
     dispatch(fetchPeopleCardDataStart());
@@ -57,7 +64,6 @@ export const fetchPeopleCredits = (id) => {
     tmdbUrl
       .get(`person/${id}/combined_credits?api_key=${apiKey}&language=en-US`)
       .then((response) => {
-        console.log(response.data)
         dispatch(fetchPeopleCreditsCastSuccess(response.data.cast));
         dispatch(fetchPeopleCreditsCrewSuccess(response.data.crew));
       });

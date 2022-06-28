@@ -28,6 +28,13 @@ const setPeopleCreditsCast = (state, action) => {
   };
 };
 
+const cleanupCardData = (state, action) => {
+  return {
+    ...state,
+    cardData: { ...state.cardData, data: [], cast: [], crew: [] },
+  };
+};
+
 const peoplesReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_PEOPLE_CARD_DATA_START:
@@ -44,6 +51,8 @@ const peoplesReducer = (state = initialState, action) => {
       return setPeopleCreditsCast(state, action);
     case actionTypes.FETCH_PEOPLE_CREDITS_FAIL:
       return { ...state };
+    case actionTypes.CLEANUP_CARD_DATA:
+      return cleanupCardData(state, action);
     default:
       return state;
   }

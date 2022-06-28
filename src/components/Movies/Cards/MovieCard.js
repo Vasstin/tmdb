@@ -94,7 +94,7 @@ const MovieCard = (props) => {
 
     return () => {
       dispatch(actions.cleanupCardData());
-      //dispatch(actions.cleanupCast());
+      dispatch(actions.cleanupCast());
     };
   }, [
     onFetchCardData,

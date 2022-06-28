@@ -5,13 +5,13 @@ import * as actions from "../../../store/peoples/actions/peoples";
 import { styled } from "@mui/material/styles";
 import {
   Box,
-  Card,
-  CardContent,
   CardMedia,
   Typography,
   Skeleton,
   IconButton,
   LinearProgress,
+  Popover,
+  Button,
 } from "@mui/material";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import TabContainerCard from "../../Movies/Tabs/TabContainerCard";
@@ -27,7 +27,7 @@ const ActorCard = (props) => {
     return state.peoples.cardData.crew;
   });
 
-  const filteredCast = cast
+  const sortedCast = cast
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, 10);
 
@@ -48,9 +48,42 @@ const ActorCard = (props) => {
     setIsReadMore(!isReadMore);
   };
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
+  function getFilteredDepartment(crew) {
+    let department = [];
+    crew.forEach((item) => {
+      if (!department.includes(item.department)) {
+        department.push(item.department);
+      }
+    });
+    return department.sort();
+  }
+
+  let departmentArray = getFilteredDepartment(crew);
+
+  function getFilteredCastAndCrew(array) {
+    const uniqueId = [];
+    const newArray = []
+    array.forEach(item=>{
+      if(!uniqueId.includes(item.id)){
+        uniqueId.push(item.id)
+        newArray.push(item)
+      }
+    })
+    return newArray
+  }
+  const filteredCast = getFilteredCastAndCrew(cast)
+  const filteredCrew = getFilteredCastAndCrew(crew)
+
+  // getFilteredCastAndCrew(cast)
+  //console.log(cast)
+  //getFilteredCastAndCrew(cast)
+
+  function getFullYear(date) {
+    if (!date) {
+      return "—";
+    }
+    return new Date(date).getFullYear();
+  }
 
   const dispatch = useDispatch();
 
@@ -66,7 +99,15 @@ const ActorCard = (props) => {
   useEffect(() => {
     onFetchPeopleCardData(id);
     onFetchPeopleCredits(id);
+    return () => {
+      dispatch(actions.cleanupCardData());
+      //dispatch(actions.cleanupCast());
+    };
   }, [onFetchPeopleCardData, onFetchPeopleCredits, id]);
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
@@ -141,6 +182,10 @@ const ActorCard = (props) => {
   });
   const CustomLink = styled(Link)({
     display: "flex",
+    color: 'inherit',
+    "&:hover": {
+      color: "#01b4e4",
+    },
   });
 
   const CastAndCrew = styled(Box)({});
@@ -153,32 +198,25 @@ const ActorCard = (props) => {
   const CastAndCrewItem = styled(Box)({
     marginBottom: "30px",
   });
-  
+
   const CastAndCrewInfo = styled(Box)({
     display: "flex",
+    alignItems: "center",
     padding: "10px",
   });
 
-  const CastAndCrewInfoDate = styled(Typography)({});
-  const CastAndCrewInfoTitle = styled(Typography)({});
+  const CastAndCrewInfoDate = styled(Typography)({
+    width: "60px",
+    textAlign: "center",
+    padding: "0 15px",
+  });
+  const CastAndCrewInfoTitle = styled(Typography)({
+    padding: "0 15px",
+  });
 
-  function filterCrew(crew) {
-    let department = [];
-    crew.forEach((item) => {
-      if (!department.includes(item.department)) {
-        department.push(item.department);
-      }
-    });
-    return department.sort();
-  }
-  let departmentArray = filterCrew(crew);
-
-  function getFullYear(date) {
-    if (!date) {
-      return "—";
-    }
-    return new Date(date).getFullYear();
-  }
+  const UnreleasedBox = styled(Box)({
+    borderBottom: "1px solid #e3e3e3",
+  });
 
   return (
     <Box sx={{ marginTop: "120px" }}>
@@ -251,7 +289,7 @@ const ActorCard = (props) => {
                 Known For
               </Typography>
               <ScrollWrapper ref={scrollTab}>
-                {filteredCast.map((item) => (
+                {sortedCast.map((item) => (
                   <CustomLink
                     key={item.id}
                     to={`/${item.media_type ?? props.moviesType}/${item.id}`}
@@ -265,19 +303,31 @@ const ActorCard = (props) => {
                 <CastAndCrewItem>
                   <Typography variant="h6">Acting</Typography>
                   <CastAndCrewWrapper>
-                    {cast
-                      .filter(
-                        (item) => !item.first_air_date && !item.release_date
-                      )
-                      .map((item) => (
-                        <CastAndCrewInfo>
-                          <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
-                          <CastAndCrewInfoTitle>
-                            {item.title ?? item.name}
-                          </CastAndCrewInfoTitle>
-                        </CastAndCrewInfo>
-                      ))}
-                    {cast
+                    <UnreleasedBox>
+                      {filteredCast
+                        .filter(
+                          (item) => !item.first_air_date && !item.release_date
+                        )
+                        .map((item) => (
+                          <CastAndCrewInfo>
+                                  <CastAndCrewInfoDate>
+                                    {"—"}
+                                  </CastAndCrewInfoDate>
+                                  <CustomLink
+                                    key={item.id}
+                                    to={`/${
+                                      item.media_type ?? props.moviesType
+                                    }/${item.id}`}
+                                    state={item.media_type ?? props.moviesType}
+                                  >
+                                    <CastAndCrewInfoTitle>
+                                      {item.title ?? item.name}
+                                    </CastAndCrewInfoTitle>
+                                  </CustomLink>
+                                </CastAndCrewInfo>
+                        ))}
+                    </UnreleasedBox>
+                    {filteredCast
                       .filter(
                         (item) => item.release_date ?? item.first_air_date
                       )
@@ -293,9 +343,17 @@ const ActorCard = (props) => {
                               item.release_date ?? item.first_air_date
                             )}
                           </CastAndCrewInfoDate>
-                          <CastAndCrewInfoTitle>
-                            {item.title ?? item.name}
-                          </CastAndCrewInfoTitle>
+                          <CustomLink
+                                    key={item.id}
+                                    to={`/${
+                                      item.media_type ?? props.moviesType
+                                    }/${item.id}`}
+                                    state={item.media_type ?? props.moviesType}
+                                  >
+                                    <CastAndCrewInfoTitle>
+                                      {item.title ?? item.name}
+                                    </CastAndCrewInfoTitle>
+                                  </CustomLink>
                         </CastAndCrewInfo>
                       ))}
                   </CastAndCrewWrapper>
@@ -306,20 +364,32 @@ const ActorCard = (props) => {
                       <CastAndCrewItem>
                         <Typography variant="h6">{item}</Typography>
                         <CastAndCrewWrapper>
-                          {crew
-                            .filter(
-                              (item) =>
-                                !item.first_air_date && !item.release_date
-                            )
-                            .map((item) => (
-                              <CastAndCrewInfo>
-                                <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
-                                <CastAndCrewInfoTitle>
-                                  {item.title ?? item.name}
-                                </CastAndCrewInfoTitle>
-                              </CastAndCrewInfo>
-                            ))}
-                          {crew
+                          <UnreleasedBox>
+                            {filteredCrew
+                              .filter(
+                                (item) =>
+                                  !item.first_air_date && !item.release_date
+                              )
+                              .map((item) => (
+                                <CastAndCrewInfo>
+                                  <CastAndCrewInfoDate>
+                                    {"—"}
+                                  </CastAndCrewInfoDate>
+                                  <CustomLink
+                                    key={item.id}
+                                    to={`/${
+                                      item.media_type ?? props.moviesType
+                                    }/${item.id}`}
+                                    state={item.media_type ?? props.moviesType}
+                                  >
+                                    <CastAndCrewInfoTitle>
+                                      {item.title ?? item.name}
+                                    </CastAndCrewInfoTitle>
+                                  </CustomLink>
+                                </CastAndCrewInfo>
+                              ))}
+                          </UnreleasedBox>
+                          {filteredCrew
                             .filter(
                               (item) => item.release_date ?? item.first_air_date
                             )
@@ -339,9 +409,17 @@ const ActorCard = (props) => {
                                       crewItem.first_air_date
                                   )}
                                 </CastAndCrewInfoDate>
-                                <CastAndCrewInfoTitle>
-                                  {crewItem.title ?? crewItem.name}
-                                </CastAndCrewInfoTitle>
+                                <CustomLink
+                                    key={crewItem.id}
+                                    to={`/${
+                                      crewItem.media_type ?? props.moviesType
+                                    }/${crewItem.id}`}
+                                    state={crewItem.media_type ?? props.moviesType}
+                                  >
+                                    <CastAndCrewInfoTitle>
+                                      {crewItem.title ?? crewItem.name}
+                                    </CastAndCrewInfoTitle>
+                                  </CustomLink>
                               </CastAndCrewInfo>
                             ))}
                         </CastAndCrewWrapper>
