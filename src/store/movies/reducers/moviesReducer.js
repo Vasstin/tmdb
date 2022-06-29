@@ -22,6 +22,7 @@ const initialState = {
     cast: [],
     crew: [],
     trailers: [],
+    topCast: []
   },
 };
 
@@ -93,11 +94,17 @@ const setCast = (state, action) => {
     cardData: { ...state.cardData, cast: action.payload },
   };
 };
-
-const cleanupCast = (state, action) => {
+const setTopCast = (state, action) => {
   return {
     ...state,
-    cardData: { ...state.cardData, cast: [] },
+    cardData: { ...state.cardData, topCast: action.payload },
+  };
+};
+
+const cleanupTopCast = (state, action) => {
+  return {
+    ...state,
+    cardData: { ...state.cardData, topCast: [] },
   };
 };
 
@@ -172,10 +179,12 @@ const moviesReducer = (state = initialState, action) => {
       return setCrew(state, action);
     case actionTypes.FETCH_CAST_SUCCESS:
       return setCast(state, action);
+    case actionTypes.SET_TOP_CAST_SUCCESS:
+      return setTopCast(state, action);
     case actionTypes.FETCH_CREW_AND_CAST_FAIL:
       return { ...state };
-    case actionTypes.CLEANUP_CAST:
-      return cleanupCast(state, action);
+    case actionTypes.CLEANUP_TOP_CAST:
+      return cleanupTopCast(state, action);
     case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_START:
       return { ...state };
     case actionTypes.FETCH_RECOMMEND_SUCCESS:

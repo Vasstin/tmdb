@@ -42,7 +42,7 @@ const VoteRate = styled(Box)({
 });
 
 const CustomizedCard = styled(Card)`
-  min-width: 150px;
+  width: 150px;
   min-height: 380px;
   margin-right: 15px;
   background: transparent;

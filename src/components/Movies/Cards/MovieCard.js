@@ -27,7 +27,7 @@ const MovieCard = (props) => {
   const { id } = useParams();
   const locationState = useLocation();
   const scrollTab = useHorizontalScroll();
-
+  console.log(locationState)
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -59,10 +59,13 @@ const MovieCard = (props) => {
   const cast = useSelector((state) => {
     return state.movies.cardData.cast;
   });
+  const topCast = useSelector((state) => {
+    return state.movies.cardData.topCast;
+  });
 
   let credits =
     locationState.state === "movie" ? "credits" : "aggregate_credits";
-
+ 
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
@@ -94,7 +97,7 @@ const MovieCard = (props) => {
 
     return () => {
       dispatch(actions.cleanupCardData());
-      dispatch(actions.cleanupCast());
+      dispatch(actions.cleanupTopCast());
     };
   }, [
     onFetchCardData,
@@ -473,7 +476,7 @@ const MovieCard = (props) => {
                 Top Cast
               </Typography>
               <ScrollWrapper ref={scrollTab}>
-                {cast.slice(0, 10).map((item) => (
+                {topCast.map((item) => (
                   <CustomLink to={`/actor/${item.id}`} key={item.id}>
                     <ShortActorCard key={item.id} data={item} />
                   </CustomLink>
@@ -485,6 +488,8 @@ const MovieCard = (props) => {
                     poster: cardData.poster_path,
                     title: cardData.title ?? cardData.name,
                     year: fullYear,
+                    credits: credits,
+                    mediaType: locationState.state
                   }}
                 >
                   <Typography sx={{ width: "100px", textAlign: "center" }}>

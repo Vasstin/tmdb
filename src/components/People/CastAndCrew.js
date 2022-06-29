@@ -1,6 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
+
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useSelector} from "react-redux";
+
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -17,6 +19,7 @@ import CastAndCrewCard from "./Cards/CastAndCrewCard";
 
 const CastAndCrew = (props) => {
   const location = useLocation();
+
   const navigate = useNavigate();
 
   const goBack = () => navigate(-1);
@@ -28,7 +31,8 @@ const CastAndCrew = (props) => {
   const cast = useSelector((state) => {
     return state.movies.cardData.cast;
   });
-
+  
+  
   const CastomBox = styled(Box)({
     marginTop: "120px",
   });
@@ -95,7 +99,7 @@ const CastAndCrew = (props) => {
     return department.sort();
   }
   let departmentArray = filterCrew(crew);
-  
+
   return (
     <CastomBox>
       <BackgroundBlur>
@@ -132,6 +136,7 @@ const CastAndCrew = (props) => {
                 profile_path={item.profile_path}
                 name={item.name}
                 character={item.character}
+                key={item.id}
               />
             </Link>
           ))}
@@ -143,9 +148,9 @@ const CastAndCrew = (props) => {
               ({crew.length})
             </Typography>
           </Typography>
-          {departmentArray.map((item) => {
+          {departmentArray.map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <Typography variant="h6">{item}</Typography>
                 {crew
                   .filter((filterItem) => filterItem.department === item)

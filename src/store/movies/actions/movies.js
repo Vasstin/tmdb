@@ -169,6 +169,12 @@ export const fetchCastSuccess = (payload) => {
     payload: payload,
   };
 };
+export const setTopCast = (payload) => {
+  return {
+    type: actionTypes.SET_TOP_CAST_SUCCESS,
+    payload: payload,
+  };
+};
 export const fetchCrewAndCastFail = (error) => {
   return {
     type: actionTypes.FETCH_CREW_AND_CAST_FAIL,
@@ -176,9 +182,9 @@ export const fetchCrewAndCastFail = (error) => {
   };
 };
 
-export const cleanupCast = (payload) => {
+export const cleanupTopCast = (payload) => {
   return {
-    type: actionTypes.CLEANUP_CAST,
+    type: actionTypes.CLEANUP_TOP_CAST,
     payload: payload
   }
 }
@@ -306,6 +312,8 @@ export const fetchCrewAndCast = (id, mediaType, credits) => {
       .then((response) => {
         dispatch(fetchCrewSuccess(response.data.crew))
         dispatch(fetchCastSuccess(response.data.cast))
+        dispatch(setTopCast(response.data.cast.slice(0, 10)))
+
       })
   };
 };

@@ -7,11 +7,9 @@ import {
   Box,
   CardMedia,
   Typography,
-  Skeleton,
-  IconButton,
+  // Skeleton,
+  // IconButton,
   LinearProgress,
-  Popover,
-  Button,
 } from "@mui/material";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import TabContainerCard from "../../Movies/Tabs/TabContainerCard";
@@ -32,7 +30,6 @@ const ActorCard = (props) => {
     .slice(0, 10);
 
   const { id } = useParams();
-  const locationState = useLocation();
   const scrollTab = useHorizontalScroll();
 
   const [isReadMore, setIsReadMore] = useState(true);
@@ -103,11 +100,11 @@ const ActorCard = (props) => {
       dispatch(actions.cleanupCardData());
       //dispatch(actions.cleanupCast());
     };
-  }, [onFetchPeopleCardData, onFetchPeopleCredits, id]);
+  }, [onFetchPeopleCardData, onFetchPeopleCredits, dispatch, id]);
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
@@ -228,7 +225,7 @@ const ActorCard = (props) => {
   const UnreleasedBox = styled(Box)({
     borderBottom: "1px solid #e3e3e3",
   });
-  console.log(filteredCast)
+  
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
