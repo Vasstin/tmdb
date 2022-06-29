@@ -7,7 +7,7 @@ import {
   Box,
   CardMedia,
   Typography,
-  // Skeleton,
+  Skeleton,
   // IconButton,
   LinearProgress,
 } from "@mui/material";
@@ -25,15 +25,13 @@ const ActorCard = (props) => {
     return state.peoples.cardData.crew;
   });
 
-  const sortedCast = cast
-    .sort((a, b) => b.popularity - a.popularity)
-    .slice(0, 10);
-
+  
   const { id } = useParams();
   const scrollTab = useHorizontalScroll();
-
+  
   const [isReadMore, setIsReadMore] = useState(true);
-  const biography = cardData.biography ?? "";
+  const biography =
+  cardData.biography === "" ? "Biography not found" : cardData.biography;
   const genderType = { 1: "Female", 2: "Male" };
   const date = new Date(cardData.birthday);
 
@@ -44,7 +42,7 @@ const ActorCard = (props) => {
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
   };
-
+  
   function getFilteredDepartment(crew) {
     let department = [];
     crew.forEach((item) => {
@@ -56,7 +54,7 @@ const ActorCard = (props) => {
   }
 
   let departmentArray = getFilteredDepartment(crew);
-
+  
   function getFilteredCastAndCrew(array) {
     const uniqueId = [];
     const newArray = [];
@@ -70,25 +68,25 @@ const ActorCard = (props) => {
   }
   const filteredCast = getFilteredCastAndCrew(cast);
   const filteredCrew = getFilteredCastAndCrew(crew);
-
-  // getFilteredCastAndCrew(cast)
-  //console.log(cast)
-  //getFilteredCastAndCrew(cast)
-
+  
+  const sortedCast = getFilteredCastAndCrew(cast)
+  .sort((a, b) => b.popularity - a.popularity)
+  .slice(0, 10);
+  
   function getFullYear(date) {
     if (!date) {
       return "—";
     }
     return new Date(date).getFullYear();
   }
-
+  
   const dispatch = useDispatch();
-
+  
   const onFetchPeopleCardData = useCallback(
     () => dispatch(actions.fetchPeopleCardData(id)),
     [dispatch, id]
-  );
-  const onFetchPeopleCredits = useCallback(
+    );
+    const onFetchPeopleCredits = useCallback(
     () => dispatch(actions.fetchPeopleCredits(id)),
     [dispatch, id]
   );
@@ -198,11 +196,11 @@ const ActorCard = (props) => {
 
   const CastAndCrewInfo = styled(Box)({
     display: "flex",
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
     alignItems: "center",
     textAlign: "middle",
     padding: "10px",
-    borderBottom: "1px solid #e3e3e3"
+    borderBottom: "1px solid #e3e3e3",
   });
 
   const CastAndCrewInfoDate = styled(Typography)({
@@ -225,17 +223,27 @@ const ActorCard = (props) => {
   const UnreleasedBox = styled(Box)({
     borderBottom: "1px solid #e3e3e3",
   });
-  
+
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
         <CustomizedBox className="Wrapper">
           <ActorCardMain>
-            <ImgWrapper
-              component="img"
-              image={`https://image.tmdb.org/t/p/w500/${cardData.profile_path}`}
-              alt={cardData.name}
-            />
+            {cardData.profile_path ? (
+              <ImgWrapper
+                component="img"
+                image={`https://image.tmdb.org/t/p/w500/${cardData.profile_path}`}
+                alt={cardData.name}
+              />
+            ) : (
+              <Skeleton
+                sx={{ borderRadius: "10px" }}
+                variant="rectangular"
+                width={300}
+                height={450}
+              />
+            )}
+
             <BasicInform>
               <Typography variant="h4" sx={{ marginBottom: "30px" }}>
                 {cardData.name}
@@ -243,9 +251,11 @@ const ActorCard = (props) => {
               <Typography variant="h6">Biography</Typography>
               <Typography sx={{ fontWeight: "fontWeightLight" }}>
                 {isReadMore ? biography.slice(0, 350) : biography}
-                <ReadMoreSpan onClick={toggleReadMore}>
-                  {isReadMore ? "...Read More" : "Show Less"}
-                </ReadMoreSpan>
+                {biography === "Biography not found" ? null : (
+                  <ReadMoreSpan onClick={toggleReadMore}>
+                    {isReadMore ? "...Read More" : "Show Less"}
+                  </ReadMoreSpan>
+                )}
               </Typography>
             </BasicInform>
           </ActorCardMain>
@@ -293,34 +303,87 @@ const ActorCard = (props) => {
               </PersonalInformItem>
             </PersonalInform>
             <KnownFor>
-              <Typography sx={{ marginBottom: "20px" }} variant="h6">
-                Known For
-              </Typography>
-              <ScrollWrapper ref={scrollTab}>
-                {sortedCast.map((item) => (
-                  <CustomLink
-                    key={item.id}
-                    to={`/${item.media_type ?? props.moviesType}/${item.id}`}
-                    state={item.media_type ?? props.moviesType}
-                  >
-                    <TabContainerCard data={item} />
-                  </CustomLink>
-                ))}
-              </ScrollWrapper>
+              {cast.length > 0 ? (
+                <div>
+                  <Typography sx={{ marginBottom: "20px" }} variant="h6">
+                    Known For
+                  </Typography>
+                  <ScrollWrapper ref={scrollTab}>
+                    {sortedCast.map((item) => (
+                      <CustomLink
+                        key={item.id}
+                        to={`/${item.media_type ?? props.moviesType}/${
+                          item.id
+                        }`}
+                        state={item.media_type ?? props.moviesType}
+                      >
+                        <TabContainerCard data={item} />
+                      </CustomLink>
+                    ))}
+                  </ScrollWrapper>
+                </div>
+              ) : null}
               <CastAndCrew>
-                <CastAndCrewItem>
-                  <Typography variant="h6">Acting</Typography>
-                  <CastAndCrewWrapper>
-                    <UnreleasedBox>
+                {cast.length > 0 ? (
+                  <CastAndCrewItem>
+                    <Typography variant="h6">Acting</Typography>
+                    <CastAndCrewWrapper>
+                      <UnreleasedBox>
+                        {filteredCast
+                          .filter(
+                            (item) => !item.first_air_date && !item.release_date
+                          )
+                          .map((item) => (
+                            <CastAndCrewInfo key={item.id}>
+                              <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
+                              <CustomLink
+                                to={`/${item.media_type ?? props.moviesType}/${
+                                  item.id
+                                }`}
+                                state={item.media_type ?? props.moviesType}
+                              >
+                                <CastAndCrewInfoTitle>
+                                  {item.title ?? item.name}
+                                </CastAndCrewInfoTitle>
+                              </CustomLink>
+                              <CastAndCrewInfoJob
+                                sx={{ fontWeight: "fontWeightLight" }}
+                              >
+                                <Typography
+                                  component={"span"}
+                                  sx={{
+                                    color: "lightgray",
+                                    paddingRight: "5px",
+                                  }}
+                                >
+                                  {item.episode_count
+                                    ? `(${item.episode_count} episodes)`
+                                    : null}
+                                </Typography>
+                                {(item.character ?? item.job) !== ""
+                                  ? `as ${item.character ?? item.job}`
+                                  : "unknown"}
+                              </CastAndCrewInfoJob>
+                            </CastAndCrewInfo>
+                          ))}
+                      </UnreleasedBox>
                       {filteredCast
                         .filter(
-                          (item) => !item.first_air_date && !item.release_date
+                          (item) => item.release_date ?? item.first_air_date
                         )
-                        .map((item) => (
-                          <CastAndCrewInfo>
-                            <CastAndCrewInfoDate>{"—"}</CastAndCrewInfoDate>
+                        .sort(
+                          (a, b) =>
+                            new Date(b.release_date ?? b.first_air_date) -
+                            new Date(a.release_date ?? a.first_air_date)
+                        )
+                        .map((item, index) => (
+                          <CastAndCrewInfo key={index}>
+                            <CastAndCrewInfoDate>
+                              {getFullYear(
+                                item.release_date ?? item.first_air_date
+                              )}
+                            </CastAndCrewInfoDate>
                             <CustomLink
-                              key={item.id}
                               to={`/${item.media_type ?? props.moviesType}/${
                                 item.id
                               }`}
@@ -341,59 +404,20 @@ const ActorCard = (props) => {
                                   ? `(${item.episode_count} episodes)`
                                   : null}
                               </Typography>
-                              {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
+                              {(item.character ?? item.job) !== ""
+                                ? `as ${item.character ?? item.job}`
+                                : "unknown"}
                             </CastAndCrewInfoJob>
                           </CastAndCrewInfo>
                         ))}
-                    </UnreleasedBox>
-                    {filteredCast
-                      .filter(
-                        (item) => item.release_date ?? item.first_air_date
-                      )
-                      .sort(
-                        (a, b) =>
-                          new Date(b.release_date ?? b.first_air_date) -
-                          new Date(a.release_date ?? a.first_air_date)
-                      )
-                      .map((item) => (
-                        <CastAndCrewInfo>
-                          <CastAndCrewInfoDate>
-                            {getFullYear(
-                              item.release_date ?? item.first_air_date
-                            )}
-                          </CastAndCrewInfoDate>
-                          <CustomLink
-                            key={item.id}
-                            to={`/${item.media_type ?? props.moviesType}/${
-                              item.id
-                            }`}
-                            state={item.media_type ?? props.moviesType}
-                          >
-                            <CastAndCrewInfoTitle>
-                              {item.title ?? item.name}
-                            </CastAndCrewInfoTitle>
-                          </CustomLink>
-                            <CastAndCrewInfoJob
-                              sx={{ fontWeight: "fontWeightLight" }}
-                            >
-                              <Typography
-                                component={"span"}
-                                sx={{ color: "lightgray", paddingRight: "5px" }}
-                              >
-                                {item.episode_count
-                                  ? `(${item.episode_count} episodes)`
-                                  : null}
-                              </Typography>
-                              {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
-                            </CastAndCrewInfoJob>
-                        </CastAndCrewInfo>
-                      ))}
-                  </CastAndCrewWrapper>
-                </CastAndCrewItem>
+                    </CastAndCrewWrapper>
+                  </CastAndCrewItem>
+                ) : null}
+
                 <CastAndCrewItem>
-                  {departmentArray.map((item) => {
+                  {departmentArray.map((item, index) => {
                     return (
-                      <CastAndCrewItem>
+                      <CastAndCrewItem key={index}>
                         <Typography variant="h6">{item}</Typography>
                         <CastAndCrewWrapper>
                           <UnreleasedBox>
@@ -403,12 +427,11 @@ const ActorCard = (props) => {
                                   !item.first_air_date && !item.release_date
                               )
                               .map((item) => (
-                                <CastAndCrewInfo>
+                                <CastAndCrewInfo key={item.id}>
                                   <CastAndCrewInfoDate>
                                     {"—"}
                                   </CastAndCrewInfoDate>
                                   <CustomLink
-                                    key={item.id}
                                     to={`/${
                                       item.media_type ?? props.moviesType
                                     }/${item.id}`}
@@ -418,22 +441,24 @@ const ActorCard = (props) => {
                                       {item.title ?? item.name}
                                     </CastAndCrewInfoTitle>
                                   </CustomLink>
-                                    <CastAndCrewInfoJob
-                                      sx={{ fontWeight: "fontWeightLight" }}
+                                  <CastAndCrewInfoJob
+                                    sx={{ fontWeight: "fontWeightLight" }}
+                                  >
+                                    <Typography
+                                      component={"span"}
+                                      sx={{
+                                        color: "lightgray",
+                                        paddingRight: "5px",
+                                      }}
                                     >
-                                      <Typography
-                                        component={"span"}
-                                        sx={{
-                                          color: "lightgray",
-                                          paddingRight: "5px",
-                                        }}
-                                      >
-                                        {item.episode_count
-                                          ? `(${item.episode_count} episodes)`
-                                          : null}
-                                      </Typography>
-                                      {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
-                                    </CastAndCrewInfoJob>
+                                      {item.episode_count
+                                        ? `(${item.episode_count} episodes)`
+                                        : null}
+                                    </Typography>
+                                    {(item.character ?? item.job) !== ""
+                                      ? `as ${item.character ?? item.job}`
+                                      : "unknown"}
+                                  </CastAndCrewInfoJob>
                                 </CastAndCrewInfo>
                               ))}
                           </UnreleasedBox>
@@ -450,42 +475,40 @@ const ActorCard = (props) => {
                               (filterItem) => filterItem.department === item
                             )
                             .map((item) => (
-                              <CastAndCrewInfo>
+                              <CastAndCrewInfo key={item.id}>
                                 <CastAndCrewInfoDate>
                                   {getFullYear(
-                                    item.release_date ??
-                                      item.first_air_date
+                                    item.release_date ?? item.first_air_date
                                   )}
                                 </CastAndCrewInfoDate>
                                 <CustomLink
-                                  key={item.id}
                                   to={`/${
                                     item.media_type ?? props.moviesType
                                   }/${item.id}`}
-                                  state={
-                                    item.media_type ?? props.moviesType
-                                  }
+                                  state={item.media_type ?? props.moviesType}
                                 >
                                   <CastAndCrewInfoTitle>
                                     {item.title ?? item.name}
                                   </CastAndCrewInfoTitle>
                                 </CustomLink>
-                                  <CastAndCrewInfoJob
-                                    sx={{ fontWeight: "fontWeightLight" }}
+                                <CastAndCrewInfoJob
+                                  sx={{ fontWeight: "fontWeightLight" }}
+                                >
+                                  <Typography
+                                    component={"span"}
+                                    sx={{
+                                      color: "lightgray",
+                                      paddingRight: "5px",
+                                    }}
                                   >
-                                    <Typography
-                                      component={"span"}
-                                      sx={{
-                                        color: "lightgray",
-                                        paddingRight: "5px",
-                                      }}
-                                    >
-                                      {item.episode_count
-                                        ? `(${item.episode_count} episodes)`
-                                        : null}
-                                    </Typography>
-                                    {(item.character ?? item.job) !== '' ? `as ${item.character ?? item.job}` : 'unknown'}
-                                  </CastAndCrewInfoJob>
+                                    {item.episode_count
+                                      ? `(${item.episode_count} episodes)`
+                                      : null}
+                                  </Typography>
+                                  {(item.character ?? item.job) !== ""
+                                    ? `as ${item.character ?? item.job}`
+                                    : "unknown"}
+                                </CastAndCrewInfoJob>
                               </CastAndCrewInfo>
                             ))}
                         </CastAndCrewWrapper>

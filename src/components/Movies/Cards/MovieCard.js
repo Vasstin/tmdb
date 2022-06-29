@@ -27,7 +27,6 @@ const MovieCard = (props) => {
   const { id } = useParams();
   const locationState = useLocation();
   const scrollTab = useHorizontalScroll();
-  console.log(locationState)
   const toggleModal = () => {
     setOpen(!open);
   };
