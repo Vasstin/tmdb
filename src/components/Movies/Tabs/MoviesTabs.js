@@ -110,7 +110,7 @@ const MoviesTabs = (props) => {
 
   return (
     <div className="Wrapper">
-      {latestTv.length > 0 ? (
+    
         <div>
           <TabsContainer
             title={"What's Popular"}
@@ -157,14 +157,7 @@ const MoviesTabs = (props) => {
             bpos={"50% 200px"}
           />
         </div>
-      ) : (
-        <Skeleton
-          sx={{ borderRadius: "10px" }}
-          variant="rectangular"
-          width={"100%"}
-          height={"1300px"}
-        />
-      )}
+     
     </div>
   );
 };

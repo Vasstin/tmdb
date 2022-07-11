@@ -149,10 +149,11 @@ const TabsContainer = (props) => {
           )
         ) : (
           <Skeleton
-            sx={{ borderRadius: "10px" }}
+            sx={{ borderRadius: "10px", bgcolor: 'transparent' }}
             variant="rectangular"
             width={"100%"}
             height={380}
+            
           />
         )}
       </TabPanel>

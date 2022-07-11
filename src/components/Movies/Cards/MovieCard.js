@@ -31,6 +31,8 @@ const MovieCard = (props) => {
     setOpen(!open);
   };
 
+  // const [isContentLoaded, setIsContentLoaded] = useState(false);
+
   function coreCrewFilter(item) {
     return item.job === "Director" || item.job === "Screenplay";
   }
@@ -62,9 +64,28 @@ const MovieCard = (props) => {
     return state.movies.cardData.topCast;
   });
 
+  // useEffect(() => {
+  //   if (
+  //     recommendations.length > 0 &&
+  //     similar.length > 0 &&
+  //     trailers.length > 0 &&
+  //     crew.length > 0 &&
+  //     cast.length > 0 &&
+  //     topCast.length > 0
+  //   ) {
+  //     setTimeout(()=> {
+  //       setIsContentLoaded(true);
+
+  //     }, 1000)
+  //   }
+  //   return () => {
+  //     setIsContentLoaded(false);
+  //   };
+  // }, [cardData, recommendations, similar, trailers, crew, cast, topCast]);
+  // console.log(isContentLoaded);
   let credits =
     locationState.state === "movie" ? "credits" : "aggregate_credits";
- 
+
   const onFetchCardData = useCallback(
     () => dispatch(actions.fetchCardData(id, locationState.state)),
     [dispatch, id, locationState.state]
@@ -352,203 +373,219 @@ const MovieCard = (props) => {
   });
 
   const CustomLink = styled(Link)({
-    display: 'flex'
-  })
+    display: "flex",
+  });
+
   return (
-    <CustomizedBox>
-      {cardData.id && cast.length > 0 ? (
-        <div>
-          <MovieOverviewSection>
-            {trailers.length === 0 ? null : (
-              <ModalTrailer
-                trailers={trailers}
-                toggle={open}
-                toggleModal={toggleModal}
-              />
-            )}
-            <BackgroundBlur>
-              <CustomizedCard className="Wrapper">
-                {!cardData.poster_path ? (
-                  <Skeleton
-                    sx={{ borderRadius: "10px" }}
-                    variant="rectangular"
-                    width={300}
-                    height={450}
-                  />
-                ) : (
-                  <ImgWrapper
-                    component="img"
-                    image={`https://image.tmdb.org/t/p/w500/${cardData.poster_path}`}
-                    alt={cardData.title}
-                  />
-                )}
-                <ContentWrapper>
-                  <TitleInform>
-                    <Typography variant="h4" width={"100%"}>
-                      {cardData.title ?? cardData.name} ({fullYear})
-                    </Typography>
-                    <Facts>
-                      <FactsItem>
-                        <Typography>
-                          {date.toLocaleDateString("en-US")}
-                        </Typography>
-                      </FactsItem>
-                      <FactsItem>
-                        {cardData.genres.map((item, index) => (
-                          <Typography
-                            sx={{ display: "flex" }}
-                            key={item.id + 1}
-                          >
-                            {(index ? ", " : "") + item.name}
+    <div /*hidden={!isContentLoaded}*/>
+      <CustomizedBox>
+        {cardData.id && cast.length > 0 ? (
+          <div>
+            <MovieOverviewSection>
+              {trailers.length === 0 ? null : (
+                <ModalTrailer
+                  trailers={trailers}
+                  toggle={open}
+                  toggleModal={toggleModal}
+                />
+              )}
+              <BackgroundBlur>
+                <CustomizedCard className="Wrapper">
+                  {!cardData.poster_path ? (
+                    <Skeleton
+                      sx={{ borderRadius: "10px" }}
+                      variant="rectangular"
+                      width={300}
+                      height={450}
+                    />
+                  ) : (
+                    <ImgWrapper
+                      component="img"
+                      image={`https://image.tmdb.org/t/p/w500/${cardData.poster_path}`}
+                      alt={cardData.title}
+                    />
+                  )}
+                  <ContentWrapper>
+                    <TitleInform>
+                      <Typography variant="h4" width={"100%"}>
+                        {cardData.title ?? cardData.name} ({fullYear})
+                      </Typography>
+                      <Facts>
+                        <FactsItem>
+                          <Typography>
+                            {date.toLocaleDateString("en-US")}
                           </Typography>
-                        ))}
-                      </FactsItem>
-                      <FactsItem>
+                        </FactsItem>
+                        <FactsItem>
+                          {cardData.genres.map((item, index) => (
+                            <Typography
+                              sx={{ display: "flex" }}
+                              key={item.id + 1}
+                            >
+                              {(index ? ", " : "") + item.name}
+                            </Typography>
+                          ))}
+                        </FactsItem>
+                        <FactsItem>
+                          <Typography>
+                            {getTimeFromMins(
+                              cardData.runtime ?? cardData.episode_run_time[0]
+                            )}
+                          </Typography>
+                        </FactsItem>
+                      </Facts>
+                    </TitleInform>
+                    <Actions>
+                      <VoteRate>
                         <Typography>
-                          {getTimeFromMins(
-                            cardData.runtime ?? cardData.episode_run_time[0]
-                          )}
+                          {Math.floor(cardData.vote_average * 10)}
                         </Typography>
-                      </FactsItem>
-                    </Facts>
-                  </TitleInform>
-                  <Actions>
-                    <VoteRate>
-                      <Typography>{Math.floor(cardData.vote_average * 10)}</Typography>
-                      <sup>%</sup>
-                      <CustomizedMovieScore rate={cardData.vote_average} />
-                    </VoteRate>
-                    <Typography
-                      sx={{
-                        width: "15px",
-                        marginRight: "40px",
-                        color: "white",
-                      }}
-                    >
-                      User Score
-                    </Typography>
-                    <CustomizedIconButton
-                      onClick={() => toggleModal()}
-                      aria-label="play video"
-                    >
-                      <Icon />
-                      Play Trailer
-                    </CustomizedIconButton>
-                  </Actions>
-                  <Overview>
-                    <Typography
-                      sx={{
-                        color: "gray",
-                        fontStyle: "italic",
-                        marginBottom: "15px",
-                      }}
-                    >
-                      {cardData.tagline}
-                    </Typography>
-                    <Typography variant="h6">Overview</Typography>
-                    <Typography variant="body3">{cardData.overview}</Typography>
-                  </Overview>
-                  <CoreCrew>
-                    {crew
-                      .filter((item) => coreCrewFilter(item))
-                      .map((item) => (
-                        <CoreCrewItem key={item.id}>
-                          <Typography>{item.name}</Typography>
-                          <Typography variant="body3">{item.job}</Typography>
-                        </CoreCrewItem>
-                      ))}
-                  </CoreCrew>
-                </ContentWrapper>
-              </CustomizedCard>
-            </BackgroundBlur>
-          </MovieOverviewSection>
-          <MovieInformSection className="Wrapper">
-            <CastWrapper>
-              <Typography
-                variant="h5"
-                sx={{
-                  width: "100%",
-                  marginBottom: "15px",
-                  paddingLeft: "30px",
-                }}
-              >
-                Top Cast
-              </Typography>
-              <ScrollWrapper ref={scrollTab}>
-                {topCast.map((item) => (
-                  <CustomLink to={`/actor/${item.id}`} key={item.id}>
-                    <ShortActorCard key={item.id} data={item} />
-                  </CustomLink>
-                ))}
-                <Link
-                  style={{ display: "flex", alignItems: "center" }}
-                  to={`/${locationState.state}/${cardData.id}/cast`}
-                  state={{
-                    poster: cardData.poster_path,
-                    title: cardData.title ?? cardData.name,
-                    year: fullYear,
-                    credits: credits,
-                    mediaType: locationState.state
+                        <sup>%</sup>
+                        <CustomizedMovieScore rate={cardData.vote_average} />
+                      </VoteRate>
+                      <Typography
+                        sx={{
+                          width: "15px",
+                          marginRight: "40px",
+                          color: "white",
+                        }}
+                      >
+                        User Score
+                      </Typography>
+                      <CustomizedIconButton
+                        onClick={() => toggleModal()}
+                        aria-label="play video"
+                      >
+                        <Icon />
+                        Play Trailer
+                      </CustomizedIconButton>
+                    </Actions>
+                    <Overview>
+                      <Typography
+                        sx={{
+                          color: "gray",
+                          fontStyle: "italic",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        {cardData.tagline}
+                      </Typography>
+                      <Typography variant="h6">Overview</Typography>
+                      <Typography variant="body3">
+                        {cardData.overview}
+                      </Typography>
+                    </Overview>
+                    <CoreCrew>
+                      {crew
+                        .filter((item) => coreCrewFilter(item))
+                        .map((item) => (
+                          <CoreCrewItem key={item.id}>
+                            <Typography>{item.name}</Typography>
+                            <Typography variant="body3">{item.job}</Typography>
+                          </CoreCrewItem>
+                        ))}
+                    </CoreCrew>
+                  </ContentWrapper>
+                </CustomizedCard>
+              </BackgroundBlur>
+            </MovieOverviewSection>
+            <MovieInformSection className="Wrapper">
+              <CastWrapper>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    width: "100%",
+                    marginBottom: "15px",
+                    paddingLeft: "30px",
                   }}
                 >
-                  <Typography sx={{ width: "100px", textAlign: "center" }}>
-                    View more
+                  Top Cast
+                </Typography>
+                {topCast.length > 0 ? (
+                  <ScrollWrapper ref={scrollTab}>
+                    {topCast.map((item) => (
+                      <CustomLink to={`/actor/${item.id}`} key={item.id}>
+                        <ShortActorCard key={item.id} data={item} />
+                      </CustomLink>
+                    ))}
+                    <Link
+                      style={{ display: "flex", alignItems: "center" }}
+                      to={`/${locationState.state}/${cardData.id}/cast`}
+                      state={{
+                        poster: cardData.poster_path,
+                        title: cardData.title ?? cardData.name,
+                        year: fullYear,
+                        credits: credits,
+                        mediaType: locationState.state,
+                      }}
+                    >
+                      <Typography sx={{ width: "100px", textAlign: "center" }}>
+                        View more
+                      </Typography>
+                    </Link>
+                  </ScrollWrapper>
+                ) : (
+                  <Skeleton
+                    sx={{ borderRadius: "10px", bgcolor: "transparent" }}
+                    variant="rectangular"
+                    width={"100%"}
+                    height={340}
+                  />
+                )}
+              </CastWrapper>
+              <BaseInfornation>
+                <BaseInfornationItem>
+                  <Typography variant="h6">Status:</Typography>
+                  <Typography variant="body2">{cardData.status}</Typography>
+                </BaseInfornationItem>
+                <BaseInfornationItem>
+                  <Typography variant="h6">Original Language:</Typography>
+                  <Typography variant="body2">
+                    {cardData.original_language === "en"
+                      ? "English"
+                      : cardData.original_language}
                   </Typography>
-                </Link>
-              </ScrollWrapper>
-            </CastWrapper>
-            <BaseInfornation>
-              <BaseInfornationItem>
-                <Typography variant="h6">Status:</Typography>
-                <Typography variant="body2">{cardData.status}</Typography>
-              </BaseInfornationItem>
-              <BaseInfornationItem>
-                <Typography variant="h6">Original Language:</Typography>
-                <Typography variant="body2">
-                  {cardData.original_language === "en"
-                    ? "English"
-                    : cardData.original_language}
-                </Typography>
-              </BaseInfornationItem>
-              <BaseInfornationItem>
-                <Typography variant="h6">
-                  {locationState.state === "movie" ? "Budget:" : "Network:"}
-                </Typography>
-                <Typography variant="body2">
-                  {locationState.state === "movie"
-                    ? `$${cardData.budget}`
-                    : `${cardData.networks[0].name}`}
-                </Typography>{" "}
-              </BaseInfornationItem>
-              <BaseInfornationItem>
-                <Typography variant="h6">
-                  {locationState.state === "movie" ? "Revenue:" : "Type:"}
-                </Typography>
-                <Typography variant="body2">
-                  {locationState.state === "movie"
-                    ? `$${cardData.revenue}`
-                    : `${cardData.type}`}
-                </Typography>
-              </BaseInfornationItem>
-            </BaseInfornation>
-          </MovieInformSection>
-          <TabsContainer
-            title={"TMDB Advises"}
-            tabLabelOne={"Recommendations"}
-            tabLabelTwo={"Similar"}
-            tabOne={recommendations}
-            tabTwo={similar}
-            tvsType={locationState.state}
-            moviesType={locationState.state}
+                </BaseInfornationItem>
+                <BaseInfornationItem>
+                  <Typography variant="h6">
+                    {locationState.state === "movie" ? "Budget:" : "Network:"}
+                  </Typography>
+                  <Typography variant="body2">
+                    {locationState.state === "movie"
+                      ? `$${cardData.budget}`
+                      : `${cardData.networks[0].name}`}
+                  </Typography>{" "}
+                </BaseInfornationItem>
+                <BaseInfornationItem>
+                  <Typography variant="h6">
+                    {locationState.state === "movie" ? "Revenue:" : "Type:"}
+                  </Typography>
+                  <Typography variant="body2">
+                    {locationState.state === "movie"
+                      ? `$${cardData.revenue}`
+                      : `${cardData.type}`}
+                  </Typography>
+                </BaseInfornationItem>
+              </BaseInfornation>
+            </MovieInformSection>
+            <TabsContainer
+              title={"TMDB Advises"}
+              tabLabelOne={"Recommendations"}
+              tabLabelTwo={"Similar"}
+              tabOne={recommendations}
+              tabTwo={similar}
+              tvsType={locationState.state}
+              moviesType={locationState.state}
+            />
+          </div>
+        ) : (
+          <LinearProgress
+            sx={{ marginBottom: "1300px", transition: "all 1s" }}
+            color={"primary"}
           />
-        </div>
-      ) : (
-        <LinearProgress
-          sx={{ marginBottom: "800px", transition: "all 1s" }}
-          color={"primary"}
-        />
-      )}
-    </CustomizedBox>
+        )}
+      </CustomizedBox>
+    </div>
   );
 };
 

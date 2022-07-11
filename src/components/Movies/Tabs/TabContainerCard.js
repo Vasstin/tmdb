@@ -7,11 +7,14 @@ import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
 import MovieScore from "../../../utility/MovieScore";
 import { Box } from "@mui/system";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
-const ImgWrapper = styled(CardMedia)({
-  minHeight: "200px",
+const ImgWrapper = styled(LazyLoadImage)({
   borderRadius: "10px",
-  background: "#032541",
+  //background: "#032541",
+  width: "150px",
+  height: "225px",
 });
 
 const Content = styled(CardContent)({
@@ -87,8 +90,8 @@ export default function TabContainerCard(props) {
         />
       ) : (
         <ImgWrapper
-          component="img"
-          image={`https://image.tmdb.org/t/p/w500/${props.data.poster_path}`}
+          effect="blur"
+          src={`https://image.tmdb.org/t/p/w500/${props.data.poster_path}`}
           alt={props.data.title}
         />
       )}

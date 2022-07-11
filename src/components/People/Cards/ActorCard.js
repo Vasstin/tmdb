@@ -25,13 +25,13 @@ const ActorCard = (props) => {
     return state.peoples.cardData.crew;
   });
 
-  
   const { id } = useParams();
   const scrollTab = useHorizontalScroll();
-  
+
   const [isReadMore, setIsReadMore] = useState(true);
+
   const biography =
-  cardData.biography === "" ? "Biography not found" : cardData.biography;
+    cardData.biography === "" ? "Biography not found" : cardData.biography;
   const genderType = { 1: "Female", 2: "Male" };
   const date = new Date(cardData.birthday);
 
@@ -42,7 +42,7 @@ const ActorCard = (props) => {
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
   };
-  
+
   function getFilteredDepartment(crew) {
     let department = [];
     crew.forEach((item) => {
@@ -54,7 +54,7 @@ const ActorCard = (props) => {
   }
 
   let departmentArray = getFilteredDepartment(crew);
-  
+
   function getFilteredCastAndCrew(array) {
     const uniqueId = [];
     const newArray = [];
@@ -68,25 +68,25 @@ const ActorCard = (props) => {
   }
   const filteredCast = getFilteredCastAndCrew(cast);
   const filteredCrew = getFilteredCastAndCrew(crew);
-  
+
   const sortedCast = getFilteredCastAndCrew(cast)
-  .sort((a, b) => b.popularity - a.popularity)
-  .slice(0, 10);
-  
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 10);
+
   function getFullYear(date) {
     if (!date) {
       return "—";
     }
     return new Date(date).getFullYear();
   }
-  
+
   const dispatch = useDispatch();
-  
+
   const onFetchPeopleCardData = useCallback(
     () => dispatch(actions.fetchPeopleCardData(id)),
     [dispatch, id]
-    );
-    const onFetchPeopleCredits = useCallback(
+  );
+  const onFetchPeopleCredits = useCallback(
     () => dispatch(actions.fetchPeopleCredits(id)),
     [dispatch, id]
   );

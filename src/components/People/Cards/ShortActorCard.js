@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -6,13 +6,30 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ShortActorCard = (props) => {
+  const [imgLink, setImgLink] = useState("");
+  // const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // useEffect(() => {
+  //   fetch(`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`).then(
+  //     (res) => {
+  //       setImgLink(res.url);
+  //       setShowSkeleton(false);
+  //     }
+  //   );
+  //   return () => {
+  //     setImgLink("");
+  //     setShowSkeleton(true);
+  //   };
+  // }, []);
 
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
     background: "#032541",
-    transition: 'all 1s'
+    transition: "all 1s",
   });
 
   const Content = styled(CardContent)({
@@ -26,7 +43,7 @@ const ShortActorCard = (props) => {
   const CustomizedCard = styled(Card)`
     /* flex: 0 0 auto; */
     width: 150px;
-    /* min-height: 330px; */
+    //min-height: 330px;
     margin-right: 15px;
     background: transparent;
     box-shadow: 1px solid lightgray;
@@ -47,12 +64,10 @@ const ShortActorCard = (props) => {
           width={150}
           height={225}
         />
-      ) : (
-        <ImgWrapper
-          component="img"
-          image={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`}
-          alt={props.data.name}
-        />
+        ) : (
+        <LazyLoadImage effect="blur" width={150}
+        height={225} src={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`} alt={props.data.name} />
+        //<ImgWrapper component="img" image={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`} alt={props.data.name} />
       )}
       <Content>
         <Typography>{props.data.name}</Typography>
