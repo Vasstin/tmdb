@@ -1,7 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
@@ -9,6 +8,7 @@ import MovieScore from "../../../utility/MovieScore";
 import { Box } from "@mui/system";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { Link } from "react-router-dom";
 
 const ImgWrapper = styled(LazyLoadImage)({
   borderRadius: "10px",
@@ -80,40 +80,55 @@ export default function TabContainerCard(props) {
   getReleaseDate(props.data.release_date);
 
   return (
-    <CustomizedCard /*onClick={() => handleClick()}*/>
-      {!props.data.poster_path ? (
-        <Skeleton
-          sx={{ borderRadius: "10px" }}
-          variant="rectangular"
-          width={150}
-          height={225}
-        />
-      ) : (
-        <ImgWrapper
-          effect="blur"
-          src={`https://image.tmdb.org/t/p/w500/${props.data.poster_path}`}
-          alt={props.data.title}
-        />
-      )}
+    <Link to={props.to} state={props.linkState}>
+      <CustomizedCard
+        sx={
+          props.cardType === "movieCard"
+            ? { width: "200px", height: "450px" }
+            : null
+        }
+      >
+        {!props.data.poster_path ? (
+          <Skeleton
+            sx={{ borderRadius: "10px" }}
+            variant="rectangular"
+            width={150}
+            height={225}
+          />
+        ) : (
+          <ImgWrapper
+            sx={
+              props.cardType === "movieCard"
+                ? { width: "200px", height: "300px" }
+                : null
+            }
+            effect="blur"
+            src={`https://image.tmdb.org/t/p/w500/${props.data.poster_path}`}
+            alt={props.data.title}
+          />
+        )}
 
-      <VoteRate>
-        <Typography>{Math.floor(props.data.vote_average * 10)}</Typography>
-        <sup>%</sup>
-        <CustomizedMovieScore rate={props.data.vote_average} />
-      </VoteRate>
-      <Content>
-        <Typography
-        // gutterBottom
-        // variant="span"
-        // component="div"
-        // sx={{ fontWeight: "bold" }}
-        >
-          {props.data.title ?? props.data.name}
-        </Typography>
-        <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
-          {getReleaseDate(props.data.release_date ?? props.data.first_air_date)}
-        </Typography>
-      </Content>
-    </CustomizedCard>
+        <VoteRate>
+          <Typography>{Math.floor(props.data.vote_average * 10)}</Typography>
+          <sup>%</sup>
+          <CustomizedMovieScore rate={props.data.vote_average} />
+        </VoteRate>
+        <Content>
+          <Typography
+          // gutterBottom
+          // variant="span"
+          // component="div"
+          // sx={{ fontWeight: "bold" }}
+          >
+            {props.data.title ?? props.data.name}
+          </Typography>
+          <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
+            {getReleaseDate(
+              props.data.release_date ?? props.data.first_air_date
+            )}
+          </Typography>
+        </Content>
+      </CustomizedCard>
+    </Link>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../store/peoples/actions/peoples";
 import { styled } from "@mui/material/styles";
@@ -310,15 +310,14 @@ const ActorCard = (props) => {
                   </Typography>
                   <ScrollWrapper ref={scrollTab}>
                     {sortedCast.map((item) => (
-                      <CustomLink
+                      <TabContainerCard
                         key={item.id}
+                        data={item}
                         to={`/${item.media_type ?? props.moviesType}/${
                           item.id
                         }`}
-                        state={item.media_type ?? props.moviesType}
-                      >
-                        <TabContainerCard data={item} />
-                      </CustomLink>
+                        linkState={item.media_type ?? props.moviesType}
+                      />
                     ))}
                   </ScrollWrapper>
                 </div>

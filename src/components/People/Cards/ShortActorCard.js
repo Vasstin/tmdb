@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
@@ -10,7 +9,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ShortActorCard = (props) => {
-  const [imgLink, setImgLink] = useState("");
   // const [showSkeleton, setShowSkeleton] = useState(true);
 
   // useEffect(() => {
@@ -25,12 +23,6 @@ const ShortActorCard = (props) => {
   //     setShowSkeleton(true);
   //   };
   // }, []);
-
-  const ImgWrapper = styled(CardMedia)({
-    minHeight: "200px",
-    background: "#032541",
-    transition: "all 1s",
-  });
 
   const Content = styled(CardContent)({
     display: "flex",

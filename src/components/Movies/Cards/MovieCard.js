@@ -529,7 +529,7 @@ const MovieCard = (props) => {
                     sx={{ borderRadius: "10px", bgcolor: "transparent" }}
                     variant="rectangular"
                     width={"100%"}
-                    height={340}
+                    height={370}
                   />
                 )}
               </CastWrapper>

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import TabContainerCard from "./TabContainerCard";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import PropTypes from "prop-types";
@@ -9,7 +9,6 @@ import { styled } from "@mui/material/styles";
 import "./TabsContainer.css";
 import Typography from "@mui/material/Typography";
 import TrailerCard from "../Cards/TrailerCard";
-import { Link } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 
 function TabPanel(props) {
@@ -138,22 +137,26 @@ const TabsContainer = (props) => {
                 toggleModal={props.toggleModal}
               />
             ) : (
-              <Link
+              // <Link
+              //   key={item.id}
+              //   to={`/${item.media_type ?? props.moviesType}/${item.id}`}
+              //   state={item.media_type ?? props.moviesType}
+              // >
+              <TabContainerCard
                 key={item.id}
+                data={item}
                 to={`/${item.media_type ?? props.moviesType}/${item.id}`}
-                state={item.media_type ?? props.moviesType}
-              >
-                <TabContainerCard data={item} />
-              </Link>
+                linkState={item.media_type ?? props.moviesType}
+              />
+              // </Link>
             )
           )
         ) : (
           <Skeleton
-            sx={{ borderRadius: "10px", bgcolor: 'transparent' }}
+            sx={{ borderRadius: "10px", bgcolor: "transparent" }}
             variant="rectangular"
             width={"100%"}
             height={380}
-            
           />
         )}
       </TabPanel>
@@ -168,13 +171,18 @@ const TabsContainer = (props) => {
               toggleModal={props.toggleModal}
             />
           ) : (
-            <Link
+            // <Link
+            //   key={item.id}
+            //   to={`/${item.media_type ?? props.tvsType}/${item.id}`}
+            //   state={item.media_type ?? props.tvsType}
+            // >
+            <TabContainerCard
               key={item.id}
+              data={item}
               to={`/${item.media_type ?? props.tvsType}/${item.id}`}
-              state={item.media_type ?? props.tvsType}
-            >
-              <TabContainerCard data={item} />
-            </Link>
+              linkState={item.media_type ?? props.tvsType}
+            />
+            // </Link>
           )
         )}
       </TabPanel>
