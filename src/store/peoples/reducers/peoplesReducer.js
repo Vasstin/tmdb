@@ -1,6 +1,11 @@
 import * as actionTypes from "../../peoples/actions/actionTypes";
 
 const initialState = {
+  popular: {
+    people: [],
+    currentPage: 1,
+    totalPages: 10,
+  },
   cardData: {
     data: {},
     cast: [],
@@ -13,6 +18,12 @@ const setPeopleCardData = (state, action) => {
   return {
     ...state,
     cardData: { ...state.cardData, data: action.payload },
+  };
+};
+const setPeoplePopular = (state, action) => {
+  return {
+    ...state,
+    popular: { ...state.popular, people: action.payload },
   };
 };
 const setPeopleCreditsCrew = (state, action) => {
@@ -42,6 +53,12 @@ const peoplesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_PEOPLE_CARD_DATA_SUCCESS:
       return setPeopleCardData(state, action);
     case actionTypes.FETCH_PEOPLE_CARD_DATA_FAIL:
+      return { ...state };
+    case actionTypes.FETCH_PEOPLE_POPULAR_START:
+      return { ...state };
+    case actionTypes.FETCH_PEOPLE_POPULAR_SUCCESS:
+      return setPeoplePopular(state, action);
+    case actionTypes.FETCH_PEOPLE_POPULAR_FAIL:
       return { ...state };
     case actionTypes.FETCH_PEOPLE_CREDITS_START:
       return { ...state };

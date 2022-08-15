@@ -30,7 +30,7 @@ const MovieCard = (props) => {
   const toggleModal = () => {
     setOpen(!open);
   };
-  console.log(id )
+  console.log(id);
   // const [isContentLoaded, setIsContentLoaded] = useState(false);
 
   function coreCrewFilter(item) {
@@ -42,7 +42,7 @@ const MovieCard = (props) => {
   const cardData = useSelector((state) => {
     return state.movies.cardData.data;
   });
-  
+
   const recommendations = useSelector((state) => {
     return state.movies.advicedMovies.recommendations;
   });
@@ -373,10 +373,6 @@ const MovieCard = (props) => {
     flexDirection: "column",
   });
 
-  const CustomLink = styled(Link)({
-    display: "flex",
-  });
-
   return (
     <div /*hidden={!isContentLoaded}*/>
       <CustomizedBox>
@@ -505,9 +501,11 @@ const MovieCard = (props) => {
                 {topCast.length > 0 ? (
                   <ScrollWrapper ref={scrollTab}>
                     {topCast.map((item) => (
-                      <CustomLink to={`/actor/${item.id}`} key={item.id}>
-                        <ShortActorCard key={item.id} data={item} />
-                      </CustomLink>
+                      <ShortActorCard
+                        to={`/actor/${item.id}`}
+                        key={item.id}
+                        data={item}
+                      />
                     ))}
                     <Link
                       style={{ display: "flex", alignItems: "center" }}

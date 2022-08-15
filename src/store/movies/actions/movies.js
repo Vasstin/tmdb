@@ -34,7 +34,7 @@ export const setMoviesTotalPages = (payload) => {
 };
 export const setMoviesCurrentPage = (payload) => {
   return {
-    type: actionTypes.SET_MOVIES_CURRENT_PAGE ,
+    type: actionTypes.SET_MOVIES_CURRENT_PAGE,
     payload: payload,
   };
 };
@@ -42,15 +42,15 @@ export const setMoviesCurrentPage = (payload) => {
 export const cleanupPopularMovies = (payload) => {
   return {
     type: actionTypes.CLEANUP_POPULAR_MOVIES,
-    payload: payload
-  }
-}
+    payload: payload,
+  };
+};
 export const cleanupPopularMoviesCurrentPage = (payload) => {
   return {
     type: actionTypes.CLEANUP_POPULAR_MOVIES_CURRENT_PAGE,
-    payload: payload
-  }
-}
+    payload: payload,
+  };
+};
 export const fetchPopularMoviesFail = (error) => {
   return {
     type: actionTypes.FETCH_POPULAR_MOVIES_FAIL,
@@ -168,9 +168,9 @@ export const fetchCardDataFail = (error) => {
 export const cleanupCardData = (payload) => {
   return {
     type: actionTypes.CLEANUP_CARD_DATA,
-    payload: payload
-  }
-}
+    payload: payload,
+  };
+};
 
 export const fetchTrailersStart = () => {
   return {
@@ -223,9 +223,9 @@ export const fetchCrewAndCastFail = (error) => {
 export const cleanupTopCast = (payload) => {
   return {
     type: actionTypes.CLEANUP_TOP_CAST,
-    payload: payload
-  }
-}
+    payload: payload,
+  };
+};
 
 export const fetchRecommendAndSimilarMoviesStart = () => {
   return {
@@ -251,17 +251,14 @@ export const fetchRecommendAndSimilarMoviesFail = (error) => {
   };
 };
 
-
 export const fetchPopularMovies = (page) => {
   return (dispatch) => {
     dispatch(fetchPopularMoviesStart());
     tmdbUrl
       .get(`movie/popular?api_key=${apiKey}&language=en-US&page=${page}`)
       .then((response) => {
-        dispatch(fetchPopularMoviesSuccess(response.data.results))
-      }
-
-      );
+        dispatch(fetchPopularMoviesSuccess(response.data.results));
+      });
   };
 };
 export const fetchAllPopularMovies = (page) => {
@@ -270,13 +267,9 @@ export const fetchAllPopularMovies = (page) => {
     tmdbUrl
       .get(`movie/popular?api_key=${apiKey}&language=en-US&page=${page}`)
       .then((response) => {
-        dispatch(fetchAllPopularMoviesSuccess(response.data.results))
-        dispatch(setMoviesTotalPages(response.data.total_pages))
-
-        
-      }
-
-      );
+        dispatch(fetchAllPopularMoviesSuccess(response.data.results));
+        dispatch(setMoviesTotalPages(response.data.total_pages));
+      });
   };
 };
 export const fetchPopularTvs = () => {
@@ -365,11 +358,10 @@ export const fetchCrewAndCast = (id, mediaType, credits) => {
     tmdbUrl
       .get(`${mediaType}/${id}/${credits}?api_key=${apiKey}&language=en-US`)
       .then((response) => {
-        dispatch(fetchCrewSuccess(response.data.crew))
-        dispatch(fetchCastSuccess(response.data.cast))
-        dispatch(setTopCast(response.data.cast.slice(0, 10)))
-
-      })
+        dispatch(fetchCrewSuccess(response.data.crew));
+        dispatch(fetchCastSuccess(response.data.cast));
+        dispatch(setTopCast(response.data.cast.slice(0, 10)));
+      });
   };
 };
 export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
@@ -378,13 +370,15 @@ export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
     tmdbUrl
       .get(`${mediaType}/${id}/${section[0]}?api_key=${apiKey}&language=en-US`)
       .then((response) => {
-        dispatch(fetchRecommendMoviesSuccess(response.data.results.slice(0,10)))
-      })
+        dispatch(
+          fetchRecommendMoviesSuccess(response.data.results.slice(0, 10))
+        );
+      });
     tmdbUrl
       .get(`${mediaType}/${id}/${section[1]}?api_key=${apiKey}&language=en-US`)
       .then((response) => {
-        dispatch(fetchSimilarMoviesSuccess(response.data.results.slice(0,10)))
-      })
+        dispatch(fetchSimilarMoviesSuccess(response.data.results.slice(0, 10)));
+      });
   };
 };
 
@@ -404,8 +398,6 @@ export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
 //       setCoreCrew([...director, ...screenplay]);
 //     });
 // }, [id, locationState.state]);
-
-
 
 // useEffect(() => {
 //   let isSubscribed = true;

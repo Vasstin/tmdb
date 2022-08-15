@@ -19,6 +19,23 @@ export const fetchPeopleCardDataFail = (error) => {
     error: error,
   };
 };
+export const fetchPeoplePopularStart = () => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_POPULAR_START,
+  };
+};
+export const fetchPeoplePopularSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_POPULAR_SUCCESS,
+    payload: payload,
+  };
+};
+export const fetchPeoplePopularFail = (error) => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_POPULAR_FAIL,
+    error: error,
+  };
+};
 export const fetchPeopleCreditsStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_START,
@@ -66,6 +83,17 @@ export const fetchPeopleCredits = (id) => {
       .then((response) => {
         dispatch(fetchPeopleCreditsCastSuccess(response.data.cast));
         dispatch(fetchPeopleCreditsCrewSuccess(response.data.crew));
+      });
+  };
+};
+
+export const fetchPeoplePopular = (page) => {
+  return (dispatch) => {
+    dispatch(fetchPeoplePopularStart());
+    tmdbUrl
+      .get(`person/popular?api_key=${apiKey}&language=en-US&page=${page}`)
+      .then((response) => {
+        dispatch(fetchPeoplePopularSuccess(response.data.results));
       });
   };
 };

@@ -11,7 +11,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/MainPages/Layout";
 import MainPage from "./components/MainPages/MainPage";
-import Actors from "./components/Placeholders/Actros";
+import Actors from "./components/Placeholders/Actors";
 import ActorCard from "./components/People/Cards/ActorCard";
 import Movies from "./components/Placeholders/Movies";
 import MovieCard from "./components/Movies/Cards/MovieCard";

@@ -5,8 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const ShortActorCard = (props) => {
   // const [showSkeleton, setShowSkeleton] = useState(true);
@@ -41,33 +43,66 @@ const ShortActorCard = (props) => {
     box-shadow: 1px solid lightgray;
     margin-bottom: 10px;
     border-radius: 10px;
+    /* padding-bottom: 10px; */
     /* transition: all 1s;
     &:hover {
       transform: scale(1.1);
       transition: all 1s;
     } */
   `;
+  const CustomLink = styled(Link)({
+    display: "flex",
+  });
 
+  const CustomLazyLoadImage = styled(LazyLoadImage)({
+    width: "150px",
+    height: "225px",
+  });
+
+  console.log();
   return (
-    <CustomizedCard /*onClick={() => handleClick()}*/>
-      {!props.data.profile_path ? (
-        <Skeleton
-          variant="rectangular"
-          width={150}
-          height={225}
-        />
+    <CustomLink to={props.to}>
+      <CustomizedCard
+        /*onClick={() => handleClick()}*/ sx={
+          props.cardType === "actorCard"
+            ? { width: "200px", height: "430px" }
+            : null
+        }
+      >
+        {!props.data.profile_path ? (
+          <Skeleton variant="rectangular" width={150} height={225} />
         ) : (
-        <LazyLoadImage effect="blur" width={150}
-        height={225} src={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`} alt={props.data.name} />
-        //<ImgWrapper component="img" image={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`} alt={props.data.name} />
-      )}
-      <Content>
-        <Typography>{props.data.name}</Typography>
-        <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
-          {props.data.character}
-        </Typography>
-      </Content>
-    </CustomizedCard>
+          <CustomLazyLoadImage
+            effect="blur"
+            sx={
+              props.cardType === "actorCard"
+                ? { width: "200px", height: "300px" }
+                : null
+            }
+            src={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`}
+            alt={props.data.name}
+          />
+          //<ImgWrapper component="img" image={`https://image.tmdb.org/t/p/w500/${props.data.profile_path}`} alt={props.data.name} />
+        )}
+        <Content>
+          <Typography>{props.data.name}</Typography>
+          <Typography sx={{ fontWeight: "fontWeightLight" }} variant="body2">
+            {props.data.character}
+          </Typography>
+          {props.cardType === "actorCard" ? (
+            <Box>
+              {props.data.known_for.map((item) => (
+                <Typography
+                  sx={{ fontWeight: "fontWeightLight", fontSize: "small" }}
+                >
+                  {item.title}
+                </Typography>
+              ))}
+            </Box>
+          ) : null}
+        </Content>
+      </CustomizedCard>
+    </CustomLink>
   );
 };
 
