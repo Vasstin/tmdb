@@ -7,11 +7,12 @@ import apiKey from "../../../utility/apiKey";
 import tmdbUrl from "../../../utility/tmdbUrl";
 // import ModalTrailer from "./Cards/ModalTrailer";
 
+
 const MoviesTabs = (props) => {
   const dispatch = useDispatch();
 
   const movies = useSelector((state) => {
-    return state.movies.popular.movies;
+    return state.movies.popular.movies.movies;
   });
 
   const tvs = useSelector((state) => {
@@ -59,12 +60,14 @@ const MoviesTabs = (props) => {
   );
 
   useEffect(() => {
-    onFetchPopularMovies();
+    onFetchPopularMovies(1);
     onFetchPopularTvs();
     onFetchTrandingPerDay();
     onFetchTrandingPerWeek();
     onFetchNowPlayingMovies();
     onFetchLatestTvs();
+    dispatch(actions.cleanupPopularMoviesCurrentPage())
+    window.localStorage.removeItem("moviePage");
   }, [
     onFetchPopularMovies,
     onFetchPopularTvs,
@@ -72,6 +75,7 @@ const MoviesTabs = (props) => {
     onFetchTrandingPerWeek,
     onFetchNowPlayingMovies,
     onFetchLatestTvs,
+    dispatch,
   ]);
 
   const [bg, setBg] = useState("");
@@ -106,11 +110,9 @@ const MoviesTabs = (props) => {
   //   const results =  response.data.results
   //   setTrailers(results)
   // }, [idTrailers]);
-
+   
   return (
     <div className="Wrapper">
-    
-        <div>
           <TabsContainer
             title={"What's Popular"}
             tabLabelOne={"Movies"}
@@ -155,8 +157,6 @@ const MoviesTabs = (props) => {
             tabTwo={weekTrand}
             bpos={"50% 200px"}
           />
-        </div>
-     
     </div>
   );
 };

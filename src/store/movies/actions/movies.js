@@ -13,6 +13,44 @@ export const fetchPopularMoviesSuccess = (payload) => {
     payload: payload,
   };
 };
+
+export const fetchAllPopularMoviesStart = () => {
+  return {
+    type: actionTypes.FETCH_ALL_POPULAR_MOVIES_START,
+  };
+};
+
+export const fetchAllPopularMoviesSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_ALL_POPULAR_MOVIES_SUCCESS,
+    payload: payload,
+  };
+};
+export const setMoviesTotalPages = (payload) => {
+  return {
+    type: actionTypes.SET_MOVIES_TOTAL_PAGES,
+    payload: payload,
+  };
+};
+export const setMoviesCurrentPage = (payload) => {
+  return {
+    type: actionTypes.SET_MOVIES_CURRENT_PAGE ,
+    payload: payload,
+  };
+};
+
+export const cleanupPopularMovies = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_POPULAR_MOVIES,
+    payload: payload
+  }
+}
+export const cleanupPopularMoviesCurrentPage = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_POPULAR_MOVIES_CURRENT_PAGE,
+    payload: payload
+  }
+}
 export const fetchPopularMoviesFail = (error) => {
   return {
     type: actionTypes.FETCH_POPULAR_MOVIES_FAIL,
@@ -214,13 +252,30 @@ export const fetchRecommendAndSimilarMoviesFail = (error) => {
 };
 
 
-export const fetchPopularMovies = () => {
+export const fetchPopularMovies = (page) => {
   return (dispatch) => {
     dispatch(fetchPopularMoviesStart());
     tmdbUrl
-      .get(`movie/popular?api_key=${apiKey}&language=en-US&page=1`)
-      .then((response) =>
+      .get(`movie/popular?api_key=${apiKey}&language=en-US&page=${page}`)
+      .then((response) => {
         dispatch(fetchPopularMoviesSuccess(response.data.results))
+      }
+
+      );
+  };
+};
+export const fetchAllPopularMovies = (page) => {
+  return (dispatch) => {
+    dispatch(fetchAllPopularMoviesStart());
+    tmdbUrl
+      .get(`movie/popular?api_key=${apiKey}&language=en-US&page=${page}`)
+      .then((response) => {
+        dispatch(fetchAllPopularMoviesSuccess(response.data.results))
+        dispatch(setMoviesTotalPages(response.data.total_pages))
+
+        
+      }
+
       );
   };
 };

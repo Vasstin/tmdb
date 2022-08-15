@@ -2,7 +2,12 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   popular: {
-    movies: [],
+    movies: {
+      movies: [],
+      allPopularMovies: [],
+      currentPage: 1,
+      totalPages: 10,
+    },
     tvs: [],
   },
   tranding: {
@@ -22,16 +27,66 @@ const initialState = {
     cast: [],
     crew: [],
     trailers: [],
-    topCast: []
+    topCast: [],
   },
 };
 
 const setPopularMovies = (state, action) => {
   return {
     ...state,
-    popular: { ...state.popular, movies: action.payload },
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, movies: action.payload },
+    },
   };
 };
+const setAllPopularMovies = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, allPopularMovies: action.payload },
+    },
+  };
+};
+const setMoviesTotalPages = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, totalPages: action.payload },
+    },
+  };
+};
+const setMoviesCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, currentPage: action.payload },
+    },
+  };
+};
+
+const cleanupPopularMovies = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, movies: [] },
+    },
+  };
+};
+const cleanupPopularMoviesCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      movies: { ...state.popular.movies, currentPage: 1 },
+    },
+  };
+};
+
 const setPopularTvs = (state, action) => {
   return {
     ...state,
@@ -127,6 +182,18 @@ const moviesReducer = (state = initialState, action) => {
       return { ...state };
     case actionTypes.FETCH_POPULAR_MOVIES_SUCCESS:
       return setPopularMovies(state, action);
+    case actionTypes.FETCH_ALL_POPULAR_MOVIES_START:
+      return { ...state };
+    case actionTypes.FETCH_ALL_POPULAR_MOVIES_SUCCESS:
+      return setAllPopularMovies(state, action);
+    case actionTypes.SET_MOVIES_TOTAL_PAGES:
+      return setMoviesTotalPages(state, action);
+    case actionTypes.SET_MOVIES_CURRENT_PAGE:
+      return setMoviesCurrentPage(state, action);
+    case actionTypes.CLEANUP_POPULAR_MOVIES:
+      return cleanupPopularMovies(state, action);
+    case actionTypes.CLEANUP_POPULAR_MOVIES_CURRENT_PAGE:
+      return cleanupPopularMoviesCurrentPage(state, action);
     case actionTypes.FETCH_POPULAR_MOVIES_FAIL:
       return { ...state };
     case actionTypes.FETCH_POPULAR_TVS_START:

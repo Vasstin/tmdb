@@ -90,7 +90,7 @@ export default function SearchAppBar(props) {
               <img width={150} src={navLogo} alt="nav-logo" />
             </LogoLink>
             <NavList>
-              <NavigationItem link="/movie">Movies</NavigationItem>
+              <NavigationItem link='/movie'>Movies</NavigationItem>
               <NavigationItem link="/serial">Serials</NavigationItem>
               <NavigationItem link="/actor">Actors</NavigationItem>
             </NavList>

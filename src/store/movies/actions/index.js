@@ -8,7 +8,11 @@ export {
   fetchCardData,
   fetchTrailers,
   fetchCrewAndCast,
+  fetchRecommendAndSimilarMovies,
+  setMoviesCurrentPage,
+  fetchAllPopularMovies,
+  cleanupPopularMovies,
   cleanupCardData,
   cleanupTopCast,
-  fetchRecommendAndSimilarMovies
-} from './movies'
+  cleanupPopularMoviesCurrentPage,
+} from "./movies";
