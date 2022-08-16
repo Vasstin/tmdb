@@ -65,12 +65,12 @@ const ShortActorCard = (props) => {
       <CustomizedCard
         /*onClick={() => handleClick()}*/ sx={
           props.cardType === "actorCard"
-            ? { width: "200px", height: "430px" }
+            ? { width: "200px", minHeight: "430px" }
             : null
         }
       >
         {!props.data.profile_path ? (
-          <Skeleton variant="rectangular" width={150} height={225} />
+          <Skeleton variant="rectangular" width={200} height={300} />
         ) : (
           <CustomLazyLoadImage
             effect="blur"
@@ -95,7 +95,7 @@ const ShortActorCard = (props) => {
                 <Typography
                   sx={{ fontWeight: "fontWeightLight", fontSize: "small" }}
                 >
-                  {item.title}
+                  {item.title ?? item.name}
                 </Typography>
               ))}
             </Box>

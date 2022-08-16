@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../store/peoples/actions/peoples";
+import * as actions from "../../store/peoples/actions/index";
 import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
@@ -24,17 +24,17 @@ const Actors = (props) => {
     (page) => dispatch(actions.fetchPeoplePopular(page)),
     [dispatch]
   );
-  // const onSetMoviesCurrentPage = useCallback(
-  //   (page) => dispatch(actions.setMoviesCurrentPage(page)),
-  //   [dispatch]
-  // );
+  const onSetPeopleCurrentPage = useCallback(
+    (page) => dispatch(actions.setPeopleCurrentPage(page)),
+    [dispatch]
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setIsLoading(true), 500);
     window.localStorage.setItem("peoplePage", page);
     onFetchPeoplePopular(page);
-    // onSetMoviesCurrentPage(page);
+    onSetPeopleCurrentPage(page);
     setIsLoading(false);
 
     // return () => {

@@ -36,6 +36,18 @@ export const fetchPeoplePopularFail = (error) => {
     error: error,
   };
 };
+export const setPeopleCurrentPage = (payload) => {
+  return {
+    type: actionTypes.SET_PEOPLE_CURRENT_PAGE,
+    payload: payload,
+  };
+};
+export const cleanupPeopleCurrentPage = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_PEOPLE_CURRENT_PAGE,
+    payload: payload,
+  };
+};
 export const fetchPeopleCreditsStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_START,

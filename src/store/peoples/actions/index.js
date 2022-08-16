@@ -1,6 +1,8 @@
 export {
-  fetchPeopleCardData
+  fetchPeopleCardData,
   fetchPeopleCredits,
   fetchPeoplePopular,
+  setPeopleCurrentPage,
   cleanupCardData,
+  cleanupPeopleCurrentPage
 } from './peoples'

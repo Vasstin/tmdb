@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../store/movies/actions/movies";
+import * as movieActions from "../../../store/movies/actions/index";
+import * as peopleActions from "../../../store/peoples/actions/index";
 import Image from "../../../assets/img/tranding.svg";
 import TabsContainer from "./TabsContainer";
 import apiKey from "../../../utility/apiKey";
@@ -34,28 +35,28 @@ const MoviesTabs = (props) => {
   });
 
   const onFetchPopularMovies = useCallback(
-    () => dispatch(actions.fetchPopularMovies()),
+    () => dispatch(movieActions.fetchPopularMovies()),
     [dispatch]
   );
   const onFetchPopularTvs = useCallback(
-    () => dispatch(actions.fetchPopularTvs()),
+    () => dispatch(movieActions.fetchPopularTvs()),
     [dispatch]
   );
 
   const onFetchTrandingPerDay = useCallback(
-    () => dispatch(actions.fetchTrandingPerDay()),
+    () => dispatch(movieActions.fetchTrandingPerDay()),
     [dispatch]
   );
   const onFetchTrandingPerWeek = useCallback(
-    () => dispatch(actions.fetchTrandingPerWeek()),
+    () => dispatch(movieActions.fetchTrandingPerWeek()),
     [dispatch]
   );
   const onFetchNowPlayingMovies = useCallback(
-    () => dispatch(actions.fetchNowPlayingMovies()),
+    () => dispatch(movieActions.fetchNowPlayingMovies()),
     [dispatch]
   );
   const onFetchLatestTvs = useCallback(
-    () => dispatch(actions.fetchLatestTv()),
+    () => dispatch(movieActions.fetchLatestTv()),
     [dispatch]
   );
 
@@ -66,8 +67,10 @@ const MoviesTabs = (props) => {
     onFetchTrandingPerWeek();
     onFetchNowPlayingMovies();
     onFetchLatestTvs();
-    dispatch(actions.cleanupPopularMoviesCurrentPage())
+    dispatch(movieActions.cleanupPopularMoviesCurrentPage())
+    dispatch(peopleActions.cleanupPeopleCurrentPage())
     window.localStorage.removeItem("moviePage");
+    window.localStorage.removeItem("peoplePage");
   }, [
     onFetchPopularMovies,
     onFetchPopularTvs,

@@ -26,6 +26,18 @@ const setPeoplePopular = (state, action) => {
     popular: { ...state.popular, people: action.payload },
   };
 };
+const setPeopleCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: { ...state.popular, currentPage: action.payload },
+  };
+};
+const cleanupPeopleCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: { ...state.popular, currentPage: 1 },
+  };
+};
 const setPeopleCreditsCrew = (state, action) => {
   return {
     ...state,
@@ -60,6 +72,10 @@ const peoplesReducer = (state = initialState, action) => {
       return setPeoplePopular(state, action);
     case actionTypes.FETCH_PEOPLE_POPULAR_FAIL:
       return { ...state };
+    case actionTypes.SET_PEOPLE_CURRENT_PAGE:
+      return setPeopleCurrentPage(state, action);
+    case actionTypes.CLEANUP_PEOPLE_CURRENT_PAGE:
+      return cleanupPeopleCurrentPage(state, action);
     case actionTypes.FETCH_PEOPLE_CREDITS_START:
       return { ...state };
     case actionTypes.FETCH_PEOPLE_CREDITS_CREW_SUCCESS:

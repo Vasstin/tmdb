@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../store/movies/actions/movies";
+import * as actions from "../../store/movies/actions/index";
 import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
-// import RoutingPagination from '../../utility/routingPagination'
 import { Box, LinearProgress } from "@mui/material";
 import TabContainerCard from "../Movies/Tabs/TabContainerCard";
 
