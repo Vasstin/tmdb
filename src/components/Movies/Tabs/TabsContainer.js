@@ -82,6 +82,7 @@ const TabsContainer = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   /*style={{background: `linear-gradient(rgba(3, 37, 65, 0.5) 0%, rgba(1, 180, 228, 0.5)100%), url(https://image.tmdb.org/t/p/original/${props.trandingImage})`}}*/
   return (
     <Box
@@ -153,7 +154,7 @@ const TabsContainer = (props) => {
           )
         ) : (
           <Skeleton
-            sx={{ borderRadius: "10px", bgcolor: "transparent" }}
+            sx={{ borderRadius: "10px" }}
             variant="rectangular"
             width={"100%"}
             height={380}
@@ -161,29 +162,38 @@ const TabsContainer = (props) => {
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {props.tabTwo.map((item) =>
-          props.trailerCard ? (
-            <TrailerCard
-              type={"tv"}
-              key={item.id}
-              data={item}
-              handleNowPlayingId={props.handleNowPlayingId}
-              toggleModal={props.toggleModal}
-            />
-          ) : (
-            // <Link
-            //   key={item.id}
-            //   to={`/${item.media_type ?? props.tvsType}/${item.id}`}
-            //   state={item.media_type ?? props.tvsType}
-            // >
-            <TabContainerCard
-              key={item.id}
-              data={item}
-              to={`/${item.media_type ?? props.tvsType}/${item.id}`}
-              linkState={item.media_type ?? props.tvsType}
-            />
-            // </Link>
+        {props.tabTwo.length > 0 ? (
+          props.tabTwo.map((item) =>
+            props.trailerCard ? (
+              <TrailerCard
+                type={"tv"}
+                key={item.id}
+                data={item}
+                handleNowPlayingId={props.handleNowPlayingId}
+                toggleModal={props.toggleModal}
+              />
+            ) : (
+              // <Link
+              //   key={item.id}
+              //   to={`/${item.media_type ?? props.tvsType}/${item.id}`}
+              //   state={item.media_type ?? props.tvsType}
+              // >
+              <TabContainerCard
+                key={item.id}
+                data={item}
+                to={`/${item.media_type ?? props.tvsType}/${item.id}`}
+                linkState={item.media_type ?? props.tvsType}
+              />
+              // </Link>
+            )
           )
+        ) : (
+          <Skeleton
+            sx={{ borderRadius: "10px" }}
+            variant="rectangular"
+            width={"100%"}
+            height={380}
+          />
         )}
       </TabPanel>
     </Box>

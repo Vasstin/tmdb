@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../store/movies/actions/index";
+import * as movieActions from "../../store/movies/actions/index";
+import * as peopleActions from "../../store/peoples/actions/index";
 import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
@@ -21,11 +22,11 @@ const Movies = (props) => {
   const dispatch = useDispatch();
 
   const onFetchAllPopularMovies = useCallback(
-    (page) => dispatch(actions.fetchAllPopularMovies(page)),
+    (page) => dispatch(movieActions.fetchAllPopularMovies(page)),
     [dispatch]
   );
   const onSetMoviesCurrentPage = useCallback(
-    (page) => dispatch(actions.setMoviesCurrentPage(page)),
+    (page) => dispatch(movieActions.setMoviesCurrentPage(page)),
     [dispatch]
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -36,11 +37,13 @@ const Movies = (props) => {
     onFetchAllPopularMovies(page);
     onSetMoviesCurrentPage(page);
     setIsLoading(false);
+    window.localStorage.removeItem("peoplePage");
+    dispatch(peopleActions.cleanupPeopleCurrentPage())
 
     // return () => {
     //   window.localStorage.removeItem("moviePage");
     // };
-  }, [onFetchAllPopularMovies, onSetMoviesCurrentPage, page]);
+  }, [onFetchAllPopularMovies, onSetMoviesCurrentPage, dispatch, page]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

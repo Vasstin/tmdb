@@ -91,8 +91,9 @@ const ShortActorCard = (props) => {
           </Typography>
           {props.cardType === "actorCard" ? (
             <Box>
-              {props.data.known_for.map((item) => (
+              {props.data.known_for.map((item, index) => (
                 <Typography
+                  key={index}
                   sx={{ fontWeight: "fontWeightLight", fontSize: "small" }}
                 >
                   {item.title ?? item.name}

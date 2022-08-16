@@ -30,7 +30,6 @@ const MovieCard = (props) => {
   const toggleModal = () => {
     setOpen(!open);
   };
-  console.log(id);
   // const [isContentLoaded, setIsContentLoaded] = useState(false);
 
   function coreCrewFilter(item) {
