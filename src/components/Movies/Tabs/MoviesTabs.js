@@ -6,11 +6,14 @@ import Image from "../../../assets/img/tranding.svg";
 import TabsContainer from "./TabsContainer";
 import apiKey from "../../../utility/apiKey";
 import tmdbUrl from "../../../utility/tmdbUrl";
+import { Box, LinearProgress } from "@mui/material";
+
 // import ModalTrailer from "./Cards/ModalTrailer";
 
 
 const MoviesTabs = (props) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const movies = useSelector((state) => {
     return state.movies.popular.movies.movies;
@@ -61,6 +64,8 @@ const MoviesTabs = (props) => {
   );
 
   useEffect(() => {
+    setTimeout(() => setIsLoading(true), 500);
+
     onFetchPopularMovies(1);
     onFetchPopularTvs();
     onFetchTrandingPerDay();
@@ -71,6 +76,8 @@ const MoviesTabs = (props) => {
     dispatch(peopleActions.cleanupPeopleCurrentPage())
     window.localStorage.removeItem("moviePage");
     window.localStorage.removeItem("peoplePage");
+    setIsLoading(false);
+
   }, [
     onFetchPopularMovies,
     onFetchPopularTvs,
@@ -116,7 +123,7 @@ const MoviesTabs = (props) => {
    
   return (
     <div className="Wrapper">
-          <TabsContainer
+      {isLoading === true ? (<Box><TabsContainer
             title={"What's Popular"}
             tabLabelOne={"Movies"}
             tabLabelTwo={"On Tv"}
@@ -159,7 +166,15 @@ const MoviesTabs = (props) => {
             tabOne={dayTrand}
             tabTwo={weekTrand}
             bpos={"50% 200px"}
-          />
+          /></Box>):(<LinearProgress
+          sx={{
+            marginTop: "120px",
+            marginBottom: "1300px",
+            transition: "all 1s",
+          }}
+          color={"primary"}
+        />)}
+          
     </div>
   );
 };
