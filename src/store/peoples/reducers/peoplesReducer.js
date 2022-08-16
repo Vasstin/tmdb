@@ -32,6 +32,13 @@ const setPeopleCurrentPage = (state, action) => {
     popular: { ...state.popular, currentPage: action.payload },
   };
 };
+const setPeopleTotalPages = (state, action) => {
+  return {
+    ...state,
+    popular: { ...state.popular, totalPages: action.payload },
+  };
+};
+
 const cleanupPeopleCurrentPage = (state, action) => {
   return {
     ...state,
@@ -74,6 +81,8 @@ const peoplesReducer = (state = initialState, action) => {
       return { ...state };
     case actionTypes.SET_PEOPLE_CURRENT_PAGE:
       return setPeopleCurrentPage(state, action);
+    case actionTypes.SET_PEOPLE_TOTAL_PAGES:
+      return setPeopleTotalPages(state, action);
     case actionTypes.CLEANUP_PEOPLE_CURRENT_PAGE:
       return cleanupPeopleCurrentPage(state, action);
     case actionTypes.FETCH_PEOPLE_CREDITS_START:

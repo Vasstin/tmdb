@@ -42,6 +42,12 @@ export const setPeopleCurrentPage = (payload) => {
     payload: payload,
   };
 };
+export const setPeopleTotalPages = (payload) => {
+  return {
+    type: actionTypes.SET_PEOPLE_TOTAL_PAGES,
+    payload: payload,
+  };
+};
 export const cleanupPeopleCurrentPage = (payload) => {
   return {
     type: actionTypes.CLEANUP_PEOPLE_CURRENT_PAGE,
@@ -106,6 +112,7 @@ export const fetchPeoplePopular = (page) => {
       .get(`person/popular?api_key=${apiKey}&language=en-US&page=${page}`)
       .then((response) => {
         dispatch(fetchPeoplePopularSuccess(response.data.results));
+        dispatch(setPeopleTotalPages(response.data.total_pages));
       });
   };
 };
