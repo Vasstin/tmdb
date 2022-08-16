@@ -58,7 +58,10 @@ const ShortActorCard = (props) => {
     width: "150px",
     height: "225px",
   });
-
+  const CustomSkeleton = styled(Skeleton)({
+    width: "150px",
+    height: "225px",
+  });
   console.log();
   return (
     <CustomLink to={props.to}>
@@ -70,7 +73,14 @@ const ShortActorCard = (props) => {
         }
       >
         {!props.data.profile_path ? (
-          <Skeleton variant="rectangular" width={200} height={300} />
+          <CustomSkeleton
+            sx={
+              props.cardType === "actorCard"
+                ? { width: "200px", height: "300px" }
+                : null
+            }
+            variant="rectangular"
+          />
         ) : (
           <CustomLazyLoadImage
             effect="blur"
