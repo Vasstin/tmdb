@@ -2,31 +2,37 @@ import * as actionTypes from "./actionTypes";
 import apiKey from "../../../utility/apiKey";
 import tmdbUrl from "../../../utility/tmdbUrl";
 
-export const fetchPopularMoviesStart = () => {
+const fetchPopularMoviesStart = () => {
   return {
     type: actionTypes.FETCH_POPULAR_MOVIES_START,
   };
 };
-export const fetchPopularMoviesSuccess = (payload) => {
+const fetchPopularMoviesSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_POPULAR_MOVIES_SUCCESS,
     payload: payload,
   };
 };
 
-export const fetchAllPopularMoviesStart = () => {
+const fetchAllPopularMoviesStart = () => {
   return {
     type: actionTypes.FETCH_ALL_POPULAR_MOVIES_START,
   };
 };
 
-export const fetchAllPopularMoviesSuccess = (payload) => {
+const fetchAllPopularMoviesSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_ALL_POPULAR_MOVIES_SUCCESS,
     payload: payload,
   };
 };
-export const setMoviesTotalPages = (payload) => {
+const fetchPopularMoviesFail = (error) => {
+  return {
+    type: actionTypes.FETCH_POPULAR_MOVIES_FAIL,
+    error: error,
+  };
+};
+const setMoviesTotalPages = (payload) => {
   return {
     type: actionTypes.SET_MOVIES_TOTAL_PAGES,
     payload: payload,
@@ -51,25 +57,19 @@ export const cleanupPopularMoviesCurrentPage = (payload) => {
     payload: payload,
   };
 };
-export const fetchPopularMoviesFail = (error) => {
-  return {
-    type: actionTypes.FETCH_POPULAR_MOVIES_FAIL,
-    error: error,
-  };
-};
 
-export const fetchPopularTvsStart = () => {
+const fetchPopularTvsStart = () => {
   return {
     type: actionTypes.FETCH_POPULAR_TVS_START,
   };
 };
-export const fetchPopularTvsSuccess = (payload) => {
+const fetchPopularTvsSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_POPULAR_TVS_SUCCESS,
     payload: payload,
   };
 };
-export const fetchPopularTvsFail = (error) => {
+const fetchPopularTvsFail = (error) => {
   return {
     type: actionTypes.FETCH_POPULAR_TVS_FAIL,
     error: error,
@@ -93,89 +93,89 @@ export const cleanupPopularTvsCurrentPage = (payload) => {
     payload: payload,
   };
 };
-export const fetchTrandingPerDayStart = () => {
+const fetchTrandingPerDayStart = () => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_DAY_START,
   };
 };
-export const fetchTrandingPerDaySuccess = (payload) => {
+const fetchTrandingPerDaySuccess = (payload) => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_DAY_SUCCESS,
     payload: payload,
   };
 };
-export const fetchTrandingPerDayFail = (error) => {
+const fetchTrandingPerDayFail = (error) => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_DAY_FAIL,
     error: error,
   };
 };
-export const fetchTrandingPerWeekStart = () => {
+const fetchTrandingPerWeekStart = () => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_WEEK_START,
   };
 };
-export const fetchTrandingPerWeekSuccess = (payload) => {
+const fetchTrandingPerWeekSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_WEEK_SUCCESS,
     payload: payload,
   };
 };
-export const fetchTrandingPerWeekFail = (error) => {
+const fetchTrandingPerWeekFail = (error) => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_WEEK_FAIL,
     error: error,
   };
 };
 
-export const fetchNowPlayingMoviesStart = () => {
+const fetchNowPlayingMoviesStart = () => {
   return {
     type: actionTypes.FETCH_NOW_PLAYING_MOVIES_START,
   };
 };
-export const fetchNowPlayingMoviesSuccess = (payload) => {
+const fetchNowPlayingMoviesSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_NOW_PLAYING_MOVIES_SUCCESS,
     payload: payload,
   };
 };
-export const fetchNowPlayingMoviesFail = (error) => {
+const fetchNowPlayingMoviesFail = (error) => {
   return {
     type: actionTypes.FETCH_NOW_PLAYING_MOVIES_FAIL,
     error: error,
   };
 };
 
-export const fetchLatestTvStart = () => {
+const fetchLatestTvStart = () => {
   return {
     type: actionTypes.FETCH_LATEST_TV_START,
   };
 };
-export const fetchLatestTvSuccess = (payload) => {
+const fetchLatestTvSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_LATEST_TV_SUCCESS,
     payload: payload,
   };
 };
-export const fetchLatestTvFail = (error) => {
+const fetchLatestTvFail = (error) => {
   return {
     type: actionTypes.FETCH_LATEST_TV_FAIL,
     error: error,
   };
 };
 
-export const fetchCardDataStart = () => {
+const fetchCardDataStart = () => {
   return {
     type: actionTypes.FETCH_CARD_DATA_START,
   };
 };
-export const fetchCardDataSuccess = (payload) => {
+const fetchCardDataSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_CARD_DATA_SUCCESS,
     payload: payload,
   };
 };
-export const fetchCardDataFail = (error) => {
+const fetchCardDataFail = (error) => {
   return {
     type: actionTypes.FETCH_CARD_DATA_FAIL,
     error: error,
@@ -189,48 +189,48 @@ export const cleanupCardData = (payload) => {
   };
 };
 
-export const fetchTrailersStart = () => {
+const fetchTrailersStart = () => {
   return {
     type: actionTypes.FETCH_TRAILERS_START,
   };
 };
-export const fetchTrailersSuccess = (payload) => {
+const fetchTrailersSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_TRAILERS_SUCCESS,
     payload: payload,
   };
 };
-export const fetchTrailersFail = (error) => {
+const fetchTrailersFail = (error) => {
   return {
     type: actionTypes.FETCH_TRAILERS_FAIL,
     error: error,
   };
 };
 
-export const fetchCrewAndCastStart = () => {
+const fetchCrewAndCastStart = () => {
   return {
     type: actionTypes.FETCH_CREW_AND_CAST_START,
   };
 };
-export const fetchCrewSuccess = (payload) => {
+const fetchCrewSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_CREW_SUCCESS,
     payload: payload,
   };
 };
-export const fetchCastSuccess = (payload) => {
+const fetchCastSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_CAST_SUCCESS,
     payload: payload,
   };
 };
-export const setTopCast = (payload) => {
+const setTopCast = (payload) => {
   return {
     type: actionTypes.SET_TOP_CAST_SUCCESS,
     payload: payload,
   };
 };
-export const fetchCrewAndCastFail = (error) => {
+const fetchCrewAndCastFail = (error) => {
   return {
     type: actionTypes.FETCH_CREW_AND_CAST_FAIL,
     error: error,
@@ -244,24 +244,24 @@ export const cleanupTopCast = (payload) => {
   };
 };
 
-export const fetchRecommendAndSimilarMoviesStart = () => {
+const fetchRecommendAndSimilarMoviesStart = () => {
   return {
     type: actionTypes.FETCH_RECOMMEND_AND_SIMILAR_START,
   };
 };
-export const fetchRecommendMoviesSuccess = (payload) => {
+const fetchRecommendMoviesSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_RECOMMEND_SUCCESS,
     payload: payload,
   };
 };
-export const fetchSimilarMoviesSuccess = (payload) => {
+const fetchSimilarMoviesSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_SIMILAR_SUCCESS,
     payload: payload,
   };
 };
-export const fetchRecommendAndSimilarMoviesFail = (error) => {
+const fetchRecommendAndSimilarMoviesFail = (error) => {
   return {
     type: actionTypes.FETCH_RECOMMEND_AND_SIMILAR_FAIL,
     error: error,

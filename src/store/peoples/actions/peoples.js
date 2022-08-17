@@ -2,35 +2,35 @@ import * as actionTypes from "./actionTypes";
 import apiKey from "../../../utility/apiKey";
 import tmdbUrl from "../../../utility/tmdbUrl";
 
-export const fetchPeopleCardDataStart = () => {
+const fetchPeopleCardDataStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_CARD_DATA_START,
   };
 };
-export const fetchPeopleCardDataSuccess = (payload) => {
+const fetchPeopleCardDataSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_PEOPLE_CARD_DATA_SUCCESS,
     payload: payload,
   };
 };
-export const fetchPeopleCardDataFail = (error) => {
+const fetchPeopleCardDataFail = (error) => {
   return {
     type: actionTypes.FETCH_PEOPLE_CARD_DATA_FAIL,
     error: error,
   };
 };
-export const fetchPeoplePopularStart = () => {
+const fetchPeoplePopularStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_POPULAR_START,
   };
 };
-export const fetchPeoplePopularSuccess = (payload) => {
+const fetchPeoplePopularSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_PEOPLE_POPULAR_SUCCESS,
     payload: payload,
   };
 };
-export const fetchPeoplePopularFail = (error) => {
+const fetchPeoplePopularFail = (error) => {
   return {
     type: actionTypes.FETCH_PEOPLE_POPULAR_FAIL,
     error: error,
@@ -42,7 +42,7 @@ export const setPeopleCurrentPage = (payload) => {
     payload: payload,
   };
 };
-export const setPeopleTotalPages = (payload) => {
+const setPeopleTotalPages = (payload) => {
   return {
     type: actionTypes.SET_PEOPLE_TOTAL_PAGES,
     payload: payload,
@@ -54,24 +54,24 @@ export const cleanupPeopleCurrentPage = (payload) => {
     payload: payload,
   };
 };
-export const fetchPeopleCreditsStart = () => {
+const fetchPeopleCreditsStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_START,
   };
 };
-export const fetchPeopleCreditsCrewSuccess = (payload) => {
+const fetchPeopleCreditsCrewSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_CREW_SUCCESS,
     payload: payload,
   };
 };
-export const fetchPeopleCreditsCastSuccess = (payload) => {
+const fetchPeopleCreditsCastSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_CAST_SUCCESS,
     payload: payload,
   };
 };
-export const fetchPeopleCreditsFail = (error) => {
+const fetchPeopleCreditsFail = (error) => {
   return {
     type: actionTypes.FETCH_PEOPLE_CREDITS_FAIL,
     error: error,
@@ -81,9 +81,9 @@ export const fetchPeopleCreditsFail = (error) => {
 export const cleanupCardData = (payload) => {
   return {
     type: actionTypes.CLEANUP_CARD_DATA,
-    payload: payload
-  }
-}
+    payload: payload,
+  };
+};
 
 export const fetchPeopleCardData = (id) => {
   return (dispatch) => {
