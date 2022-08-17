@@ -38,7 +38,10 @@ const Movies = (props) => {
     onSetMoviesCurrentPage(page);
     setIsLoading(false);
     window.localStorage.removeItem("peoplePage");
+    window.localStorage.removeItem("tvPage");
     dispatch(peopleActions.cleanupPeopleCurrentPage())
+    dispatch(movieActions.cleanupPopularTvsCurrentPage())
+
 
     // return () => {
     //   window.localStorage.removeItem("moviePage");

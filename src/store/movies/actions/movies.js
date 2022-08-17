@@ -75,7 +75,24 @@ export const fetchPopularTvsFail = (error) => {
     error: error,
   };
 };
-
+const setTvsTotalPages = (payload) => {
+  return {
+    type: actionTypes.SET_TVS_TOTAL_PAGES,
+    payload: payload,
+  };
+};
+export const setTvsCurrentPage = (payload) => {
+  return {
+    type: actionTypes.SET_TVS_CURRENT_PAGE,
+    payload: payload,
+  };
+};
+export const cleanupPopularTvsCurrentPage = (payload) => {
+  return {
+    type: actionTypes.CLEANUP_POPULAR_TVS_CURRENT_PAGE,
+    payload: payload,
+  };
+};
 export const fetchTrandingPerDayStart = () => {
   return {
     type: actionTypes.FETCH_TRANDING_PER_DAY_START,
@@ -272,14 +289,15 @@ export const fetchAllPopularMovies = (page) => {
       });
   };
 };
-export const fetchPopularTvs = () => {
+export const fetchPopularTvs = (page) => {
   return (dispatch) => {
     dispatch(fetchPopularTvsStart());
     tmdbUrl
-      .get(`tv/popular?api_key=${apiKey}&language=en-US&page=1`)
-      .then((response) =>
-        dispatch(fetchPopularTvsSuccess(response.data.results))
-      );
+      .get(`tv/popular?api_key=${apiKey}&language=en-US&page=${page}`)
+      .then((response) => {
+        dispatch(fetchPopularTvsSuccess(response.data.results));
+        dispatch(setTvsTotalPages(response.data.total_pages));
+      });
   };
 };
 

@@ -91,7 +91,7 @@ export default function SearchAppBar(props) {
             </LogoLink>
             <NavList>
               <NavigationItem link='/movie'>Movies</NavigationItem>
-              <NavigationItem link="/serial">Serials</NavigationItem>
+              <NavigationItem link="/tv">Tvs</NavigationItem>
               <NavigationItem link="/actor">Actors</NavigationItem>
             </NavList>
             <Search>

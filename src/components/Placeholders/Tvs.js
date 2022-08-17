@@ -5,14 +5,14 @@ import * as peopleActions from "../../store/peoples/actions/index";
 import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
-import ShortActorCard from "../People/Cards/ShortActorCard";
+import TabContainerCard from "../Movies/Tabs/TabContainerCard";
 
-const Actors = (props) => {
+const Tvs = (props) => {
   const currentPage = useSelector((state) => {
-    return state.peoples.popular.currentPage;
+    return state.movies.popular.tvs.currentPage;
   });
   const [page, setPage] = useState(
-    +window.localStorage.getItem("peoplePage") || currentPage
+    +window.localStorage.getItem("tvPage") || currentPage
   );
 
   const pageChanger = (event, value) => {
@@ -21,45 +21,45 @@ const Actors = (props) => {
 
   const dispatch = useDispatch();
 
-  const onFetchPeoplePopular = useCallback(
-    (page) => dispatch(peopleActions.fetchPeoplePopular(page)),
+  const onFetchPopularTvs = useCallback(
+    (page) => dispatch(movieActions.fetchPopularTvs(page)),
     [dispatch]
   );
-  const onSetPeopleCurrentPage = useCallback(
-    (page) => dispatch(peopleActions.setPeopleCurrentPage(page)),
+  const onSetTvsCurrentPage = useCallback(
+    (page) => dispatch(movieActions.setTvsCurrentPage(page)),
     [dispatch]
   );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setIsLoading(true), 500);
-    window.localStorage.setItem("peoplePage", page);
-    onFetchPeoplePopular(page);
-    onSetPeopleCurrentPage(page);
+    window.localStorage.setItem("tvPage", page);
+    onFetchPopularTvs(page);
+    onSetTvsCurrentPage(page);
     setIsLoading(false);
+    window.localStorage.removeItem("peoplePage");
     window.localStorage.removeItem("moviePage");
-    window.localStorage.removeItem("tvPage");
+    dispatch(peopleActions.cleanupPeopleCurrentPage())
     dispatch(movieActions.cleanupPopularMoviesCurrentPage());
-    dispatch(movieActions.cleanupPopularTvsCurrentPage())
 
     // return () => {
-    //   window.localStorage.removeItem("peoplePage");
+    //   window.localStorage.removeItem("moviePage");
     // };
-  }, [onFetchPeoplePopular, onSetPeopleCurrentPage, dispatch, page]);
+  }, [onFetchPopularTvs, onSetTvsCurrentPage, dispatch, page]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page, currentPage]);
 
-  const people = useSelector((state) => {
-    return state.peoples.popular.people;
+  const tvs = useSelector((state) => {
+    return state.movies.popular.tvs.tvs;
   });
 
   const totalPages = useSelector((state) => {
-    return state.peoples.popular.totalPages;
+    return state.movies.popular.tvs.totalPages;
   });
 
-  const ActorsBox = styled(Box)({
+  const TvsBox = styled(Box)({
     display: "flex",
     flexWrap: "wrap",
     marginTop: "120px",
@@ -69,15 +69,15 @@ const Actors = (props) => {
 
   return (
     <Box>
-      {people.length > 0 && isLoading === true ? (
-        <ActorsBox className="Wrapper">
-          {people.map((people) => (
-            <ShortActorCard
-              key={people.id}
-              data={people}
-              cardType="actorCard"
-              to={`/actor/${people.id}`}
-              linkState={"movie"}
+      {tvs.length > 0 && isLoading === true ? (
+        <TvsBox className="Wrapper">
+          {tvs.map((tvs) => (
+            <TabContainerCard
+              key={tvs.id}
+              data={tvs}
+              cardType="movieCard"
+              to={`/tv/${tvs.id}`}
+              linkState={"tv"}
             />
           ))}
           <Pagination
@@ -85,7 +85,7 @@ const Actors = (props) => {
             currentPage={page}
             pageChanger={pageChanger}
           />
-        </ActorsBox>
+        </TvsBox>
       ) : (
         <LinearProgress
           sx={{
@@ -100,4 +100,4 @@ const Actors = (props) => {
   );
 };
 
-export default Actors;
+export default Tvs;

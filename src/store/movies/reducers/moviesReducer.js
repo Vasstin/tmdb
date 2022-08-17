@@ -8,7 +8,12 @@ const initialState = {
       currentPage: 1,
       totalPages: 10,
     },
-    tvs: [],
+    tvs: {
+      tvs: [],
+      allPopularTvs: [],
+      currentPage: 1,
+      totalPages: 10,
+    },
   },
   tranding: {
     day: [],
@@ -90,9 +95,42 @@ const cleanupPopularMoviesCurrentPage = (state, action) => {
 const setPopularTvs = (state, action) => {
   return {
     ...state,
-    popular: { ...state.popular, tvs: action.payload },
+    popular: {
+      ...state.popular,
+      tvs: { ...state.popular.tvs, tvs: action.payload },
+    },
   };
 };
+
+const setTvsTotalPages = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      tvs: { ...state.popular.tvs, totalPages: action.payload },
+    },
+  };
+};
+const setTvsCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      tvs: { ...state.popular.tvs, currentPage: action.payload },
+    },
+  };
+};
+
+const cleanupPopularTvsCurrentPage = (state, action) => {
+  return {
+    ...state,
+    popular: {
+      ...state.popular,
+      tvs: { ...state.popular.tvs, currentPage: 1 },
+    },
+  };
+};
+
 const setTrandingPerDay = (state, action) => {
   return {
     ...state,
@@ -202,6 +240,12 @@ const moviesReducer = (state = initialState, action) => {
       return setPopularTvs(state, action);
     case actionTypes.FETCH_POPULAR_TVS_FAIL:
       return { ...state };
+    case actionTypes.SET_TVS_TOTAL_PAGES:
+      return setTvsTotalPages(state, action);
+    case actionTypes.SET_TVS_CURRENT_PAGE:
+      return setTvsCurrentPage(state, action);
+    case actionTypes.CLEANUP_POPULAR_TVS_CURRENT_PAGE:
+      return cleanupPopularTvsCurrentPage(state, action);
     case actionTypes.FETCH_TRANDING_PER_DAY_START:
       return { ...state };
     case actionTypes.FETCH_TRANDING_PER_DAY_SUCCESS:

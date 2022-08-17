@@ -10,9 +10,11 @@ export {
   fetchCrewAndCast,
   fetchRecommendAndSimilarMovies,
   setMoviesCurrentPage,
+  setTvsCurrentPage,
   fetchAllPopularMovies,
   cleanupPopularMovies,
   cleanupCardData,
   cleanupTopCast,
   cleanupPopularMoviesCurrentPage,
+  cleanupPopularTvsCurrentPage,
 } from "./movies";

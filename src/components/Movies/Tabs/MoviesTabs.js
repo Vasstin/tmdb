@@ -20,7 +20,7 @@ const MoviesTabs = (props) => {
   });
 
   const tvs = useSelector((state) => {
-    return state.movies.popular.tvs;
+    return state.movies.popular.tvs.tvs;
   });
 
   const dayTrand = useSelector((state) => {
@@ -73,9 +73,11 @@ const MoviesTabs = (props) => {
     onFetchNowPlayingMovies();
     onFetchLatestTvs();
     dispatch(movieActions.cleanupPopularMoviesCurrentPage())
+    dispatch(movieActions.cleanupPopularTvsCurrentPage())
     dispatch(peopleActions.cleanupPeopleCurrentPage())
     window.localStorage.removeItem("moviePage");
     window.localStorage.removeItem("peoplePage");
+    window.localStorage.removeItem("tvPage");
     setIsLoading(false);
 
   }, [
