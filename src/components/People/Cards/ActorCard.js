@@ -224,6 +224,10 @@ const ActorCard = (props) => {
     borderBottom: "1px solid #e3e3e3",
   });
 
+  const LightTypography = styled(Typography)({
+    fontWeight: "400",
+  });
+
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
@@ -249,14 +253,14 @@ const ActorCard = (props) => {
                 {cardData.name}
               </Typography>
               <Typography variant="h6">Biography</Typography>
-              <Typography sx={{ fontWeight: "fontWeightLight" }}>
+              <LightTypography>
                 {isReadMore ? biography.slice(0, 350) : biography}
                 {biography === "Biography not found" ? null : (
                   <ReadMoreSpan onClick={toggleReadMore}>
                     {isReadMore ? "...Read More" : "Show Less"}
                   </ReadMoreSpan>
                 )}
-              </Typography>
+              </LightTypography>
             </BasicInform>
           </ActorCardMain>
           <InformSection>
@@ -266,40 +270,41 @@ const ActorCard = (props) => {
               </Typography>
               <PersonalInformItem>
                 <PersonalInformTitle>Known For</PersonalInformTitle>
-                <Typography sx={{ fontWeight: "fontWeightLight" }}>
+                <LightTypography>
                   {cardData.known_for_department}
-                </Typography>
+                </LightTypography>
               </PersonalInformItem>
               <PersonalInformItem>
                 <PersonalInformTitle>Gender</PersonalInformTitle>
-                <Typography sx={{ fontWeight: "fontWeightLight" }}>
-                  {genderType[cardData.gender]}
-                </Typography>
+                <LightTypography>{genderType[cardData.gender]}</LightTypography>
               </PersonalInformItem>
               <PersonalInformItem>
                 <PersonalInformTitle>Birthday</PersonalInformTitle>
-                <Typography sx={{ fontWeight: "fontWeightLight" }}>
-                  {`${date.toLocaleDateString("en-US")} (${getAge(
-                    date
-                  )} years old)`}
-                </Typography>
+                <LightTypography>
+                  {cardData.birthday == null
+                    ? "Unknown"
+                    : `${date.toLocaleDateString("en-US")} (${getAge(
+                        date
+                      )} years old)`}
+                </LightTypography>
               </PersonalInformItem>
               <PersonalInformItem>
                 <PersonalInformTitle>Place of Birth</PersonalInformTitle>
-                <Typography sx={{ fontWeight: "fontWeightLight" }}>
-                  {cardData.place_of_birth}
-                </Typography>
+                <LightTypography>
+                  {cardData.place_of_birth == null
+                    ? "Unknown"
+                    : cardData.place_of_birth}
+                </LightTypography>
               </PersonalInformItem>
               <PersonalInformItem>
                 <PersonalInformTitle>Also Known As</PersonalInformTitle>
-                {cardData.also_known_as.map((item, index) => (
-                  <Typography
-                    key={index}
-                    sx={{ fontWeight: "fontWeightLight" }}
-                  >
-                    {item}
-                  </Typography>
-                ))}
+                {cardData.also_known_as.length > 0 ? (
+                  cardData.also_known_as.map((item, index) => (
+                    <LightTypography key={index}>{item}</LightTypography>
+                  ))
+                ) : (
+                  <LightTypography>{"Unknown"}</LightTypography>
+                )}
               </PersonalInformItem>
             </PersonalInform>
             <KnownFor>
