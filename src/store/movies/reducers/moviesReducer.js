@@ -34,6 +34,7 @@ const initialState = {
     trailers: [],
     topCast: [],
   },
+  isError: false,
 };
 
 const setPopularMovies = (state, action) => {
@@ -213,6 +214,12 @@ const setSimilarMovies = (state, action) => {
     advicedMovies: { ...state.advicedMovies, similar: action.payload },
   };
 };
+const isError = (state, action) => {
+  return {
+    ...state,
+    isError: action.error,
+  };
+};
 
 const moviesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -224,6 +231,8 @@ const moviesReducer = (state = initialState, action) => {
       return { ...state };
     case actionTypes.FETCH_ALL_POPULAR_MOVIES_SUCCESS:
       return setAllPopularMovies(state, action);
+    case actionTypes.FETCH_ALL_POPULAR_MOVIES_FAIL:
+      return isError(state, action);
     case actionTypes.SET_MOVIES_TOTAL_PAGES:
       return setMoviesTotalPages(state, action);
     case actionTypes.SET_MOVIES_CURRENT_PAGE:
@@ -233,13 +242,13 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.CLEANUP_POPULAR_MOVIES_CURRENT_PAGE:
       return cleanupPopularMoviesCurrentPage(state, action);
     case actionTypes.FETCH_POPULAR_MOVIES_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_POPULAR_TVS_START:
       return { ...state };
     case actionTypes.FETCH_POPULAR_TVS_SUCCESS:
       return setPopularTvs(state, action);
     case actionTypes.FETCH_POPULAR_TVS_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.SET_TVS_TOTAL_PAGES:
       return setTvsTotalPages(state, action);
     case actionTypes.SET_TVS_CURRENT_PAGE:
@@ -251,31 +260,31 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_TRANDING_PER_DAY_SUCCESS:
       return setTrandingPerDay(state, action);
     case actionTypes.FETCH_TRANDING_PER_DAY_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_TRANDING_PER_WEEK_START:
       return { ...state };
     case actionTypes.FETCH_TRANDING_PER_WEEK_SUCCESS:
       return setTrandingPerWeek(state, action);
     case actionTypes.FETCH_TRANDING_PER_WEEK_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_NOW_PLAYING_MOVIES_START:
       return { ...state };
     case actionTypes.FETCH_NOW_PLAYING_MOVIES_SUCCESS:
       return setNowPlayingMovies(state, action);
     case actionTypes.FETCH_NOW_PLAYING_MOVIES_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_LATEST_TV_START:
       return { ...state };
     case actionTypes.FETCH_LATEST_TV_SUCCESS:
       return setLatestTv(state, action);
     case actionTypes.FETCH_LATEST_TV_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_CARD_DATA_START:
       return { ...state };
     case actionTypes.FETCH_CARD_DATA_SUCCESS:
       return setCardData(state, action);
     case actionTypes.FETCH_CARD_DATA_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.CLEANUP_CARD_DATA:
       return cleanupCardData(state, action);
     case actionTypes.FETCH_TRAILERS_START:
@@ -283,7 +292,7 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_TRAILERS_SUCCESS:
       return setTrailers(state, action);
     case actionTypes.FETCH_TRAILERS_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.FETCH_CREW_AND_CAST_START:
       return { ...state };
     case actionTypes.FETCH_CREW_SUCCESS:
@@ -293,7 +302,7 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.SET_TOP_CAST_SUCCESS:
       return setTopCast(state, action);
     case actionTypes.FETCH_CREW_AND_CAST_FAIL:
-      return { ...state };
+      return isError(state, action);
     case actionTypes.CLEANUP_TOP_CAST:
       return cleanupTopCast(state, action);
     case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_START:
@@ -303,7 +312,7 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_SIMILAR_SUCCESS:
       return setSimilarMovies(state, action);
     case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_FAIL:
-      return { ...state };
+      return isError(state, action);
     default:
       return state;
   }

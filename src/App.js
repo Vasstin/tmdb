@@ -17,7 +17,8 @@ import Movies from "./components/Placeholders/Movies";
 import MovieCard from "./components/Movies/Cards/MovieCard";
 import CastAndCrew from "./components/People/CastAndCrew";
 import NotFoundPage from "./components/Placeholders/NotFoundPage";
-import Tvs from './components/Placeholders/Tvs'
+import Tvs from "./components/Placeholders/Tvs";
+import Error from "./components/Placeholders/Error";
 // import Content from './utility/routingPagination';
 // const theme = createTheme({
 //   palette: {
@@ -77,6 +78,7 @@ function App() {
         <Route path="tv" element={<Tvs />} />
         <Route path="tv/:id" element={<MovieCard />} />
         <Route path="tv/:id/cast" element={<CastAndCrew />} />
+        <Route path="error" element={<Error />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

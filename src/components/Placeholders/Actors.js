@@ -6,11 +6,20 @@ import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
 import ShortActorCard from "../People/Cards/ShortActorCard";
+import { useNavigate } from "react-router-dom";
 
 const Actors = (props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const currentPage = useSelector((state) => {
     return state.peoples.popular.currentPage;
   });
+
+  const isError = useSelector((state) => {
+    return state.peoples.isError;
+  });
+
   const [page, setPage] = useState(
     +window.localStorage.getItem("peoplePage") || currentPage
   );
@@ -18,8 +27,6 @@ const Actors = (props) => {
   const pageChanger = (event, value) => {
     setPage(value);
   };
-
-  const dispatch = useDispatch();
 
   const onFetchPeoplePopular = useCallback(
     (page) => dispatch(peopleActions.fetchPeoplePopular(page)),
@@ -32,6 +39,9 @@ const Actors = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
     setTimeout(() => setIsLoading(true), 500);
     window.localStorage.setItem("peoplePage", page);
     onFetchPeoplePopular(page);
@@ -40,12 +50,18 @@ const Actors = (props) => {
     window.localStorage.removeItem("moviePage");
     window.localStorage.removeItem("tvPage");
     dispatch(movieActions.cleanupPopularMoviesCurrentPage());
-    dispatch(movieActions.cleanupPopularTvsCurrentPage())
-
+    dispatch(movieActions.cleanupPopularTvsCurrentPage());
     // return () => {
     //   window.localStorage.removeItem("peoplePage");
     // };
-  }, [onFetchPeoplePopular, onSetPeopleCurrentPage, dispatch, page]);
+  }, [
+    onFetchPeoplePopular,
+    onSetPeopleCurrentPage,
+    dispatch,
+    page,
+    isError,
+    navigate,
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -26,6 +26,12 @@ const fetchAllPopularMoviesSuccess = (payload) => {
     payload: payload,
   };
 };
+const fetchAllPopularMoviesFail = (error) => {
+  return {
+    type: actionTypes.FETCH_ALL_POPULAR_MOVIES_FAIL,
+    error: error,
+  };
+};
 const fetchPopularMoviesFail = (error) => {
   return {
     type: actionTypes.FETCH_POPULAR_MOVIES_FAIL,
@@ -275,6 +281,10 @@ export const fetchPopularMovies = (page) => {
       .get(`movie/popular?api_key=${apiKey}&language=en-US&page=${page}`)
       .then((response) => {
         dispatch(fetchPopularMoviesSuccess(response.data.results));
+      })
+      .catch((error) => {
+        dispatch(fetchPopularMoviesFail(true));
+        setTimeout(() => dispatch(fetchPopularMoviesFail(false)), 2000);
       });
   };
 };
@@ -286,7 +296,12 @@ export const fetchAllPopularMovies = (page) => {
       .then((response) => {
         dispatch(fetchAllPopularMoviesSuccess(response.data.results));
         dispatch(setMoviesTotalPages(response.data.total_pages));
+      })
+      .catch((error) => {
+        dispatch(fetchAllPopularMoviesFail(true));
+        setTimeout(() => dispatch(fetchAllPopularMoviesFail(false)), 2000);
       });
+      
   };
 };
 export const fetchPopularTvs = (page) => {
@@ -297,6 +312,10 @@ export const fetchPopularTvs = (page) => {
       .then((response) => {
         dispatch(fetchPopularTvsSuccess(response.data.results));
         dispatch(setTvsTotalPages(response.data.total_pages));
+      })
+      .catch((error) => {
+        dispatch(fetchPopularTvsFail(true));
+        setTimeout(() => dispatch(fetchPopularTvsFail(false)), 2000);
       });
   };
 };
@@ -308,7 +327,11 @@ export const fetchTrandingPerDay = () => {
       .get(`trending/all/day?api_key=${apiKey}&language=en-US&page=1`)
       .then((response) =>
         dispatch(fetchTrandingPerDaySuccess(response.data.results))
-      );
+      )
+      .catch((error) => {
+        dispatch(fetchTrandingPerDayFail(true));
+        setTimeout(() => dispatch(fetchTrandingPerDayFail(false)), 2000);
+      });
   };
 };
 export const fetchTrandingPerWeek = () => {
@@ -318,7 +341,11 @@ export const fetchTrandingPerWeek = () => {
       .get(`trending/all/week?api_key=${apiKey}&language=en-US&page=1`)
       .then((response) =>
         dispatch(fetchTrandingPerWeekSuccess(response.data.results))
-      );
+      )
+      .catch((error) => {
+        dispatch(fetchTrandingPerWeekFail(true));
+        setTimeout(() => dispatch(fetchTrandingPerWeekFail(false)), 2000);
+      });
   };
 };
 
@@ -329,7 +356,11 @@ export const fetchNowPlayingMovies = () => {
       .get(`movie/now_playing?api_key=${apiKey}&language=en-US&page=1`)
       .then((response) =>
         dispatch(fetchNowPlayingMoviesSuccess(response.data.results))
-      );
+      )
+      .catch((error) => {
+        dispatch(fetchNowPlayingMoviesFail(true));
+        setTimeout(() => dispatch(fetchNowPlayingMoviesFail(false)), 2000);
+      });
   };
 };
 
@@ -340,7 +371,11 @@ export const fetchLatestTv = () => {
       .get(`tv/on_the_air?api_key=${apiKey}&language=en-US&page=1`)
       .then((response) =>
         dispatch(fetchLatestTvSuccess(response.data.results))
-      );
+      )
+      .catch((error) => {
+        dispatch(fetchLatestTvFail(true));
+        setTimeout(() => dispatch(fetchLatestTvFail(false)), 2000);
+      });
   };
 };
 
@@ -349,7 +384,11 @@ export const fetchCardData = (id, mediaType) => {
     dispatch(fetchCardDataStart());
     tmdbUrl
       .get(`${mediaType}/${id}?api_key=${apiKey}&language=en-US`)
-      .then((response) => dispatch(fetchCardDataSuccess(response.data)));
+      .then((response) => dispatch(fetchCardDataSuccess(response.data)))
+      .catch((error) => {
+        dispatch(fetchCardDataFail(true));
+        setTimeout(() => dispatch(fetchCardDataFail(false)), 2000);
+      });
   };
 };
 
@@ -366,7 +405,11 @@ export const fetchTrailers = (id, mediaType) => {
             )
           )
         )
-      );
+      )
+      .catch((error) => {
+        dispatch(fetchTrailersFail(true));
+        setTimeout(() => dispatch(fetchTrailersFail(false)), 2000);
+      });
   };
 };
 
@@ -379,6 +422,10 @@ export const fetchCrewAndCast = (id, mediaType, credits) => {
         dispatch(fetchCrewSuccess(response.data.crew));
         dispatch(fetchCastSuccess(response.data.cast));
         dispatch(setTopCast(response.data.cast.slice(0, 10)));
+      })
+      .catch((error) => {
+        dispatch(fetchCrewAndCastFail(true));
+        setTimeout(() => dispatch(fetchCrewAndCastFail(false)), 2000);
       });
   };
 };
@@ -391,11 +438,25 @@ export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
         dispatch(
           fetchRecommendMoviesSuccess(response.data.results.slice(0, 10))
         );
+      })
+      .catch((error) => {
+        dispatch(fetchRecommendAndSimilarMoviesFail(true));
+        setTimeout(
+          () => dispatch(fetchRecommendAndSimilarMoviesFail(false)),
+          2000
+        );
       });
     tmdbUrl
       .get(`${mediaType}/${id}/${section[1]}?api_key=${apiKey}&language=en-US`)
       .then((response) => {
         dispatch(fetchSimilarMoviesSuccess(response.data.results.slice(0, 10)));
+      })
+      .catch((error) => {
+        dispatch(fetchRecommendAndSimilarMoviesFail(true));
+        setTimeout(
+          () => dispatch(fetchRecommendAndSimilarMoviesFail(false)),
+          2000
+        );
       });
   };
 };

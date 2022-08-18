@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../store/peoples/actions/peoples";
 import { styled } from "@mui/material/styles";
@@ -15,6 +15,8 @@ import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import TabContainerCard from "../../Movies/Tabs/TabContainerCard";
 
 const ActorCard = (props) => {
+  const navigate = useNavigate();
+
   const cardData = useSelector((state) => {
     return state.peoples.cardData.data;
   });
@@ -24,7 +26,9 @@ const ActorCard = (props) => {
   const crew = useSelector((state) => {
     return state.peoples.cardData.crew;
   });
-
+  const isError = useSelector((state) => {
+    return state.peoples.isError;
+  });
   const { id } = useParams();
   const scrollTab = useHorizontalScroll();
 
@@ -92,13 +96,16 @@ const ActorCard = (props) => {
   );
 
   useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
     onFetchPeopleCardData(id);
     onFetchPeopleCredits(id);
     return () => {
       dispatch(actions.cleanupCardData());
       //dispatch(actions.cleanupCast());
     };
-  }, [onFetchPeopleCardData, onFetchPeopleCredits, dispatch, id]);
+  }, [onFetchPeopleCardData, onFetchPeopleCredits, dispatch,navigate,isError, id]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

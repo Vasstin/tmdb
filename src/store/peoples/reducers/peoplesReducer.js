@@ -12,6 +12,7 @@ const initialState = {
     crew: [],
     // trailers: [],
   },
+  isError: false,
 };
 
 const setPeopleCardData = (state, action) => {
@@ -65,6 +66,13 @@ const cleanupCardData = (state, action) => {
   };
 };
 
+const isError = (state, action) => {
+  return {
+    ...state,
+    isError: action.error,
+  };
+};
+
 const peoplesReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_PEOPLE_CARD_DATA_START:
@@ -72,13 +80,13 @@ const peoplesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_PEOPLE_CARD_DATA_SUCCESS:
       return setPeopleCardData(state, action);
     case actionTypes.FETCH_PEOPLE_CARD_DATA_FAIL:
-      return { ...state };
+      return isError(state, action)
     case actionTypes.FETCH_PEOPLE_POPULAR_START:
       return { ...state };
     case actionTypes.FETCH_PEOPLE_POPULAR_SUCCESS:
       return setPeoplePopular(state, action);
     case actionTypes.FETCH_PEOPLE_POPULAR_FAIL:
-      return { ...state };
+      return isError(state, action)
     case actionTypes.SET_PEOPLE_CURRENT_PAGE:
       return setPeopleCurrentPage(state, action);
     case actionTypes.SET_PEOPLE_TOTAL_PAGES:
@@ -92,7 +100,7 @@ const peoplesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_PEOPLE_CREDITS_CAST_SUCCESS:
       return setPeopleCreditsCast(state, action);
     case actionTypes.FETCH_PEOPLE_CREDITS_FAIL:
-      return { ...state };
+      return isError(state, action)
     case actionTypes.CLEANUP_CARD_DATA:
       return cleanupCardData(state, action);
     default:

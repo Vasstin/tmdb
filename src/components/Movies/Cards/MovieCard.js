@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../store/movies/actions/movies";
 import { styled } from "@mui/material/styles";
@@ -27,11 +27,16 @@ const MovieCard = (props) => {
   const { id } = useParams();
   const locationState = useLocation();
   const scrollTab = useHorizontalScroll();
+  const navigate = useNavigate();
+
   const toggleModal = () => {
     setOpen(!open);
   };
   // const [isContentLoaded, setIsContentLoaded] = useState(false);
-
+  const isError = useSelector((state) => {
+    return state.movies.isError;
+  });
+  
   function coreCrewFilter(item) {
     return item.job === "Director" || item.job === "Screenplay";
   }
@@ -110,6 +115,9 @@ const MovieCard = (props) => {
   );
 
   useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
     onFetchCrewAndCast(id, locationState.state, credits);
@@ -128,6 +136,8 @@ const MovieCard = (props) => {
     id,
     locationState.state,
     credits,
+    isError,
+    navigate,
   ]);
 
   useEffect(() => {

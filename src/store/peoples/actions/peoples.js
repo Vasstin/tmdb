@@ -90,7 +90,11 @@ export const fetchPeopleCardData = (id) => {
     dispatch(fetchPeopleCardDataStart());
     tmdbUrl
       .get(`person/${id}?api_key=${apiKey}&language=en-US`)
-      .then((response) => dispatch(fetchPeopleCardDataSuccess(response.data)));
+      .then((response) => dispatch(fetchPeopleCardDataSuccess(response.data)))
+      .catch((error) => {
+        dispatch(fetchPeopleCardDataFail(true));
+        setTimeout(() => dispatch(fetchPeopleCardDataFail(false)), 2000);
+      });
   };
 };
 export const fetchPeopleCredits = (id) => {
@@ -101,7 +105,12 @@ export const fetchPeopleCredits = (id) => {
       .then((response) => {
         dispatch(fetchPeopleCreditsCastSuccess(response.data.cast));
         dispatch(fetchPeopleCreditsCrewSuccess(response.data.crew));
+      })
+      .catch((error) => {
+        dispatch(fetchPeopleCreditsFail(true));
+        setTimeout(() => dispatch(fetchPeopleCreditsFail(false)), 2000);
       });
+      
   };
 };
 
@@ -113,6 +122,11 @@ export const fetchPeoplePopular = (page) => {
       .then((response) => {
         dispatch(fetchPeoplePopularSuccess(response.data.results));
         dispatch(setPeopleTotalPages(response.data.total_pages));
+      })
+      // .catch((error) => dispatch(fetchPeoplePopularFail(true)));
+      .catch((error) => {
+        dispatch(fetchPeoplePopularFail(true));
+        setTimeout(() => dispatch(fetchPeoplePopularFail(false)), 2000);
       });
   };
 };

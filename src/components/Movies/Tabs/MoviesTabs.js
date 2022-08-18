@@ -7,14 +7,17 @@ import TabsContainer from "./TabsContainer";
 import apiKey from "../../../utility/apiKey";
 import tmdbUrl from "../../../utility/tmdbUrl";
 import { Box, LinearProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // import ModalTrailer from "./Cards/ModalTrailer";
-
 
 const MoviesTabs = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
+  const isError = useSelector((state) => {
+    return state.movies.isError;
+  });
   const movies = useSelector((state) => {
     return state.movies.popular.movies.movies;
   });
@@ -64,6 +67,9 @@ const MoviesTabs = (props) => {
   );
 
   useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
     setTimeout(() => setIsLoading(true), 500);
 
     onFetchPopularMovies(1);
@@ -72,14 +78,13 @@ const MoviesTabs = (props) => {
     onFetchTrandingPerWeek();
     onFetchNowPlayingMovies();
     onFetchLatestTvs();
-    dispatch(movieActions.cleanupPopularMoviesCurrentPage())
-    dispatch(movieActions.cleanupPopularTvsCurrentPage())
-    dispatch(peopleActions.cleanupPeopleCurrentPage())
+    dispatch(movieActions.cleanupPopularMoviesCurrentPage());
+    dispatch(movieActions.cleanupPopularTvsCurrentPage());
+    dispatch(peopleActions.cleanupPeopleCurrentPage());
     window.localStorage.removeItem("moviePage");
     window.localStorage.removeItem("peoplePage");
     window.localStorage.removeItem("tvPage");
     setIsLoading(false);
-
   }, [
     onFetchPopularMovies,
     onFetchPopularTvs,
@@ -88,6 +93,8 @@ const MoviesTabs = (props) => {
     onFetchNowPlayingMovies,
     onFetchLatestTvs,
     dispatch,
+    isError,
+    navigate,
   ]);
 
   const [bg, setBg] = useState("");
@@ -122,10 +129,12 @@ const MoviesTabs = (props) => {
   //   const results =  response.data.results
   //   setTrailers(results)
   // }, [idTrailers]);
-   
+
   return (
     <div className="Wrapper">
-      {isLoading === true ? (<Box><TabsContainer
+      {isLoading === true ? (
+        <Box>
+          <TabsContainer
             title={"What's Popular"}
             tabLabelOne={"Movies"}
             tabLabelTwo={"On Tv"}
@@ -168,15 +177,18 @@ const MoviesTabs = (props) => {
             tabOne={dayTrand}
             tabTwo={weekTrand}
             bpos={"50% 200px"}
-          /></Box>):(<LinearProgress
+          />
+        </Box>
+      ) : (
+        <LinearProgress
           sx={{
             marginTop: "120px",
             marginBottom: "1300px",
             transition: "all 1s",
           }}
           color={"primary"}
-        />)}
-          
+        />
+      )}
     </div>
   );
 };

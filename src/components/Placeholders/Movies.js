@@ -6,8 +6,15 @@ import { styled } from "@mui/material/styles";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
 import TabContainerCard from "../Movies/Tabs/TabContainerCard";
+import { useNavigate } from "react-router-dom";
 
 const Movies = (props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isError = useSelector((state) => {
+    return state.movies.isError;
+  });
   const currentPage = useSelector((state) => {
     return state.movies.popular.movies.currentPage;
   });
@@ -18,8 +25,6 @@ const Movies = (props) => {
   const pageChanger = (event, value) => {
     setPage(value);
   };
-
-  const dispatch = useDispatch();
 
   const onFetchAllPopularMovies = useCallback(
     (page) => dispatch(movieActions.fetchAllPopularMovies(page)),
@@ -32,6 +37,9 @@ const Movies = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
     setTimeout(() => setIsLoading(true), 500);
     window.localStorage.setItem("moviePage", page);
     onFetchAllPopularMovies(page);
@@ -39,14 +47,20 @@ const Movies = (props) => {
     setIsLoading(false);
     window.localStorage.removeItem("peoplePage");
     window.localStorage.removeItem("tvPage");
-    dispatch(peopleActions.cleanupPeopleCurrentPage())
-    dispatch(movieActions.cleanupPopularTvsCurrentPage())
-
+    dispatch(peopleActions.cleanupPeopleCurrentPage());
+    dispatch(movieActions.cleanupPopularTvsCurrentPage());
 
     // return () => {
     //   window.localStorage.removeItem("moviePage");
     // };
-  }, [onFetchAllPopularMovies, onSetMoviesCurrentPage, dispatch, page]);
+  }, [
+    onFetchAllPopularMovies,
+    onSetMoviesCurrentPage,
+    dispatch,
+    isError,
+    navigate,
+    page,
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,7 +69,7 @@ const Movies = (props) => {
   const movies = useSelector((state) => {
     return state.movies.popular.movies.allPopularMovies;
   });
-  console.log(movies);
+
   const totalPages = useSelector((state) => {
     return state.movies.popular.movies.totalPages;
   });
