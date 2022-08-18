@@ -19,6 +19,23 @@ const fetchPeopleCardDataFail = (error) => {
     error: error,
   };
 };
+const fetchPeopleCardDataMediaStart = () => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_CARD_DATA_MEDIA_START,
+  };
+};
+const fetchPeopleCardDataMediaSuccess = (payload) => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_CARD_DATA_MEDIA_SUCCESS,
+    payload: payload,
+  };
+};
+const fetchPeopleCardDataMediaFail = (error) => {
+  return {
+    type: actionTypes.FETCH_PEOPLE_CARD_DATA_MEDIA_FAIL,
+    error: error,
+  };
+};
 const fetchPeoplePopularStart = () => {
   return {
     type: actionTypes.FETCH_PEOPLE_POPULAR_START,
@@ -127,6 +144,19 @@ export const fetchPeoplePopular = (page) => {
       .catch((error) => {
         dispatch(fetchPeoplePopularFail(true));
         setTimeout(() => dispatch(fetchPeoplePopularFail(false)), 2000);
+      });
+  };
+};
+
+export const fetchPeopleCardDataMedia = (id) => {
+  return (dispatch) => {
+    dispatch(fetchPeopleCardDataMediaStart());
+    tmdbUrl
+      .get(`person/${id}/images?api_key=${apiKey}`)
+      .then((response) => dispatch(fetchPeopleCardDataMediaSuccess(response.data.profiles)))
+      .catch((error) => {
+        dispatch(fetchPeopleCardDataMediaFail(true));
+        setTimeout(() => dispatch(fetchPeopleCardDataMediaFail(false)), 2000);
       });
   };
 };

@@ -13,12 +13,24 @@ import {
 } from "@mui/material";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import TabContainerCard from "../../Movies/Tabs/TabContainerCard";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import ModalImage from "./ModalImage";
 
 const ActorCard = (props) => {
+  const [open, setOpen] = useState(false);
+  const [imageIndex, setImageIndex] = useState();
+
+  const toggleModal = (index) => {
+    setImageIndex(index);
+    setOpen(!open);
+  };
   const navigate = useNavigate();
 
   const cardData = useSelector((state) => {
     return state.peoples.cardData.data;
+  });
+  const image = useSelector((state) => {
+    return state.peoples.cardData.media;
   });
   const cast = useSelector((state) => {
     return state.peoples.cardData.cast;
@@ -30,7 +42,8 @@ const ActorCard = (props) => {
     return state.peoples.isError;
   });
   const { id } = useParams();
-  const scrollTab = useHorizontalScroll();
+  const scrollTabMovie = useHorizontalScroll();
+  const scrollTabMedia = useHorizontalScroll();
 
   const [isReadMore, setIsReadMore] = useState(true);
 
@@ -90,6 +103,10 @@ const ActorCard = (props) => {
     () => dispatch(actions.fetchPeopleCardData(id)),
     [dispatch, id]
   );
+  const onFetchPeopleCardDataMedia = useCallback(
+    () => dispatch(actions.fetchPeopleCardDataMedia(id)),
+    [dispatch, id]
+  );
   const onFetchPeopleCredits = useCallback(
     () => dispatch(actions.fetchPeopleCredits(id)),
     [dispatch, id]
@@ -100,22 +117,45 @@ const ActorCard = (props) => {
       navigate("/error");
     }
     onFetchPeopleCardData(id);
+    onFetchPeopleCardDataMedia(id);
     onFetchPeopleCredits(id);
     return () => {
       dispatch(actions.cleanupCardData());
       //dispatch(actions.cleanupCast());
     };
-  }, [onFetchPeopleCardData, onFetchPeopleCredits, dispatch,navigate,isError, id]);
+  }, [
+    onFetchPeopleCardData,
+    onFetchPeopleCredits,
+    onFetchPeopleCardDataMedia,
+    dispatch,
+    navigate,
+    isError,
+    id,
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  //const [image, setImage] = useState([]);
+  // useEffect(() => {
+  //   fetch(`https://api.themoviedb.org/3/person/${id}/images?api_key=${apiKey}`)
+  //     .then((res) => res.json())
+  //     .then((data) => setImage(data.profiles));
+  // }, []);
 
   const ImgWrapper = styled(CardMedia)({
     minHeight: "200px",
     borderRadius: "10px",
     width: "300px",
     height: "450px",
+  });
+
+  const LazyLoadImg = styled(LazyLoadImage)({
+    borderRadius: "10px",
+    width: "200px",
+    height: "300px",
+    margin: "0px 15px 15px 0",
   });
 
   const CustomizedBox = styled(Box)({
@@ -234,14 +274,21 @@ const ActorCard = (props) => {
   const LightTypography = styled(Typography)({
     fontWeight: "400",
   });
-
   return (
     <Box sx={{ marginTop: "120px" }}>
       {cardData.id ? (
         <CustomizedBox className="Wrapper">
+          <ModalImage
+            image={image[imageIndex] ?? []}
+            typeTab={props.type}
+            toggle={open}
+            toggleModal={toggleModal}
+            idMovies={props.id}
+          />
           <ActorCardMain>
             {cardData.profile_path ? (
               <ImgWrapper
+                effect="blur"
                 component="img"
                 image={`https://image.tmdb.org/t/p/w500/${cardData.profile_path}`}
                 alt={cardData.name}
@@ -314,13 +361,14 @@ const ActorCard = (props) => {
                 )}
               </PersonalInformItem>
             </PersonalInform>
+
             <KnownFor>
               {cast.length > 0 ? (
                 <div>
                   <Typography sx={{ marginBottom: "20px" }} variant="h6">
                     Known For
                   </Typography>
-                  <ScrollWrapper ref={scrollTab}>
+                  <ScrollWrapper ref={scrollTabMovie}>
                     {sortedCast.map((item) => (
                       <TabContainerCard
                         key={item.id}
@@ -334,6 +382,22 @@ const ActorCard = (props) => {
                   </ScrollWrapper>
                 </div>
               ) : null}
+              <Box>
+                <Typography sx={{ marginBottom: "20px" }} variant="h6">
+                  Media
+                </Typography>
+                <ScrollWrapper ref={scrollTabMedia}>
+                  {image.map((item, index) => (
+                    <LazyLoadImg
+                      onClick={() => toggleModal(index)}
+                      key={index}
+                      // effect="blur"
+                      sx={{}}
+                      src={`https://image.tmdb.org/t/p/w500/${item.file_path}`}
+                    />
+                  ))}
+                </ScrollWrapper>
+              </Box>
               <CastAndCrew>
                 {cast.length > 0 ? (
                   <CastAndCrewItem>
