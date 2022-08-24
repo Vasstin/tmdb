@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../../store/movies/actions/movies";
+import * as actions from "../../../store/movies/actions/index";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -21,6 +21,7 @@ import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 // import tmdbUrl from "../../../utility/tmdbUrl";
 // import apiKey from "../../../utility/apiKey";
 import TabsContainer from "../Tabs/TabsContainer";
+import MediaTabsContainer from "../Tabs/MediaTabsContainer";
 
 const MovieCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -36,7 +37,7 @@ const MovieCard = (props) => {
   const isError = useSelector((state) => {
     return state.movies.isError;
   });
-  
+
   function coreCrewFilter(item) {
     return item.job === "Director" || item.job === "Screenplay";
   }
@@ -67,6 +68,15 @@ const MovieCard = (props) => {
   });
   const topCast = useSelector((state) => {
     return state.movies.cardData.topCast;
+  });
+  const backdrops = useSelector((state) => {
+    return state.movies.cardData.media.backdrops;
+  });
+  const logos = useSelector((state) => {
+    return state.movies.cardData.media.logos;
+  });
+  const posters = useSelector((state) => {
+    return state.movies.cardData.media.posters;
   });
 
   // useEffect(() => {
@@ -99,6 +109,10 @@ const MovieCard = (props) => {
     () => dispatch(actions.fetchTrailers(id, locationState.state)),
     [dispatch, id, locationState.state]
   );
+  const onFetchMedia = useCallback(
+    () => dispatch(actions.fetchMedia(id, locationState.state)),
+    [dispatch, id, locationState.state]
+  );
   const onFetchCrewAndCast = useCallback(
     () => dispatch(actions.fetchCrewAndCast(id, locationState.state, credits)),
     [dispatch, id, locationState.state, credits]
@@ -120,6 +134,7 @@ const MovieCard = (props) => {
     }
     onFetchCardData(id, locationState.state);
     onFetchTrailers(id, locationState.state);
+    onFetchMedia(id, locationState.state);
     onFetchCrewAndCast(id, locationState.state, credits);
     onFetchRecommendAndSimilarMovies(id, locationState.state);
 
@@ -132,6 +147,7 @@ const MovieCard = (props) => {
     onFetchTrailers,
     onFetchCrewAndCast,
     onFetchRecommendAndSimilarMovies,
+    onFetchMedia,
     dispatch,
     id,
     locationState.state,
@@ -381,7 +397,7 @@ const MovieCard = (props) => {
     width: "100%",
     flexDirection: "column",
   });
-
+  
   return (
     <div /*hidden={!isContentLoaded}*/>
       <CustomizedBox>
@@ -394,7 +410,9 @@ const MovieCard = (props) => {
                   toggle={open}
                   toggleModal={toggleModal}
                 />
+                
               )}
+              
               <BackgroundBlur>
                 <CustomizedCard className="Wrapper">
                   {!cardData.poster_path ? (
@@ -576,6 +594,16 @@ const MovieCard = (props) => {
                 </BaseInfornationItem>
               </BaseInfornation>
             </MovieInformSection>
+            <MediaTabsContainer
+              title={"Media"}
+              tabLabelOne={"Backdrops"}
+              tabLabelTwo={"Logos"}
+              tabLabelThree={"Posters"}
+              tabOne={backdrops}
+              tabTwo={logos}
+              tabThree={posters}
+
+            />
             <TabsContainer
               title={"TMDB Advises"}
               tabLabelOne={"Recommendations"}

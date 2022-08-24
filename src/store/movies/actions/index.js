@@ -9,6 +9,7 @@ export {
   fetchTrailers,
   fetchCrewAndCast,
   fetchRecommendAndSimilarMovies,
+  fetchMedia,
   setMoviesCurrentPage,
   setTvsCurrentPage,
   fetchAllPopularMovies,

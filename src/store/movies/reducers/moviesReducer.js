@@ -33,6 +33,11 @@ const initialState = {
     crew: [],
     trailers: [],
     topCast: [],
+    media: {
+      backdrops: [],
+      logos: [],
+      posters: []
+    },
   },
   isError: false,
 };
@@ -176,6 +181,33 @@ const setTrailers = (state, action) => {
     cardData: { ...state.cardData, trailers: action.payload },
   };
 };
+const setMediaBackdrops = (state, action) => {
+  return {
+    ...state,
+    cardData: { 
+      ...state.cardData, 
+      media:  {...state.cardData.media, backdrops: action.payload}
+    },
+  };
+};
+const setMediaLogos = (state, action) => {
+  return {
+    ...state,
+    cardData: { 
+      ...state.cardData, 
+      media:  {...state.cardData.media, logos: action.payload}
+    },
+  };
+};
+const setMediaPosters = (state, action) => {
+  return {
+    ...state,
+    cardData: { 
+      ...state.cardData, 
+      media:  {...state.cardData.media, posters: action.payload}
+    },
+  };
+};
 const setCrew = (state, action) => {
   return {
     ...state,
@@ -312,6 +344,16 @@ const moviesReducer = (state = initialState, action) => {
     case actionTypes.FETCH_SIMILAR_SUCCESS:
       return setSimilarMovies(state, action);
     case actionTypes.FETCH_RECOMMEND_AND_SIMILAR_FAIL:
+      return isError(state, action);
+    case actionTypes.FETCH_MEDIA_START:
+      return { ...state };
+    case actionTypes.SET_MEDIA_BACKDROPS:
+      return setMediaBackdrops(state, action);
+    case actionTypes.SET_MEDIA_LOGOS:
+      return setMediaLogos(state, action);
+    case actionTypes.SET_MEDIA_POSTERS:
+      return setMediaPosters(state, action);
+    case actionTypes.FETCH_MEDIA_FAIL:
       return isError(state, action);
     default:
       return state;

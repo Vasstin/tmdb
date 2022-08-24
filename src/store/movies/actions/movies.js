@@ -274,6 +274,37 @@ const fetchRecommendAndSimilarMoviesFail = (error) => {
   };
 };
 
+const fetchMediaStart = () => {
+  return {
+    type: actionTypes.FETCH_MEDIA_START,
+  };
+};
+
+const setMediaBackdrops = (payload) => {
+  return {
+    type: actionTypes.SET_MEDIA_BACKDROPS,
+    payload: payload,
+  };
+};
+const setMediaLogos = (payload) => {
+  return {
+    type: actionTypes.SET_MEDIA_LOGOS,
+    payload: payload,
+  };
+};
+const setMediaPosters = (payload) => {
+  return {
+    type: actionTypes.SET_MEDIA_POSTERS,
+    payload: payload,
+  };
+};
+const fetchMediaFail = (error) => {
+  return {
+    type: actionTypes.FETCH_MEDIA_FAIL,
+    error: error,
+  };
+};
+
 export const fetchPopularMovies = (page) => {
   return (dispatch) => {
     dispatch(fetchPopularMoviesStart());
@@ -301,7 +332,6 @@ export const fetchAllPopularMovies = (page) => {
         dispatch(fetchAllPopularMoviesFail(true));
         setTimeout(() => dispatch(fetchAllPopularMoviesFail(false)), 2000);
       });
-      
   };
 };
 export const fetchPopularTvs = (page) => {
@@ -369,9 +399,7 @@ export const fetchLatestTv = () => {
     dispatch(fetchLatestTvStart());
     tmdbUrl
       .get(`tv/on_the_air?api_key=${apiKey}&language=en-US&page=1`)
-      .then((response) =>
-        dispatch(fetchLatestTvSuccess(response.data.results))
-      )
+      .then((response) => dispatch(fetchLatestTvSuccess(response.data.results)))
       .catch((error) => {
         dispatch(fetchLatestTvFail(true));
         setTimeout(() => dispatch(fetchLatestTvFail(false)), 2000);
@@ -457,6 +485,26 @@ export const fetchRecommendAndSimilarMovies = (id, mediaType, section) => {
           () => dispatch(fetchRecommendAndSimilarMoviesFail(false)),
           2000
         );
+      });
+  };
+};
+
+export const fetchMedia = (id, mediaType) => {
+  return (dispatch) => {
+    dispatch(fetchMediaStart());
+    tmdbUrl
+      .get(
+        `${mediaType}/${id}/images?api_key=${apiKey}&include_image_language=en,null`
+      )
+      .then((response) => {
+
+        dispatch(setMediaBackdrops(response.data.backdrops))
+        dispatch(setMediaLogos(response.data.logos))
+        dispatch(setMediaPosters(response.data.posters))
+      })
+      .catch((error) => {
+        dispatch(fetchMediaFail(true));
+        setTimeout(() => dispatch(fetchMediaFail(false)), 2000);
       });
   };
 };
