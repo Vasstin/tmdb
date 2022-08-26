@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import { useHorizontalScroll } from "../../../utility/horizontalScroll";
 import TabContainerCard from "../../Movies/Tabs/TabContainerCard";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
 import ModalImage from "./ModalImage";
-
+import MediaTabsContainer
+ from "../../Movies/Tabs/MediaTabsContainer";
 const ActorCard = (props) => {
   const [open, setOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState();
@@ -43,7 +44,6 @@ const ActorCard = (props) => {
   });
   const { id } = useParams();
   const scrollTabMovie = useHorizontalScroll();
-  const scrollTabMedia = useHorizontalScroll();
 
   const [isReadMore, setIsReadMore] = useState(true);
 
@@ -151,12 +151,12 @@ const ActorCard = (props) => {
     height: "450px",
   });
 
-  const LazyLoadImg = styled(LazyLoadImage)({
-    borderRadius: "10px",
-    width: "200px",
-    height: "300px",
-    margin: "0px 15px 15px 0",
-  });
+  // const LazyLoadImg = styled(LazyLoadImage)({
+  //   borderRadius: "10px",
+  //   width: "200px",
+  //   height: "300px",
+  //   margin: "0px 15px 15px 0",
+  // });
 
   const CustomizedBox = styled(Box)({
     marginTop: "120px",
@@ -383,11 +383,25 @@ const ActorCard = (props) => {
                 </div>
               ) : null}
               <Box>
-                <Typography sx={{ marginBottom: "20px" }} variant="h6">
+              <MediaTabsContainer
+              title={"Media"}
+              tabLabelOne={"Photo"}
+              cardType={'photo'}
+              tabOne={image}
+              
+
+            />
+                {/* <Typography sx={{ marginBottom: "20px" }} variant="h6">
                   Media
                 </Typography>
                 <ScrollWrapper ref={scrollTabMedia}>
                   {image.map((item, index) => (
+                    <MediaCard
+                    path={item.file_path}
+                    key={index}
+                    toggleModalImage={toggleModal}
+                    index={index}
+                    />
                     <LazyLoadImg
                       onClick={() => toggleModal(index)}
                       key={index}
@@ -396,7 +410,7 @@ const ActorCard = (props) => {
                       src={`https://image.tmdb.org/t/p/w500/${item.file_path}`}
                     />
                   ))}
-                </ScrollWrapper>
+                </ScrollWrapper> */}
               </Box>
               <CastAndCrew>
                 {cast.length > 0 ? (

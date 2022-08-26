@@ -92,7 +92,7 @@ const MediaTabsContainer = (props) => {
     setOpenImage(!openImage);
     setTabsType(type);
   };
-
+  
   function imgSwitcher(cardtype) {
     console.log(cardtype);
     if (cardtype === "backdrops") {
@@ -121,8 +121,8 @@ const MediaTabsContainer = (props) => {
         transition: "all 0.5s",
       }}
     >
-      <Wrapper>
-        <Heading>{props.title}</Heading>
+      <Wrapper sx={props.cardType === "photo" ? {margin: 0}: null}>
+        <Heading sx={props.cardType === "photo" ? {marginLeft: 0}: null}>{props.title}</Heading>
         <Box
           sx={{
             marginTop: "13px",
@@ -138,16 +138,18 @@ const MediaTabsContainer = (props) => {
               label={props.tabLabelOne}
               {...a11yProps(0)}
             />
-            <Tab
+            {props.cardType === "photo" ? null : ( <Tab
               sx={{ color: `${props.color}` }}
               label={props.tabLabelTwo}
               {...a11yProps(1)}
-            />
-            <Tab
+            />)}
+            {props.cardType === "photo" ? null : (<Tab
               sx={{ color: `${props.color}` }}
               label={props.tabLabelThree}
-              {...a11yProps(1)}
-            />
+              {...a11yProps(2)}
+            />)}
+           
+            
           </Tabs>
         </Box>
       </Wrapper>
@@ -158,7 +160,7 @@ const MediaTabsContainer = (props) => {
               toggleModalImage={toggleModalImage}
               path={item.file_path}
               index={index}
-              cardType={"backdrops"}
+              cardType={props.cardType ?? "backdrops"}
               key={index}
             />
           ))
@@ -171,46 +173,51 @@ const MediaTabsContainer = (props) => {
           />
         )}
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        {props.tabTwo.length > 0 ? (
-          props.tabTwo.map((item, index) => (
-            <MediaCard
-              toggleModalImage={toggleModalImage}
-              path={item.file_path}
-              index={index}
-              cardType={"logos"}
-              key={index}
-            />
-          ))
-        ) : (
-          <Skeleton
-            sx={{ borderRadius: "10px" }}
-            variant="rectangular"
-            width={"100%"}
-            height={380}
-          />
-        )}
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        {props.tabThree.length > 0 ? (
-          props.tabThree.map((item, index) => (
-            <MediaCard
-              toggleModalImage={toggleModalImage}
-              path={item.file_path}
-              index={index}
-              cardType={"posters"}
-              key={index}
-            />
-          ))
-        ) : (
-          <Skeleton
-            sx={{ borderRadius: "10px" }}
-            variant="rectangular"
-            width={"100%"}
-            height={380}
-          />
-        )}
-      </TabPanel>
+      {props.cardType === "photo" ? null : (
+        <Box>
+          <TabPanel value={value} index={1}>
+            {props.tabTwo.length > 0 ? (
+              props.tabTwo.map((item, index) => (
+                <MediaCard
+                  toggleModalImage={toggleModalImage}
+                  path={item.file_path}
+                  index={index}
+                  cardType={"logos"}
+                  key={index}
+                />
+              ))
+            ) : (
+              <Skeleton
+                sx={{ borderRadius: "10px" }}
+                variant="rectangular"
+                width={"100%"}
+                height={380}
+              />
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            {props.tabThree.length > 0 ? (
+              props.tabThree.map((item, index) => (
+                <MediaCard
+                  toggleModalImage={toggleModalImage}
+                  path={item.file_path}
+                  index={index}
+                  cardType={"posters"}
+                  key={index}
+                />
+              ))
+            ) : (
+              <Skeleton
+                sx={{ borderRadius: "10px" }}
+                variant="rectangular"
+                width={"100%"}
+                height={380}
+              />
+            )}
+          </TabPanel>
+        </Box>
+      )}
+
       <ModalImage
         image={imgSwitcher(tabsType)[imageIndex] ?? []}
         typeTab={tabsType}

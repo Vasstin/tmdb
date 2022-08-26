@@ -10,10 +10,11 @@ const ImgWrapper = styled(LazyLoadImage)({
 
 export default function MediaCard(props) {
   return (
+    
     <ImgWrapper
       onClick={() => props.toggleModalImage(props.index, props.cardType)}
       sx={
-        props.cardType === "posters"
+        props.cardType === "posters" || props.cardType === 'photo'
           ? { width: "300px", height: "450px" }
           : null
       }
