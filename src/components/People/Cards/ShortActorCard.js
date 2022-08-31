@@ -40,18 +40,16 @@ const ShortActorCard = (props) => {
     //min-height: 330px;
     margin-right: 15px;
     background: transparent;
-    box-shadow: 1px solid lightgray;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     border-radius: 10px;
-    /* padding-bottom: 10px; */
-    /* transition: all 1s;
+    box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
     &:hover {
-      transform: scale(1.1);
-      transition: all 1s;
-    } */
+      box-shadow: 0 16px 70px -12.125px rgba(0, 0, 0, 0.3);
+    }
   `;
   const CustomLink = styled(Link)({
     display: "flex",
+    marginBottom: '10px'
   });
 
   const CustomLazyLoadImage = styled(LazyLoadImage)({
@@ -68,7 +66,7 @@ const ShortActorCard = (props) => {
       <CustomizedCard
         /*onClick={() => handleClick()}*/ sx={
           props.cardType === "actorCard"
-            ? { width: "200px", minHeight: "430px" }
+            ? { width: "200px", minHeight: "100%", }
             : null
         }
       >

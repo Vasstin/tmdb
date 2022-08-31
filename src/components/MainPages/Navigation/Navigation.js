@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -7,10 +7,12 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import NavigationItem from "./NavigationItem";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import navLogo from "../../../assets/img/nav-logo.svg";
 import { useHideHeader } from "../../../utility/hideHeader";
+import { useSelector, useDispatch } from "react-redux";
+import * as searchActions from "../../../store/search/actions/index";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,6 +77,37 @@ const NavWrapper = styled(Box)({
 
 export default function SearchAppBar(props) {
   const hideHeader = useHideHeader();
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      return navigate("/search");
+    }
+  };
+  // useEffect(()=>{
+  //   fetch(`https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&language=en-US&query=${searchValue}&page=1&include_adult=false`)
+  //     .then(res=>res.json())
+
+  // },[searchValue])
+
+  const isError = useSelector((state) => {
+    return state.search.isError;
+  });
+
+  const dispatch = useDispatch();
+
+  const searchData = useSelector((state) => {
+    return state.search.search.data;
+  });
+  const onFetchSearchData = useCallback(
+    () => dispatch(searchActions.fetchSearchData(searchValue)),
+    [dispatch, searchValue]
+  );
+
+  useEffect(() => {
+    onFetchSearchData(searchValue);
+  }, [onFetchSearchData, searchValue]);
 
   return (
     <Box>
@@ -90,7 +123,7 @@ export default function SearchAppBar(props) {
               <img width={150} src={navLogo} alt="nav-logo" />
             </LogoLink>
             <NavList>
-              <NavigationItem link='/movie'>Movies</NavigationItem>
+              <NavigationItem link="/movie">Movies</NavigationItem>
               <NavigationItem link="/tv">Tvs</NavigationItem>
               <NavigationItem link="/actor">Actors</NavigationItem>
             </NavList>
@@ -99,6 +132,8 @@ export default function SearchAppBar(props) {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
+                onKeyPress={handleKeyPress}
+                onChange={(event) => setSearchValue(event.target.value)}
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />

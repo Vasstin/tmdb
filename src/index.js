@@ -9,11 +9,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import moviesReducer from "./store/movies/reducers/moviesReducer";
 import peoplesReducer from './store/peoples/reducers/peoplesReducer'
+import searchReducer from "./store/search/reducers/searchReducer";
 
 const store = configureStore({
   reducer: {
     movies: moviesReducer,
-    peoples: peoplesReducer
+    peoples: peoplesReducer,
+    search: searchReducer
   }
 });
 

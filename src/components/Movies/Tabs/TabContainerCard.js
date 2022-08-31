@@ -51,17 +51,39 @@ const CustomizedCard = styled(Card)`
   background: transparent;
   box-shadow: none;
   transition: all 1s;
+
   &:hover {
     transform: scale(1.1);
     transition: all 1s;
   }
 `;
 
+const cardStyle = {
+  width: "200px",
+  height: "100%",
+  marginBottom: "10px",
+  borderRadius: "10px",
+  boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+  "&:hover": {
+    boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+    transform: "none",
+  },
+};
+
 const CustomizedMovieScore = styled(MovieScore)`
   position: absolute;
   top: 0;
   left: 0;
 `;
+const CustomLink = styled(Link)({
+  display: "flex",
+  marginBottom: "10px",
+});
+
+const CustomSkeleton = styled(Skeleton)({
+  width: "150px",
+  height: "225px",
+});
 
 export default function TabContainerCard(props) {
   // let navigate = useNavigate();
@@ -80,26 +102,23 @@ export default function TabContainerCard(props) {
   getReleaseDate(props.data.release_date);
 
   return (
-    <Link to={props.to} state={props.linkState}>
-      <CustomizedCard
-        sx={
-          props.cardType === "movieCard"
-            ? { width: "200px", height: "450px" }
-            : null
-        }
-      >
+    <CustomLink to={props.to} state={props.linkState}>
+      <CustomizedCard sx={props.cardType === "movieCard" ? cardStyle : null}>
         {!props.data.poster_path ? (
-          <Skeleton
-            sx={{ borderRadius: "10px" }}
+          <CustomSkeleton
+            sx={
+              props.cardType === "movieCard"
+                ? { width: "200px", height: "300px", borderRadius: "0" }
+                : { borderRadius: "10px" }
+            }
+            // sx={{ borderRadius: "10px" }}
             variant="rectangular"
-            width={150}
-            height={225}
           />
         ) : (
           <ImgWrapper
             sx={
               props.cardType === "movieCard"
-                ? { width: "200px", height: "300px" }
+                ? { width: "200px", height: "300px", borderRadius: "0" }
                 : null
             }
             effect="blur"
@@ -129,6 +148,6 @@ export default function TabContainerCard(props) {
           </Typography>
         </Content>
       </CustomizedCard>
-    </Link>
+    </CustomLink>
   );
 }

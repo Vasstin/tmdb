@@ -94,7 +94,6 @@ const MediaTabsContainer = (props) => {
   };
   
   function imgSwitcher(cardtype) {
-    console.log(cardtype);
     if (cardtype === "backdrops") {
       return props.tabOne;
     } else if (cardtype === "logos") {
