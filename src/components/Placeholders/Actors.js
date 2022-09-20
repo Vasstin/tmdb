@@ -24,7 +24,7 @@ const Actors = (props) => {
     +window.localStorage.getItem("peoplePage") || currentPage
   );
 
-  const pageChanger = (event, value) => {
+  const pageChanger = (value) => {
     setPage(value);
   };
 

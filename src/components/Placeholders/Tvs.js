@@ -15,7 +15,7 @@ const Tvs = (props) => {
     +window.localStorage.getItem("tvPage") || currentPage
   );
 
-  const pageChanger = (event, value) => {
+  const pageChanger = (value) => {
     setPage(value);
   };
 
@@ -39,7 +39,7 @@ const Tvs = (props) => {
     setIsLoading(false);
     window.localStorage.removeItem("peoplePage");
     window.localStorage.removeItem("moviePage");
-    dispatch(peopleActions.cleanupPeopleCurrentPage())
+    dispatch(peopleActions.cleanupPeopleCurrentPage());
     dispatch(movieActions.cleanupPopularMoviesCurrentPage());
 
     // return () => {

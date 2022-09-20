@@ -77,12 +77,11 @@ const NavWrapper = styled(Box)({
 
 export default function SearchAppBar(props) {
   const hideHeader = useHideHeader();
-  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      return navigate("/search");
+      return navigate("/search" /*{state: {value: searchValue}}*/);
     }
   };
   // useEffect(()=>{
@@ -91,23 +90,61 @@ export default function SearchAppBar(props) {
 
   // },[searchValue])
 
-  const isError = useSelector((state) => {
-    return state.search.isError;
-  });
+  // const isError = useSelector((state) => {
+  //   return state.search.isError;
+  // });
 
   const dispatch = useDispatch();
 
-  const searchData = useSelector((state) => {
-    return state.search.search.data;
+  // const searchData = useSelector((state) => {
+  //   return state.search.search.data;
+  // });
+  const currentPage = useSelector((state) => {
+    return state.search.search.currentPage;
   });
+  const searchValue = useSelector((state) => {
+    return state.search.search.value;
+  });
+  const lastSearch = useSelector((state) => {
+    return state.search.search.lastSearch;
+  });
+  const [navSearchValue, setNavSearchValue] = useState(
+    window.localStorage.getItem("searchValue") ||  searchValue
+  );
+
   const onFetchSearchData = useCallback(
-    () => dispatch(searchActions.fetchSearchData(searchValue)),
-    [dispatch, searchValue]
+    () => dispatch(searchActions.fetchSearchData(navSearchValue, currentPage)),
+    [dispatch, navSearchValue, currentPage]
+  );
+  const onSetSearchValue = useCallback(
+    () => dispatch(searchActions.setSearchValue(navSearchValue)),
+    [dispatch, navSearchValue]
   );
 
   useEffect(() => {
-    onFetchSearchData(searchValue);
-  }, [onFetchSearchData, searchValue]);
+    window.localStorage.setItem("searchValue", navSearchValue);
+    if (lastSearch === searchValue) {
+      onSetSearchValue(navSearchValue);
+    } else {
+      //window.localStorage.setItem("searchPage", 1);
+      dispatch(searchActions.setSearchCurrentPage(1));
+      dispatch(searchActions.setLastSearch(searchValue));
+    }
+    onFetchSearchData(navSearchValue, currentPage);
+    
+  }, [
+    onFetchSearchData,
+    onSetSearchValue,
+    navSearchValue,
+    searchValue,
+    currentPage,
+    lastSearch,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   return (
     <Box>
@@ -133,7 +170,7 @@ export default function SearchAppBar(props) {
               </SearchIconWrapper>
               <StyledInputBase
                 onKeyPress={handleKeyPress}
-                onChange={(event) => setSearchValue(event.target.value)}
+                onChange={(event) => setNavSearchValue(event.target.value)}
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />

@@ -22,7 +22,7 @@ const Movies = (props) => {
     +window.localStorage.getItem("moviePage") || currentPage
   );
 
-  const pageChanger = (event, value) => {
+  const pageChanger = (value) => {
     setPage(value);
   };
 

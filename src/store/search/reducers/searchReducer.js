@@ -5,6 +5,8 @@ const initialState = {
     data: [],
     currentPage: 1,
     totalPages: 10,
+    value: '',
+    lastSearch: ''
   },
   isError: false,
 };
@@ -21,6 +23,25 @@ const setSearchTotalPages = (state, action) => {
     search: { ...state.search, totalPages: action.payload },
   };
 };
+const setSearchCurrentPage = (state, action) => {
+  return {
+    ...state,
+    search: { ...state.search, currentPage: action.payload },
+  };
+};
+const setSearchValue = (state, action) => {
+  return {
+    ...state,
+    search: { ...state.search, value: action.payload },
+  };
+};
+const setLastSearch = (state, action) => {
+  return {
+    ...state,
+    search: { ...state.search, lastSearch: action.payload },
+  };
+};
+
 
 const isError = (state, action) => {
   return {
@@ -39,6 +60,12 @@ const searchReducer = (state = initialState, action) => {
       return isError(state, action);
     case actionTypes.SET_SEARCH_TOTAL_PAGES:
       return setSearchTotalPages(state, action);
+    case actionTypes.SET_SEARCH_VALUE:
+      return setSearchValue(state, action);
+    case actionTypes.SET_LAST_SEARCH:
+      return setLastSearch(state, action);
+    case actionTypes.SET_SEARCH_CURRENT_PAGE:
+      return setSearchCurrentPage(state, action);
     
     default:
       return state;

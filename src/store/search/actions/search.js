@@ -25,12 +25,31 @@ const setSearchTotalPages = (payload) => {
     payload: payload,
   };
 };
+export const setSearchCurrentPage = (payload) => {
+  return {
+    type: actionTypes.SET_SEARCH_CURRENT_PAGE,
+    payload: payload,
+  };
+};
+export const setSearchValue = (payload) => {
+  return {
+    type: actionTypes.SET_SEARCH_VALUE,
+    payload: payload,
+  };
+};
+export const setLastSearch = (payload) => {
+  return {
+    type: actionTypes.SET_LAST_SEARCH,
+    payload: payload,
+  };
+};
 
-export const fetchSearchData = (searchValue) => {
+export const fetchSearchData = (searchValue, page) => {
   return (dispatch) => {
     dispatch(fetchSearchDataStart());
+    //console.log(searchValue, page)
     tmdbUrl
-      .get(`search/multi?api_key=${apiKey}&language=en-US&query=${searchValue}&page=1&include_adult=false`)
+      .get(`search/multi?api_key=${apiKey}&language=en-US&query=${searchValue}&page=${page}&include_adult=false`)
       .then((response) => {
         dispatch(fetchSearchDataSuccess(response.data.results))
         dispatch(setSearchTotalPages(response.data.total_pages))
@@ -42,3 +61,10 @@ export const fetchSearchData = (searchValue) => {
       });
   };
 };
+// export const test = (searchValue) => {
+//   return (dispatch) => {
+//     dispatch(setSearchValue(searchValue));
+//     dispatch(setSearchCurrentPage(1))
+
+//   };
+// };

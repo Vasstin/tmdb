@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 
 import * as searchActions from "../../store/search/actions/index";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Pagination from "../../utility/pagination";
 import { Box, LinearProgress } from "@mui/material";
 import TabContainerCard from "../Movies/Tabs/TabContainerCard";
@@ -28,13 +28,52 @@ const Search = (props) => {
     return state.search.search.totalPages;
   });
 
+  // const searchValue = useSelector((state)=> {
+  //   return state.search.search.value
+  // })
+
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(
-    +window.localStorage.getItem("searchPage") || currentPage
+
+    +window.localStorage.getItem("searchPage") || 1
   );
-  const pageChanger = (event, value) => {
+  const pageChanger = (value) => {
+    console.log(value, "pageChanger");
     setPage(value);
   };
+
+  
+  const onSetSearchCurrentPage = useCallback(
+    (page) => dispatch(searchActions.setSearchCurrentPage(page)),
+    [dispatch]
+    );
+    
+    useEffect(() => {
+      setPage(currentPage);
+      //window.localStorage.setItem("searchPage", currentPage);
+    //window.localStorage.setItem("searchPage", currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (isError) {
+      navigate("/error");
+    }
+    setTimeout(() => setIsLoading(true), 500);
+    onSetSearchCurrentPage(page);
+    //localStorage.setItem("searchPage", currentPage)
+    // onFetchSearchData(searchValue);
+    setIsLoading(false);
+    window.localStorage.removeItem("peoplePage");
+    window.localStorage.removeItem("tvPage");
+    //window.localStorage.setItem("searchPage", page);
+    // dispatch(peopleActions.cleanupPeopleCurrentPage());
+    // dispatch(movieActions.cleanupPopularTvsCurrentPage());
+
+    // return () => {
+    //   window.localStorage.removeItem("moviePage");
+    // };
+  }, [dispatch, isError, onSetSearchCurrentPage, navigate, page,]);
+
   const SearchBox = styled(Box)({
     display: "flex",
     flexWrap: "wrap",
@@ -42,27 +81,10 @@ const Search = (props) => {
     padding: "30px ",
     justifyContent: "space-between",
   });
-  useEffect(() => {
-    if (isError) {
-      navigate("/error");
-    }
-    setTimeout(() => setIsLoading(true), 500);
-    window.localStorage.setItem("searchPage", page);
-    setIsLoading(false);
-    window.localStorage.removeItem("peoplePage");
-    window.localStorage.removeItem("tvPage");
-    // dispatch(peopleActions.cleanupPeopleCurrentPage());
-    // dispatch(movieActions.cleanupPopularTvsCurrentPage());
-
-    // return () => {
-    //   window.localStorage.removeItem("moviePage");
-    // };
-  }, [dispatch, isError, navigate, page]);
-  
   return (
     <Box>
       {searchData.length > 0 && isLoading === true ? (
-        <SearchBox className="Wrapper" sx={{display: 'flex'}}>
+        <SearchBox className="Wrapper" sx={{ display: "flex" }}>
           {searchData.map((item) => {
             if (item.media_type === "person") {
               return (
@@ -88,7 +110,7 @@ const Search = (props) => {
           })}
           <Pagination
             totalPages={totalPages}
-            currentPage={page}
+            currentPage={currentPage}
             pageChanger={pageChanger}
           />
         </SearchBox>
