@@ -13,7 +13,7 @@ const ModalTrailer = (props) => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 640,
-    height: 360,
+    height: 370,
     bgcolor: "background.paper",
     border: "6px solid #032541",
     boxShadow: 24,
@@ -42,7 +42,7 @@ const ModalTrailer = (props) => {
       >
         <Box sx={style}>
           {props.trailers.length === 0 ? (
-            <Skeleton variant="rectangular" width={640} height={360} />
+            <Skeleton variant="rectangular" width={640} height={370} />
           ) : (
             <CardMedia
               component="iframe"

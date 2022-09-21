@@ -42,3 +42,37 @@
   margin: 0 auto;
   max-width: 1300px;
 }
+
+html {
+  overflow-y: overlay;
+
+
+  
+}
+::-webkit-scrollbar {
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #032541;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0),
+}
+
+
+/*
+overflow: "scroll",
+            "::-webkit-scrollbar": {
+              height: "10px",
+            },
+            "::-webkit-scrollbar-thumb": {
+              height: "5px",
+              backgroundColor: "#032541",
+              borderRadius: "10px",
+            },
+            "::-webkit-scrollbar-corner": {
+              background: "rgba(0,0,0,0)",
+            }
+*/
