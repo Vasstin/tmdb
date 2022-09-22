@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./firebase";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
@@ -8,15 +9,15 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 import moviesReducer from "./store/movies/reducers/moviesReducer";
-import peoplesReducer from './store/peoples/reducers/peoplesReducer'
+import peoplesReducer from "./store/peoples/reducers/peoplesReducer";
 import searchReducer from "./store/search/reducers/searchReducer";
 
 const store = configureStore({
   reducer: {
     movies: moviesReducer,
     peoples: peoplesReducer,
-    search: searchReducer
-  }
+    search: searchReducer,
+  },
 });
 
 ReactDOM.render(

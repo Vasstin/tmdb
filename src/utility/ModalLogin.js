@@ -29,6 +29,8 @@ const ModalLogin = (props) => {
     bgcolor: "background.paper",
     border: "6px solid #032541",
     boxShadow: 24,
+    padding: "50px",
+    margin: "0 auto",
   };
   // const [trailers, setTrailers] = useState([]);
 
@@ -46,8 +48,28 @@ const ModalLogin = (props) => {
 
   const [isLogin, setIsLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [userAuthData, setUserAuthData] = useState({
+    email: "",
+    password: "",
+  });
 
-  console.log(isLogin);
+  const handlerOnChange = (value, type) => {
+    switch (type) {
+      case  "email":
+        return setUserAuthData({
+          ...userAuthData,
+          email: value,
+        });
+      case  "password":
+        return setUserAuthData({
+          ...userAuthData,
+          password: value,
+        });
+      default:
+        return;
+    }
+  };
+  console.log(userAuthData);
   return (
     <div>
       <Modal
@@ -60,15 +82,31 @@ const ModalLogin = (props) => {
           {false ? (
             <Skeleton variant="rectangular" width={640} height={640} />
           ) : (
-            <Box component="form" sx={{ margin: "50px 50px" }}>
-              <TextField sx={{width: '250px'}}
+            <Box
+              component="form"
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexWrap: "wrap",
+                flexDirection: "column",
+              }}
+            >
+              <TextField
+                onChange={(event) =>
+                  handlerOnChange(event.target.value, "email")
+                }
+                sx={{ width: "270px", marginBottom: "25px" }}
                 error={isLogin}
                 id="outlined-basic"
                 label={isLogin ? "Error" : "Email"}
                 variant="outlined"
                 type="email"
               />
-              <TextField sx={{width: '250px'}}
+              <TextField
+                onChange={(event) =>
+                  handlerOnChange(event.target.value, "password")
+                }
+                sx={{ width: "270px", marginBottom: "25px" }}
                 error={isLogin}
                 id="outlined-basic"
                 label={isLogin ? "Error" : "Password"}
@@ -83,16 +121,16 @@ const ModalLogin = (props) => {
                         edge="end"
                       >
                         {showPassword ? (
-                          < VisibilityOffIcon/>
+                          <VisibilityOffIcon />
                         ) : (
-                          < VisibilityIcon/>
+                          <VisibilityIcon />
                         )}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
               />
-
+              <Button variant="contained">Sign-in</Button>
               <Button variant="contained" onClick={() => setIsLogin(!isLogin)}>
                 switcher
               </Button>
