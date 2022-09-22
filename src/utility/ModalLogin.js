@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import {
   Box,
@@ -6,11 +7,11 @@ import {
   Modal,
   Skeleton,
   TextField,
-  FilledInput,
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
+  // FilledInput,
+  // FormControl,
+  // FormHelperText,
+  // Input,
+  // InputLabel,
   InputAdornment,
   Alert,
   IconButton,
@@ -53,7 +54,7 @@ const ModalLogin = (props) => {
     password: "",
   });
 
-  const handlerOnChange = (value, type) => {
+  const handleOnChange = (value, type) => {
     switch (type) {
       case  "email":
         return setUserAuthData({
@@ -69,7 +70,21 @@ const ModalLogin = (props) => {
         return;
     }
   };
-  console.log(userAuthData);
+  
+  const handleClick = (email, password) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
+  }
   return (
     <div>
       <Modal
@@ -93,7 +108,7 @@ const ModalLogin = (props) => {
             >
               <TextField
                 onChange={(event) =>
-                  handlerOnChange(event.target.value, "email")
+                  handleOnChange(event.target.value, "email")
                 }
                 sx={{ width: "270px", marginBottom: "25px" }}
                 error={isLogin}
@@ -104,7 +119,7 @@ const ModalLogin = (props) => {
               />
               <TextField
                 onChange={(event) =>
-                  handlerOnChange(event.target.value, "password")
+                  handleOnChange(event.target.value, "password")
                 }
                 sx={{ width: "270px", marginBottom: "25px" }}
                 error={isLogin}
@@ -130,7 +145,7 @@ const ModalLogin = (props) => {
                   ),
                 }}
               />
-              <Button variant="contained">Sign-in</Button>
+              <Button variant="contained" onClick={()=>handleClick(userAuthData.email, userAuthData.password)}>Sign-in</Button>
               <Button variant="contained" onClick={() => setIsLogin(!isLogin)}>
                 switcher
               </Button>
