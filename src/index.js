@@ -11,12 +11,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import moviesReducer from "./store/movies/reducers/moviesReducer";
 import peoplesReducer from "./store/peoples/reducers/peoplesReducer";
 import searchReducer from "./store/search/reducers/searchReducer";
+import authReducer from "./store/auth/reducers/authReducer";
 
 const store = configureStore({
   reducer: {
     movies: moviesReducer,
     peoples: peoplesReducer,
     search: searchReducer,
+    auth: authReducer
   },
 });
 

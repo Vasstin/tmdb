@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 import {
   Box,
@@ -73,9 +73,11 @@ const ModalLogin = (props) => {
   
   const handleClick = (email, password) => {
     const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
+    console.log(email, password)
+    signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in 
+      console.log(userCredential, 'inside')
       const user = userCredential.user;
       // ...
     })
