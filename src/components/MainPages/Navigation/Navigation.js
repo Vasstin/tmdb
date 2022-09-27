@@ -13,7 +13,7 @@ import navLogo from "../../../assets/img/nav-logo.svg";
 import { useHideHeader } from "../../../utility/hideHeader";
 import { useSelector, useDispatch } from "react-redux";
 import * as searchActions from "../../../store/search/actions/index";
-import ModalLogin from "../../../utility/ModalLogin";
+import ModalAuth from "../../Auth/ModalAuth";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -151,7 +151,7 @@ export default function SearchAppBar(props) {
   };
   return (
     <Box>
-      <ModalLogin toggle={open} toggleModal={toggleModal} idMovies={props.id} />
+      <ModalAuth toggle={open} toggleModal={toggleModal} idMovies={props.id} />
 
       <AppBar
         id="test"
