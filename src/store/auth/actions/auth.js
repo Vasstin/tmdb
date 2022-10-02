@@ -19,13 +19,39 @@ const authSuccess = (token, userID, email) => {
     email: email
   };
 };
-const authFail = (error) => {
+// const authFail = (error) => {
+//   return {
+//     type: actionTypes.AUTH_FAIL,
+//     error: error,
+//   };
+// };
+
+const createNewUserStart = () => {
   return {
-    type: actionTypes.AUTH_FAIL,
-    error: error,
+    type: actionTypes.CREATE_NEW_USER_START,
+  };
+};
+const createNewUserSuccess = (token, userID, email) => {
+  return {
+    type: actionTypes.CREATE_NEW_USER_SUCCESS,
+    token: token,
+    userID: userID,
+    email: email
   };
 };
 
+// const createNewUserFail = (error) => {
+//   return {
+//     type: actionTypes.CREATE_NEW_USER_FAIL,
+//     error: error,
+//   };
+// };
+
+export const authLogout = () => {
+  return {
+    type: actionTypes.AUTH_LOGOUT,
+  };
+};
 const isLogin = (boolean) => {
   return {
     type: actionTypes.IS_LOGIN,
@@ -39,14 +65,30 @@ export const auth = (email, password) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential)
         const user = userCredential.user;
         dispatch(authSuccess(user.accessToken, user.uid, user.email));
         dispatch(isLogin(true));
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
       });
   };
 };
+
+export const createNewUser = (email, password) => {
+  return (dispatch) => {
+    dispatch(createNewUserStart());
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    dispatch(createNewUserSuccess(user.accessToken, user.uid, user.email));
+    dispatch(isLogin(true));
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+  }
+}

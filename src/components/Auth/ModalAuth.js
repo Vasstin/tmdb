@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 //   const dispatch = useDispatch();
 import * as authActions from "../../store/auth/actions/index";
 import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import { styled } from "@mui/material/styles";
-
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Box,
   Button,
@@ -19,6 +20,7 @@ import {
   InputAdornment,
   Alert,
   IconButton,
+  Typography,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -58,6 +60,8 @@ const ModalLogin = (props) => {
     password: "",
   });
 
+  const [isSignUp, setIsSignUp] = useState(false);
+
   const isLogin = useSelector((state) => {
     return state.auth.user.isLogin;
   });
@@ -66,6 +70,28 @@ const ModalLogin = (props) => {
     () => dispatch(authActions.auth(userAuthData.email, userAuthData.password)),
     [dispatch, userAuthData.email, userAuthData.password]
   );
+
+  const onCreateNewUser = useCallback(
+    () =>
+      dispatch(
+        authActions.createNewUser(userAuthData.email, userAuthData.password)
+      ),
+    [dispatch, userAuthData.email, userAuthData.password]
+  );
+
+  const onLogout = useCallback(
+    () => dispatch(authActions.authLogout()),
+    [dispatch]
+  );
+
+  const handleLogout = () => {
+    window.location.reload();
+    onLogout();
+  };
+
+  const handleAuthSwitcher = () => {
+    setIsSignUp(!isSignUp);
+  };
 
   const handleOnChange = (value, type) => {
     switch (type) {
@@ -95,17 +121,43 @@ const ModalLogin = (props) => {
         <Box sx={style}>
           {isLogin ? (
             <Box>
-              <Alert variant="filled" severity="success" color="primary">
-                {`Welcome Back ${userAuthData.email}`}
-              </Alert>
+              {isSignUp ? (
+                <Alert variant="filled" severity="success" color="primary">
+                  {`Congratulations, ${userAuthData.email}, you have successfully registered`}
+                </Alert>
+              ) : (
+                <Alert variant="filled" severity="success" color="primary">
+                  {`Welcome Back ${userAuthData.email}`}
+                </Alert>
+              )}
+              <Button
+                onClick={() => handleLogout()}
+                variant="contained"
+                endIcon={<LogoutIcon />}
+              >
+                Logout
+              </Button>
             </Box>
           ) : (
-            <SignIn
-              onAuth={onAuth}
-              handleOnChange={handleOnChange}
-              email={userAuthData.email}
-              password={userAuthData.password}
-            />
+            <Box>
+              {isSignUp ? (
+                <SignUp
+                  onCreateNewUser={onCreateNewUser}
+                  handleOnChange={handleOnChange}
+                  email={userAuthData.email}
+                  password={userAuthData.password}
+                  handleAuthSwitcher={handleAuthSwitcher}
+                />
+              ) : (
+                <SignIn
+                  onAuth={onAuth}
+                  handleOnChange={handleOnChange}
+                  email={userAuthData.email}
+                  password={userAuthData.password}
+                  handleAuthSwitcher={handleAuthSwitcher}
+                />
+              )}
+            </Box>
           )}
 
           {/* {isLogin ? (

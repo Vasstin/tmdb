@@ -14,6 +14,8 @@ import { useHideHeader } from "../../../utility/hideHeader";
 import { useSelector, useDispatch } from "react-redux";
 import * as searchActions from "../../../store/search/actions/index";
 import ModalAuth from "../../Auth/ModalAuth";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -113,6 +115,10 @@ export default function SearchAppBar(props) {
     window.localStorage.getItem("searchValue") || searchValue
   );
 
+  const authEmail = useSelector((state) => {
+    return state.auth.user.email;
+  });
+
   const onFetchSearchData = useCallback(
     () => dispatch(searchActions.fetchSearchData(navSearchValue, currentPage)),
     [dispatch, navSearchValue, currentPage]
@@ -160,36 +166,44 @@ export default function SearchAppBar(props) {
         sx={{ top: "0", transition: "all 0.5s" }}
       >
         {/* <Box  className="Wrapper" sx={{   width: '100%'}}> */}
-          <Toolbar  className="Wrapper" sx={{ width: '100%',  display: "flex", justifyContent: "space-between",  }}>
-            <NavWrapper>
-              <LogoLink to="/">
-                <img width={150} src={navLogo} alt="nav-logo" />
-              </LogoLink>
-              <NavList>
-                <NavigationItem link="/movie">Movies</NavigationItem>
-                <NavigationItem link="/tv">Tvs</NavigationItem>
-                <NavigationItem link="/actor">Actors</NavigationItem>
-              </NavList>
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  onKeyPress={handleKeyPress}
-                  onChange={(event) => setNavSearchValue(event.target.value)}
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
-            </NavWrapper>
-            <Button
-              onClick={() => toggleModal()}
-              color="primary"
-              variant="contained"
-            >
-              Login
-            </Button>
-          </Toolbar>
+        <Toolbar
+          className="Wrapper"
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <NavWrapper>
+            <LogoLink to="/">
+              <img width={150} src={navLogo} alt="nav-logo" />
+            </LogoLink>
+            <NavList>
+              <NavigationItem link="/movie">Movies</NavigationItem>
+              <NavigationItem link="/tv">Tvs</NavigationItem>
+              <NavigationItem link="/actor">Actors</NavigationItem>
+            </NavList>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                onKeyPress={handleKeyPress}
+                onChange={(event) => setNavSearchValue(event.target.value)}
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          </NavWrapper>
+          <Button
+            onClick={() => toggleModal()}
+            color="primary"
+            variant="contained"
+            endIcon={authEmail === "" ? <LoginIcon /> : <LogoutIcon />}
+          >
+            {authEmail === "" ? "Login" : "Logout"}
+          </Button>
+        </Toolbar>
         {/* </Box> */}
       </AppBar>
     </Box>

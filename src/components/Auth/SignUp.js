@@ -12,15 +12,21 @@ import {
   // Input,
   // InputLabel,
   InputAdornment,
+  Typography,
   Alert,
   IconButton,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const SignOut = (props) => {
+const SignUp = (props) => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const AuthSwitcher = styled(Typography)({
+    marginLeft: "5px",
+    "&:hover": {
+      color: "#01b4e4",
+    },
+  });
   return (
     <Box
       component="form"
@@ -71,11 +77,21 @@ const SignOut = (props) => {
         }}
       />
       <Button
+        sx={{ marginBottom: "25px" }}
         variant="contained"
-        onClick={() => props.onAuth(props.email, props.password)}
+        onClick={() => props.onCreateNewUser(props.email, props.password)}
       >
-        Sign-in
+        Sign up
       </Button>
+      <Typography color={"primary"} sx={{ display: "flex" }}>
+        {"Do you have an account?"}
+        <AuthSwitcher
+          onClick={() => props.handleAuthSwitcher()}
+          color={"primary"}
+        >
+          {"Sign In"}
+        </AuthSwitcher>
+      </Typography>
       {/* <Button variant="contained" onClick={() => setIsLogin(!isLogin)}>
                 switcher
               </Button> */}
@@ -87,4 +103,4 @@ const SignOut = (props) => {
   );
 };
 
-export default SignOut;
+export default SignUp;

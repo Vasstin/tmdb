@@ -12,6 +12,7 @@ import {
   // Input,
   // InputLabel,
   InputAdornment,
+  Typography,
   Alert,
   IconButton,
 } from "@mui/material";
@@ -20,6 +21,13 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const SignIn = (props) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const AuthSwitcher = styled(Typography)({
+    marginLeft: "5px",
+    "&:hover": {
+      color: "#01b4e4",
+    },
+  });
 
   return (
     <Box
@@ -71,11 +79,16 @@ const SignIn = (props) => {
         }}
       />
       <Button
+        sx={{ marginBottom: "25px" }}
         variant="contained"
         onClick={() => props.onAuth(props.email, props.password)}
       >
-        Sign-in
+        Sign in
       </Button>
+      <Typography color={"primary"} sx={{ display: "flex" }}>
+        {"Don`t have an account?"}
+        <AuthSwitcher onClick={()=>props.handleAuthSwitcher()} color={"primary"}>{"Sign Up"}</AuthSwitcher>
+      </Typography>
       {/* <Button variant="contained" onClick={() => setIsLogin(!isLogin)}>
                 switcher
               </Button> */}

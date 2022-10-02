@@ -1,4 +1,9 @@
 export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
+export const AUTH_LOGOUT = 'AUTH_LOGOUT'
 export const IS_LOGIN = 'IS_LOGIN'
+
+export const CREATE_NEW_USER_START = "CREATE_NEW_USER_START";
+export const CREATE_NEW_USER_SUCCESS = "CREATE_NEW_USER_SUCCESS";
+export const CREATE_NEW_USER_FAIL = "CREATE_NEW_USER_FAIL";
