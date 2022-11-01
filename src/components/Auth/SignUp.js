@@ -21,12 +21,24 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const SignUp = (props) => {
   const [showPassword, setShowPassword] = useState(false);
-  const AuthSwitcher = styled(Typography)({
+  const [isValid, setIsValid] = useState(true);
+
+  const AuthSwitcher = styled('span')({
     marginLeft: "5px",
     "&:hover": {
       color: "#01b4e4",
     },
   });
+
+  const emailValidation = (value) => {
+    const regexp = /^[\w-]+@[\w]+\.[a-z]{2,}$/g;
+    if (regexp.test(value)) {
+      setIsValid(true);
+      return props.handleOnChange(value, "email");
+    } else {
+      return setIsValid(false);
+    }
+  };
   return (
     <Box
       component="form"
@@ -42,12 +54,14 @@ const SignUp = (props) => {
           width: "270px",
           marginBottom: "25px",
         }}
-        onChange={(event) => props.handleOnChange(event.target.value, "email")}
+        onChange={(event) => emailValidation(event.target.value)}
+        error={isValid ? false : true}
         // error={isLogin}
         id="email"
-        // label={isLogin ? "Error" : "Email"}
+        label={"Email"}
         variant="outlined"
         type="email"
+        helperText={isValid ? null : "Invalid Email"}
       />
       <TextField
         sx={{
@@ -59,7 +73,7 @@ const SignUp = (props) => {
         }
         // error={isLogin}
         id="password"
-        // label={isLogin ? "Error" : "Password"}
+        label={"Password"}
         // variant="outlined"
         type={showPassword ? "text" : "password"}
         InputProps={{
@@ -79,6 +93,7 @@ const SignUp = (props) => {
       <Button
         sx={{ marginBottom: "25px" }}
         variant="contained"
+        disabled={isValid === false ? true : false}
         onClick={() => props.onCreateNewUser(props.email, props.password)}
       >
         Sign up

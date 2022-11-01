@@ -58,7 +58,7 @@ function Layout() {
 
   return (
     <div>
-      <ThemeProvider theme={theme} sx={{overflow: 'hidden'}}>
+      <ThemeProvider theme={theme} >
         <Navigation />
         <Wrapper>
           <Outlet />

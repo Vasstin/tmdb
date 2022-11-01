@@ -21,13 +21,23 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const SignIn = (props) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
-  const AuthSwitcher = styled(Typography)({
+  const AuthSwitcher = styled('span')({
     marginLeft: "5px",
     "&:hover": {
       color: "#01b4e4",
     },
   });
+  const emailValidation = (value) => {
+    const regexp = /^[\w-]+@[\w]+\.[a-z]{2,}$/g;
+    if (regexp.test(value)) {
+      setIsValid(true);
+      return props.handleOnChange(value, "email");
+    } else {
+      return setIsValid(false);
+    }
+  };
 
   return (
     <Box
@@ -44,12 +54,14 @@ const SignIn = (props) => {
           width: "270px",
           marginBottom: "25px",
         }}
-        onChange={(event) => props.handleOnChange(event.target.value, "email")}
-        // error={isLogin}
+        //onChange={(event) => props.handleOnChange(event.target.value, "email")}
+        onChange={(event) => emailValidation(event.target.value)}
+        error={isValid ? false : true}
         id="email"
-        // label={isLogin ? "Error" : "Email"}
+        label={"Email"}
         variant="outlined"
         type="email"
+        helperText={isValid ? null : "Invalid Email"}
       />
       <TextField
         sx={{
@@ -61,8 +73,8 @@ const SignIn = (props) => {
         }
         // error={isLogin}
         id="password"
-        // label={isLogin ? "Error" : "Password"}
-        // variant="outlined"
+        label={"Password"}
+        variant="outlined"
         type={showPassword ? "text" : "password"}
         InputProps={{
           endAdornment: (
@@ -82,12 +94,18 @@ const SignIn = (props) => {
         sx={{ marginBottom: "25px" }}
         variant="contained"
         onClick={() => props.onAuth(props.email, props.password)}
+        disabled={isValid === false ? true : false}
       >
         Sign in
       </Button>
       <Typography color={"primary"} sx={{ display: "flex" }}>
         {"Don`t have an account?"}
-        <AuthSwitcher onClick={()=>props.handleAuthSwitcher()} color={"primary"}>{"Sign Up"}</AuthSwitcher>
+        <AuthSwitcher
+          onClick={() => props.handleAuthSwitcher()}
+          color={"primary"}
+        >
+          {"Sign Up"}
+        </AuthSwitcher>
       </Typography>
       {/* <Button variant="contained" onClick={() => setIsLogin(!isLogin)}>
                 switcher

@@ -45,9 +45,6 @@
 
 html {
   overflow-y: overlay;
-
-
-  
 }
 ::-webkit-scrollbar {
   height: 10px;
