@@ -16,15 +16,16 @@ const authSuccess = (token, userID, email) => {
     type: actionTypes.AUTH_SUCCESS,
     token: token,
     userID: userID,
-    email: email
+    email: email,
   };
 };
-// const authFail = (error) => {
-//   return {
-//     type: actionTypes.AUTH_FAIL,
-//     error: error,
-//   };
-// };
+const authFail = (errorCode, errorMessage) => {
+  return {
+    type: actionTypes.AUTH_FAIL,
+    errorCode: errorCode,
+    errorMessage: errorMessage,
+  };
+};
 
 const createNewUserStart = () => {
   return {
@@ -36,7 +37,7 @@ const createNewUserSuccess = (token, userID, email) => {
     type: actionTypes.CREATE_NEW_USER_SUCCESS,
     token: token,
     userID: userID,
-    email: email
+    email: email,
   };
 };
 
@@ -70,8 +71,9 @@ export const auth = (email, password) => {
         dispatch(isLogin(true));
       })
       .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        dispatch(authFail(errorCode, errorMessage));
       });
   };
 };
@@ -81,14 +83,15 @@ export const createNewUser = (email, password) => {
     dispatch(createNewUserStart());
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    dispatch(createNewUserSuccess(user.accessToken, user.uid, user.email));
-    dispatch(isLogin(true));
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
-  }
-}
+      .then((userCredential) => {
+        const user = userCredential.user;
+        dispatch(createNewUserSuccess(user.accessToken, user.uid, user.email));
+        dispatch(isLogin(true));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        dispatch(authFail(errorCode, errorMessage));
+      });
+  };
+};

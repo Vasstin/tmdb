@@ -55,6 +55,19 @@ const createNewUser = (state, action) => {
   };
 }
 
+const authFail = (state, action) => {
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      errorCode: action.errorCode,
+      errorMessage: action.errorMessage,
+    },
+  };
+}
+
+
+
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START:
@@ -62,7 +75,7 @@ const authReducer = (state = initialState, action) => {
     case actionTypes.AUTH_SUCCESS:
       return authSuccess(state, action);
     case actionTypes.AUTH_FAIL:
-      return { ...state };
+      return authFail(state, action)
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
     case actionTypes.IS_LOGIN:
