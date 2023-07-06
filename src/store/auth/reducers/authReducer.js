@@ -29,7 +29,7 @@ const isLogin = (state, action) => {
   };
 };
 
-const authLogout = (state, action) => {
+const clearUserData = (state, action) => {
   return {
     ...state,
     user: {
@@ -76,8 +76,8 @@ const authReducer = (state = initialState, action) => {
       return authSuccess(state, action);
     case actionTypes.AUTH_FAIL:
       return authFail(state, action)
-    case actionTypes.AUTH_LOGOUT:
-      return authLogout(state, action);
+    case actionTypes.CLEAR_USER_DATA:
+      return clearUserData(state, action);
     case actionTypes.IS_LOGIN:
       return isLogin(state, action);
     case actionTypes.CREATE_NEW_USER_START:

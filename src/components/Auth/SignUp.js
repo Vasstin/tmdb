@@ -6,6 +6,7 @@ import {
   Modal,
   Skeleton,
   TextField,
+  AlertTitle,
   // FilledInput,
   // FormControl,
   // FormHelperText,
@@ -49,6 +50,15 @@ const SignUp = (props) => {
         flexDirection: "column",
       }}
     >
+            <Alert
+        sx={{display: props.errorMessage === "" ? 'none' : 'flex' , marginBottom: "25px" }}
+        variant="filled"
+        severity="error"
+        color="error"
+      >
+        <AlertTitle>Error</AlertTitle>
+        {`${props.errorMessage}`}
+      </Alert>
       <TextField
         sx={{
           width: "270px",

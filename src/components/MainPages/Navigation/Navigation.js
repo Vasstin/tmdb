@@ -115,8 +115,8 @@ export default function SearchAppBar(props) {
     window.localStorage.getItem("searchValue") || searchValue
   );
 
-  const authEmail = useSelector((state) => {
-    return state.auth.user.email;
+  const isLogin = useSelector((state) => {
+    return state.auth.user.isLogin;
   });
 
   const onFetchSearchData = useCallback(
@@ -199,9 +199,9 @@ export default function SearchAppBar(props) {
             onClick={() => toggleModal()}
             color="primary"
             variant="contained"
-            endIcon={authEmail === "" ? <LoginIcon /> : <LogoutIcon />}
+            endIcon={localStorage.getItem("isLogin") || isLogin ? <LogoutIcon /> : <LoginIcon />}
           >
-            {authEmail === "" ? "Login" : "Logout"}
+            {localStorage.getItem("isLogin") || isLogin ? "Logout" : "Login"}
           </Button>
         </Toolbar>
         {/* </Box> */}

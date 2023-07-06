@@ -4,28 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import * as authActions from "../../store/auth/actions/index";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import { styled } from "@mui/material/styles";
+//import { styled } from "@mui/material/styles";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {
-  Box,
-  Button,
-  Modal,
-  Skeleton,
-  TextField,
-  // FilledInput,
-  // FormControl,
-  // FormHelperText,
-  // Input,
-  // InputLabel,
-  InputAdornment,
-  Alert,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { Box, Button, Modal, Alert } from "@mui/material";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
+import UserProfile from "./UserProfile";
 
 const ModalLogin = (props) => {
+
+  const isLoadingLocalStorage = localStorage.getItem("isLogin") 
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -40,19 +28,6 @@ const ModalLogin = (props) => {
     margin: "0 auto",
   };
 
-  // const [trailers, setTrailers] = useState([]);
-
-  // useEffect(() => {
-  //   tmdbUrl
-  //     .get(`${props.typeTab}/${props.idMovies}/videos?api_key=${apiKey}&language=en-US`)
-  //     .then((response) =>
-  //       setTrailers(
-  //         response.data.results.filter((item) => item.name.includes("Trailer"))
-  //       )
-  //     );
-  // }, [props.idMovies, props.typeTab]);
-
-  // `${tmdbUrl}movie/${props.data.id}/videos?api_key=${apiKey}&language=en-US`
   const dispatch = useDispatch();
 
   const [userAuthData, setUserAuthData] = useState({
@@ -64,6 +39,13 @@ const ModalLogin = (props) => {
 
   const isLogin = useSelector((state) => {
     return state.auth.user.isLogin;
+  });
+
+  const errorMessage = useSelector((state) => {
+    return state.auth.user.errorMessage;
+  });
+  const currentUserData = useSelector((state) => {
+    return state.auth.user;
   });
 
   const onAuth = useCallback(
@@ -79,14 +61,23 @@ const ModalLogin = (props) => {
     [dispatch, userAuthData.email, userAuthData.password]
   );
 
-  const onLogout = useCallback(
-    () => dispatch(authActions.authLogout()),
+  const onSignOutUser = useCallback(
+    () => dispatch(authActions.signOutUser()),
+    [dispatch]
+  );
+  const onGetAuthedUser = useCallback(
+    () => dispatch(authActions.getAuthedUser()),
     [dispatch]
   );
 
+  useEffect(() => {
+    onGetAuthedUser();
+  }, [onGetAuthedUser]);
+
   const handleLogout = () => {
-    window.location.reload();
-    onLogout();
+    // window.location.reload();
+    onSignOutUser();
+    //onLogout();
   };
 
   const handleAuthSwitcher = () => {
@@ -119,29 +110,17 @@ const ModalLogin = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          {isLogin ? (
-            <Box>
-              {isSignUp ? (
-                <Alert variant="filled" severity="success" color="primary">
-                  {`Congratulations, ${userAuthData.email}, you have successfully registered`}
-                </Alert>
-              ) : (
-                <Alert variant="filled" severity="success" color="primary">
-                  {`Welcome Back ${userAuthData.email}`}
-                </Alert>
-              )}
-              <Button
-                onClick={() => handleLogout()}
-                variant="contained"
-                endIcon={<LogoutIcon />}
-              >
-                Logout
-              </Button>
-            </Box>
+          {isLoadingLocalStorage ? (
+            <UserProfile
+              isLogin={isLogin}
+              email={currentUserData.email}
+              handleLogout={handleLogout}
+            />
           ) : (
             <Box>
               {isSignUp ? (
                 <SignUp
+                  errorMessage={errorMessage}
                   onCreateNewUser={onCreateNewUser}
                   handleOnChange={handleOnChange}
                   email={userAuthData.email}
@@ -150,6 +129,7 @@ const ModalLogin = (props) => {
                 />
               ) : (
                 <SignIn
+                  errorMessage={errorMessage}
                   onAuth={onAuth}
                   handleOnChange={handleOnChange}
                   email={userAuthData.email}
