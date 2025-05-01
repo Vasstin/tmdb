@@ -41,11 +41,11 @@ const MoviesTabs = (props) => {
   });
 
   const onFetchPopularMovies = useCallback(
-    () => dispatch(movieActions.fetchPopularMovies()),
+    () => dispatch(movieActions.fetchPopularMovies(1)),
     [dispatch]
   );
   const onFetchPopularTvs = useCallback(
-    () => dispatch(movieActions.fetchPopularTvs()),
+    () => dispatch(movieActions.fetchPopularTvs(1)),
     [dispatch]
   );
 
